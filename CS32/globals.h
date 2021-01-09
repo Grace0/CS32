@@ -9,6 +9,9 @@
 // Manifest constants
 ///////////////////////////////////////////////////////////////////////////
 
+#ifndef Globals_h
+#define Globals_h
+
 int randInt(int min, int max);
 void clearScreen();
 
@@ -22,3 +25,6 @@ const int DOWN    = 1;
 const int LEFT    = 2;
 const int RIGHT   = 3;
 const int NUMDIRS = 4;
+
+#endif
+

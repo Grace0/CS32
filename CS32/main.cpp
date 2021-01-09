@@ -9,6 +9,7 @@
 #include "globals.h"
 #include "Flatulan.h"
 #include "Player.h"
+#include "City.h"
 using namespace std;
 
 ///////////////////////////////////////////////////////////////////////////
@@ -20,40 +21,6 @@ int decodeDirection(char dir);
 class City;  // This is needed to let the compiler know that City is a
              // type name, since it's mentioned in the Flatulan declaration.
 class Player;
-
-class City
-{
-  public:
-        // Constructor/destructor
-    City(int nRows, int nCols);
-    ~City();
-
-        // Accessors
-    int     rows() const;
-    int     cols() const;
-    Player* player() const;
-    bool    isPlayerAt(int r, int c) const;
-    int     flatulanCount() const;
-    int     nFlatulansAt(int r, int c) const;
-    bool    determineNewPosition(int& r, int& c, int dir) const;
-    void    display() const;
-
-        // Mutators
-    bool  addFlatulan(int r, int c);
-    bool  addPlayer(int r, int c);
-    void  preachToFlatulansAroundPlayer();
-    void  moveFlatulans();
-
-  private:
-    int       m_rows;
-    int       m_cols;
-    Player*   m_player;
-    Flatulan* m_flatulans[MAXFLATULANS];
-    int       m_nFlatulans;
-
-      // Helper functions
-    bool isInBounds(int r, int c) const;
-};
 
 class Game
 {

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		FED581BF25A7A31400809E7D /* Flatulan.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FED581BD25A7A31400809E7D /* Flatulan.cpp */; };
+		FED581C425AA43D400809E7D /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FED581C225AA43D400809E7D /* Player.cpp */; };
+		FED581C725AA44C600809E7D /* globals.h in Sources */ = {isa = PBXBuildFile; fileRef = FED581C625AA44C600809E7D /* globals.h */; };
 		FEE46FE125A40E2A00CEAF97 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FEE46FE025A40E2A00CEAF97 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -26,6 +28,9 @@
 /* Begin PBXFileReference section */
 		FED581BD25A7A31400809E7D /* Flatulan.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Flatulan.cpp; sourceTree = "<group>"; };
 		FED581BE25A7A31400809E7D /* Flatulan.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Flatulan.h; sourceTree = "<group>"; };
+		FED581C225AA43D400809E7D /* Player.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
+		FED581C325AA43D400809E7D /* Player.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
+		FED581C625AA44C600809E7D /* globals.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = globals.h; sourceTree = "<group>"; };
 		FEE46FDD25A40E2A00CEAF97 /* CS32 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CS32; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEE46FE025A40E2A00CEAF97 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -62,7 +67,10 @@
 			children = (
 				FEE46FE025A40E2A00CEAF97 /* main.cpp */,
 				FED581BD25A7A31400809E7D /* Flatulan.cpp */,
+				FED581C225AA43D400809E7D /* Player.cpp */,
+				FED581C325AA43D400809E7D /* Player.h */,
 				FED581BE25A7A31400809E7D /* Flatulan.h */,
+				FED581C625AA44C600809E7D /* globals.h */,
 			);
 			path = CS32;
 			sourceTree = "<group>";
@@ -123,8 +131,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FED581C725AA44C600809E7D /* globals.h in Sources */,
 				FED581BF25A7A31400809E7D /* Flatulan.cpp in Sources */,
 				FEE46FE125A40E2A00CEAF97 /* main.cpp in Sources */,
+				FED581C425AA43D400809E7D /* Player.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

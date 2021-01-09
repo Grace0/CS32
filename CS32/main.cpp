@@ -6,23 +6,10 @@
 #include <utility>
 #include <cstdlib>
 
+#include "globals.h"
 #include "Flatulan.h"
+#include "Player.h"
 using namespace std;
-
-///////////////////////////////////////////////////////////////////////////
-// Manifest constants
-///////////////////////////////////////////////////////////////////////////
-
-const int MAXROWS = 20;               // max number of rows in a city
-const int MAXCOLS = 30;               // max number of columns in a city
-const int MAXFLATULANS = 120;         // max number of Flatulans allowed
-const int INITIAL_PLAYER_HEALTH = 12;
-
-const int UP      = 0;
-const int DOWN    = 1;
-const int LEFT    = 2;
-const int RIGHT   = 3;
-const int NUMDIRS = 4;
 
 ///////////////////////////////////////////////////////////////////////////
 // Type definitions
@@ -30,32 +17,7 @@ const int NUMDIRS = 4;
 
 class City;  // This is needed to let the compiler know that City is a
              // type name, since it's mentioned in the Flatulan declaration.
-
-class Player
-{
-  public:
-        // Constructor
-    Player(City *cp, int r, int c);
-
-        // Accessors
-    int  row() const;
-    int  col() const;
-    int  age() const;
-    int  health() const;
-    bool isPassedOut() const;
-
-        // Mutators
-    void  preach();
-    void  move(int dir);
-    void  getGassed();
-
-  private:
-    City* m_city;
-    int   m_row;
-    int   m_col;
-    int   m_health;
-    int   m_age;
-};
+class Player;
 
 class City
 {

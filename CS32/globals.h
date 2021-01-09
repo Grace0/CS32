@@ -9,6 +9,9 @@
 // Manifest constants
 ///////////////////////////////////////////////////////////////////////////
 
+int randInt(int min, int max);
+void clearScreen();
+
 const int MAXROWS = 20;               // max number of rows in a city
 const int MAXCOLS = 30;               // max number of columns in a city
 const int MAXFLATULANS = 120;         // max number of Flatulans allowed

@@ -9,8 +9,10 @@
 #define City_h
 
 #include "globals.h"
+#include "Flatulan.h"
+#include "Player.h"
 
-class Player;
+class Player; //?
 class Flatulan;
 
 class City

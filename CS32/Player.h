@@ -10,7 +10,8 @@
 
 #include "City.h" //since we call functions on it
 #include <iostream>
-//class City;
+
+class City;
 
 class Player
 {

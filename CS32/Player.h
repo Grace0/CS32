@@ -8,7 +8,9 @@
 #ifndef Player_h
 #define Player_h
 
-class City;
+#include "City.h" //since we call functions on it
+#include <iostream>
+//class City;
 
 class Player
 {

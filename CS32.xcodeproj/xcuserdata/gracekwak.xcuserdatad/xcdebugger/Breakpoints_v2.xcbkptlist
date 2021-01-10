@@ -43,10 +43,10 @@
             filePath = "CS32/main.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "437"
-            endingLineNumber = "437"
-            landmarkName = "main()"
-            landmarkType = "9">
+            startingLineNumber = "365"
+            endingLineNumber = "365"
+            landmarkName = "Game::~Game()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -9,7 +9,8 @@
 #define Game_h
 
 #include "globals.h"
-#include "City.h"
+
+class City;
 
 class Game
 {

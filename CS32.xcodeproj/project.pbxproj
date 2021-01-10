@@ -13,6 +13,7 @@
 		FED581CC25AA464300809E7D /* utilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FED581CB25AA464300809E7D /* utilities.cpp */; };
 		FED581D025AA48E500809E7D /* City.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FED581CE25AA48E500809E7D /* City.cpp */; };
 		FED581D525AA49C100809E7D /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FED581D325AA49C100809E7D /* Game.cpp */; };
+		FED581DA25AAC83700809E7D /* History.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FED581D825AAC83700809E7D /* History.cpp */; };
 		FEE46FE125A40E2A00CEAF97 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FEE46FE025A40E2A00CEAF97 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -39,6 +40,8 @@
 		FED581CF25AA48E500809E7D /* City.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = City.h; sourceTree = "<group>"; };
 		FED581D325AA49C100809E7D /* Game.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Game.cpp; sourceTree = "<group>"; };
 		FED581D425AA49C100809E7D /* Game.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Game.h; sourceTree = "<group>"; };
+		FED581D825AAC83700809E7D /* History.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = History.cpp; sourceTree = "<group>"; };
+		FED581D925AAC83700809E7D /* History.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = History.h; sourceTree = "<group>"; };
 		FEE46FDD25A40E2A00CEAF97 /* CS32 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CS32; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEE46FE025A40E2A00CEAF97 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -74,6 +77,8 @@
 			isa = PBXGroup;
 			children = (
 				FEE46FE025A40E2A00CEAF97 /* main.cpp */,
+				FED581D825AAC83700809E7D /* History.cpp */,
+				FED581D925AAC83700809E7D /* History.h */,
 				FED581CE25AA48E500809E7D /* City.cpp */,
 				FED581CF25AA48E500809E7D /* City.h */,
 				FED581CB25AA464300809E7D /* utilities.cpp */,
@@ -150,6 +155,7 @@
 				FED581BF25A7A31400809E7D /* Flatulan.cpp in Sources */,
 				FEE46FE125A40E2A00CEAF97 /* main.cpp in Sources */,
 				FED581C425AA43D400809E7D /* Player.cpp in Sources */,
+				FED581DA25AAC83700809E7D /* History.cpp in Sources */,
 				FED581D525AA49C100809E7D /* Game.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

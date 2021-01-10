@@ -7,6 +7,9 @@
 
 #include "City.h"
 
+#include "Flatulan.h"
+#include "Player.h"
+
 using namespace std;
 
 ///////////////////////////////////////////////////////////////////////////

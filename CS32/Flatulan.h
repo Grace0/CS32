@@ -9,8 +9,7 @@
 #define Flatulan_h
 
 #include <iostream>
-#include "City.h" //since we call functions on it
-#include "globals.h" // in .h or in .cpp?
+
 
 class City;
 

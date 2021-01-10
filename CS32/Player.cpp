@@ -6,6 +6,7 @@
 //
 
 #include "Player.h"
+#include "City.h" //since we call functions on it
 
 using namespace std;
 

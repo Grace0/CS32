@@ -7,6 +7,9 @@
 
 #include "Flatulan.h"
 
+#include "City.h" //since we call functions on it
+#include "globals.h" // in .h or in .cpp?
+
 using namespace std;
 ///////////////////////////////////////////////////////////////////////////
 //  Flatulan implementation

@@ -36,8 +36,15 @@ void History::display() const {
     
     for (int r = 0; r < m_nRows; r++)
     {
-        for (int c = 0; c < m_nCols; c++)
-            std::cout << historyGrid[r][c];
+        for (int c = 0; c < m_nCols; c++) {
+            if (historyGrid[r][c] == 'A' - 1) {
+                std::cout << '.';
+            } else if (historyGrid[r][c] >= 'A' + 25) {
+                std::cout << 'Z';
+            } else {
+                std::cout << historyGrid[r][c];
+            }
+        }
         std::cout << std::endl;
     }
     std::cout << std::endl;

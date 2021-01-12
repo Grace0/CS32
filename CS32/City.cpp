@@ -242,6 +242,6 @@ bool City::isInBounds(int r, int c) const
     return (r >= 1  &&  r <= m_rows  &&  c >= 1  &&  c <= m_cols);
 }
 
-void City::history() const {
-    m_history.display();
+History& City::history() {
+    return m_history;
 }

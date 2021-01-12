@@ -90,7 +90,7 @@ void Game::play()
                 p->move(decodeDirection(action[0]));
                 break;
             case 'h':
-                m_city->history();
+                m_city->history().display();
                 cout << "Press enter to continue." << endl;
                 break;
             }

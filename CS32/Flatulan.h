@@ -8,8 +8,6 @@
 #ifndef Flatulan_h
 #define Flatulan_h
 
-#include <iostream>
-
 
 class City;
 

@@ -8,6 +8,8 @@
 #include "Game.h"
 #include "City.h"
 #include "Player.h"
+#include "globals.h"
+#include <iostream>
 
 using namespace std;
 
@@ -96,7 +98,10 @@ void Game::play()
                 break;
             }
         }
-        m_city->moveFlatulans();
+        
+        if (action[0] != 'h') {
+            m_city->moveFlatulans();
+        }
         m_city->display();
     }
     if (p->isPassedOut())

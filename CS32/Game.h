@@ -8,8 +8,6 @@
 #ifndef Game_h
 #define Game_h
 
-#include "globals.h"
-
 class City;
 
 class Game
@@ -21,11 +19,10 @@ class Game
 
         // Mutators
     void play();
-    
-    int decodeDirection(char dir);
 
   private:
     City* m_city;
+    int decodeDirection(char dir);
 };
 
 #endif /* Game_hpp */

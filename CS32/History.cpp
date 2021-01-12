@@ -6,8 +6,7 @@
 //
 
 #include "History.h"
-
-//using namespace std;
+#include <iostream>
 
 History::History(int nRows, int nCols)
 {

@@ -7,7 +7,7 @@
 
 #include "Player.h"
 #include "City.h" //since we call functions on it
-
+#include <iostream>
 using namespace std;
 
 ///////////////////////////////////////////////////////////////////////////

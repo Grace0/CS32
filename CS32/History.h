@@ -8,8 +8,7 @@
 #ifndef History_h
 #define History_h
 
-#include <iostream>
-#include "globals.h" //why couldn't I do #include utilities.cpp ?
+#include "globals.h"
 
 class History
 {

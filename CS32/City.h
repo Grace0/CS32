@@ -30,7 +30,8 @@ class City
     int     nFlatulansAt(int r, int c) const;
     bool    determineNewPosition(int& r, int& c, int dir) const;
     void    display() const;
-
+    void history() const;
+    
         // Mutators
     bool  addFlatulan(int r, int c);
     bool  addPlayer(int r, int c);

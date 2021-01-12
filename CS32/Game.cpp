@@ -69,7 +69,7 @@ void Game::play()
 
     while ( ! p->isPassedOut()  &&  m_city->flatulanCount() > 0)
     {
-        cout << "Move (u/d/l/r//q): ";
+        cout << "Move (u/d/l/r//h/q): ";
         string action;
         getline(cin,action);
         if (action.size() == 0)  // player preaches
@@ -88,6 +88,10 @@ void Game::play()
               case 'l':
               case 'r':
                 p->move(decodeDirection(action[0]));
+                break;
+            case 'h':
+                m_city->history();
+                cout << "Press enter to continue." << endl;
                 break;
             }
         }

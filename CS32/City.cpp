@@ -185,6 +185,9 @@ bool City::addPlayer(int r, int c)
 
 void City::preachToFlatulansAroundPlayer()
 {
+    
+    bool atLeastOneFlatulan = false;
+
       // Preach to Flatulans orthogonally or diagonally adjacent to player.  If a
       // Flatulan is converted, then since the order of the Flatulans in the array
       // doesn't matter, we can replace the converted Flatulan we remove from the
@@ -200,16 +203,21 @@ void City::preachToFlatulansAroundPlayer()
 
           // if orthogonally or diagonally adjacent and conversion succeeds
         if (rowdiff >= -1  &&  rowdiff <= 1  &&
-            coldiff >= -1  &&  coldiff <= 1  &&
-            fp->possiblyGetConverted() )
+            coldiff >= -1  &&  coldiff <= 1)
         {
-            delete m_flatulans[k];
-            m_flatulans[k] = m_flatulans[m_nFlatulans-1];
-            m_nFlatulans--;
+            atLeastOneFlatulan = true;
+            if  (fp->possiblyGetConverted()) {
+                delete m_flatulans[k];
+                m_flatulans[k] = m_flatulans[m_nFlatulans-1];
+                m_nFlatulans--;
+            } else {
+                m_history.record(m_player->row(), m_player->col());
+            }
         }
         else
             k++;
     }
+    
 }
 
 void City::moveFlatulans()
@@ -232,4 +240,8 @@ void City::moveFlatulans()
 bool City::isInBounds(int r, int c) const
 {
     return (r >= 1  &&  r <= m_rows  &&  c >= 1  &&  c <= m_cols);
+}
+
+void City::history() const {
+    m_history.display();
 }

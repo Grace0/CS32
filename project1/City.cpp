@@ -214,6 +214,7 @@ void City::preachToFlatulansAroundPlayer()
                 m_nFlatulans--;
             } else {
                 atLeastOneRemaining = true;
+                k++;
             }
         }
         else

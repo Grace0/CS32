@@ -60,7 +60,7 @@
 		FEE46FD425A40E2A00CEAF97 = {
 			isa = PBXGroup;
 			children = (
-				FEE46FDF25A40E2A00CEAF97 /* CS32 */,
+				FEE46FDF25A40E2A00CEAF97 /* project1 */,
 				FEE46FDE25A40E2A00CEAF97 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -73,7 +73,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		FEE46FDF25A40E2A00CEAF97 /* CS32 */ = {
+		FEE46FDF25A40E2A00CEAF97 /* project1 */ = {
 			isa = PBXGroup;
 			children = (
 				FEE46FE025A40E2A00CEAF97 /* main.cpp */,
@@ -90,7 +90,7 @@
 				FED581D325AA49C100809E7D /* Game.cpp */,
 				FED581D425AA49C100809E7D /* Game.h */,
 			);
-			path = CS32;
+			path = project1;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

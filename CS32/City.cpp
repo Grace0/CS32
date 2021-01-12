@@ -187,6 +187,7 @@ void City::preachToFlatulansAroundPlayer()
 {
     
     bool atLeastOneFlatulan = false;
+    bool atLeastOneRemaining = false;
 
       // Preach to Flatulans orthogonally or diagonally adjacent to player.  If a
       // Flatulan is converted, then since the order of the Flatulans in the array
@@ -211,11 +212,15 @@ void City::preachToFlatulansAroundPlayer()
                 m_flatulans[k] = m_flatulans[m_nFlatulans-1];
                 m_nFlatulans--;
             } else {
-                m_history.record(m_player->row(), m_player->col());
+                atLeastOneRemaining = true;
             }
         }
         else
             k++;
+    }
+    
+    if (atLeastOneFlatulan && atLeastOneRemaining) {
+        m_history.record(m_player->row(), m_player->col());
     }
     
 }

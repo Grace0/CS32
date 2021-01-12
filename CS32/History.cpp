@@ -23,11 +23,11 @@ History::History(int nRows, int nCols)
 
 bool History::record(int r, int c) {
     
-    if (r >= m_nRows || c >= m_nCols || r < 1 || c < 1) {
+    if (r > m_nRows || c > m_nCols || r < 1 || c < 1) {
         return false;
     }
     
-    historyGrid[r][c]++;
+    historyGrid[r-1][c-1]++;
     return true;
 }
 

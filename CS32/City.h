@@ -9,6 +9,7 @@
 #define City_h
 
 #include "globals.h"
+#include "History.h"
 
 class Player;
 class Flatulan;
@@ -41,6 +42,7 @@ class City
     int       m_cols;
     Player*   m_player;
     Flatulan* m_flatulans[MAXFLATULANS];
+    History m_history;
     int       m_nFlatulans;
 
       // Helper functions

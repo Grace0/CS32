@@ -65,7 +65,7 @@ void clearScreen()
 
 #include <iostream>
 #include <cstring>
-#include <cstdlib>
+//#include <cstdlib>
 
 void clearScreen()  // will just write a newline in an Xcode output window
 {

@@ -31,6 +31,19 @@ int main() {
 
     assert(s.size() == 7);
     assert(s.empty() == 0);
+    
+    assert(s.erase(4) == true); // 40 41 41 42 43 43
+    assert(s.erase(0) == true); // 41 41 42 43 43
+    assert(s.erase(-43) == false);
+    assert(s.erase(s.size()-1) == true); // 41 41 42 43
+    
+    assert(s.size() == 4);
+    
+    assert(s.remove(88) == 0); // 41 41 42 43
+    assert(s.remove(41) == 2); // 42 43
+    assert(s.remove(43) == 1); // 42
+    
+    assert(s.size() == 1);
 
    cout << "Passed all tests" << endl;
 }

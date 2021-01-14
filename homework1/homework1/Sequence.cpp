@@ -50,17 +50,35 @@ int Sequence::insert(const ItemType& value) {
     return p;
 }
 
-//bool erase(int pos);
-//  // If 0 <= pos < size(), remove the item at position pos from
-//  // the sequence (so that all items that followed that item end up at
-//  // positions one lower than they were at before), and return true.
-//  // Otherwise, leave the sequence unchanged and return false.
-//
-//int remove(const ItemType& value);
-//  // Erase all items from the sequence that == value.  Return the
-//  // number of items removed (which will be 0 if no item == value).
-//
-//bool get(int pos, ItemType& value);
+bool Sequence::erase(int pos) {
+    if (pos < 0 || pos >= size()) return false;
+    
+    for (int i = pos; i < size() - 1; i++) {
+        sequence[i] = sequence[i+1];
+    }
+    
+    numItems--;
+    return true;
+}
+
+int Sequence::remove(const ItemType& value) {
+    int numRemoved = 0;
+    
+    int i;
+    for (i = 0; i < numItems; ) {
+        if (sequence[i] == value) {
+            erase(i);
+            numRemoved++;
+        } else {
+            i++; //only increment if we didn't remove something at that pos
+        }
+    }
+    return numRemoved;
+}
+
+bool Sequence::get(int pos, ItemType& value) {
+    
+}
 //  // If 0 <= pos < size(), copy into value the item at position pos
 //  // of the sequence and return true.  Otherwise, leave value unchanged
 //  // and return false.

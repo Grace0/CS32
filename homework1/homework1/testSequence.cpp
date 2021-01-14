@@ -82,5 +82,11 @@ int main() {
     assert(s.size() == 3);
     assert(t.size() == 4);
     
+    Sequence u = t;
+    assert(u.size() == 4);
+    
+    Sequence v = s;
+    assert(v.size() == 3);
+    
    cout << "Passed all tests" << endl;
 }

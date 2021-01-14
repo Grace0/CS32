@@ -5,7 +5,11 @@
 //  Created by Grace Kwak on 1/13/21.
 //
 
-using ItemType = std::string;
+#include <string>
+
+using ItemType = unsigned long;
+
+const int DEFAULT_MAX_ITEMS = 150; //where to put this?
 
 class Sequence
 {
@@ -60,4 +64,9 @@ class Sequence
 
     void swap(Sequence& other);
       // Exchange the contents of this sequence with the other one.
+    
+private:
+    
+    ItemType sequence[DEFAULT_MAX_ITEMS];
+    int numItems;
 };

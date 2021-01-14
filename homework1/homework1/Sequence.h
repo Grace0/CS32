@@ -9,8 +9,8 @@ class Sequence
 {
   public:
     Sequence();    // Create an empty sequence (i.e., one with no items)
-    bool empty();  // Return true if the sequence is empty, otherwise false.
-    int size();    // Return the number of items in the sequence.
+    bool empty() const;  // Return true if the sequence is empty, otherwise false.
+    int size() const;    // Return the number of items in the sequence.
     int insert(int pos, const std::string& value);
       // Insert value into the sequence so that it becomes the item at
       // position pos.  The original item at position pos and those that
@@ -51,7 +51,7 @@ class Sequence
       // sequence with value and return true.  Otherwise, leave the sequence
       // unchanged and return false.
 
-    int find(const std::string& value);
+    int find(const std::string& value) const;
       // Let p be the smallest integer such that value == the item at
       // position p in the sequence; if no such item exists, let p be -1.
       // Return p.

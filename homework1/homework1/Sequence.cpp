@@ -77,21 +77,51 @@ int Sequence::remove(const ItemType& value) {
 }
 
 bool Sequence::get(int pos, ItemType& value) {
-    
+    if (pos < 0 || pos >= size()) return false;
+    value = sequence[pos];
+    return true;
 }
-//  // If 0 <= pos < size(), copy into value the item at position pos
-//  // of the sequence and return true.  Otherwise, leave value unchanged
-//  // and return false.
+
+bool Sequence::set(int pos, const ItemType& value) {
+    if (pos < 0 || pos >= size()) return false;
+    sequence[pos] = value;
+    return true;
+}
+
+int Sequence::find(const ItemType& value) const {
+    for (int i = 0; i < size(); i++) {
+        if (sequence[i] == value) {
+            return i;
+        }
+    }
+    
+    return -1;
+}
+
+void Sequence::swap(Sequence& other) {
+    
+    int tempSize = size();
+    numItems = other.size();
+    other.numItems = tempSize;
+    
+    int max = size();
+    if (other.size() > max) {
+        max = other.size();
+    }
+
+    ItemType tempVal;
+    for (int i = 0; i < max; i++) { //not so efficient but clean and simple
+        tempVal = sequence[i];
+        sequence[i] = other.sequence[i];
+        other.sequence[i] = tempVal;
+    }
+
+//    for (int i = 0; i < numItems; i++) { //need temp var!!!
+//        sequence[i] = other.sequence[i];
+//    }
 //
-//bool set(int pos, const ItemType& value);
-//  // If 0 <= pos < size(), replace the item at position pos in the
-//  // sequence with value and return true.  Otherwise, leave the sequence
-//  // unchanged and return false.
+//    for (int i = 0; i < other.size(); i++) {
+//        other.sequence[i] = sequence[i];
+//    }
+}
 
-//int find(const ItemType& value) const;
-  // Let p be the smallest integer such that value == the item at
-  // position p in the sequence; if no such item exists, let p be -1.
-  // Return p.
-
-//void swap(Sequence& other);
-  // Exchange the contents of this sequence with the other one.

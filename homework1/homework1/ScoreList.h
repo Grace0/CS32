@@ -39,6 +39,7 @@
 
    private:
      // Some of your code goes here.
+     Sequence m_sequence; //uses the Sequence constructor with no args
  };
 
 

@@ -47,7 +47,7 @@ class Sequence
       // Erase all items from the sequence that == value.  Return the
       // number of items removed (which will be 0 if no item == value).
 
-    bool get(int pos, ItemType& value);
+    bool get(int pos, ItemType& value) const;
       // If 0 <= pos < size(), copy into value the item at position pos
       // of the sequence and return true.  Otherwise, leave value unchanged
       // and return false.

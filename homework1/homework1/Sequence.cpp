@@ -76,7 +76,7 @@ int Sequence::remove(const ItemType& value) {
     return numRemoved;
 }
 
-bool Sequence::get(int pos, ItemType& value) {
+bool Sequence::get(int pos, ItemType& value) const {
     if (pos < 0 || pos >= size()) return false;
     value = sequence[pos];
     return true;

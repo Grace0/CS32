@@ -10,6 +10,8 @@
 		FE85EBAC25B00F6800991C12 /* Sequence.h in Sources */ = {isa = PBXBuildFile; fileRef = FE85EBAB25B00F6800991C12 /* Sequence.h */; };
 		FE85EBB525B0110300991C12 /* Sequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FE85EBB425B0110300991C12 /* Sequence.cpp */; };
 		FE85EBB825B0DC1200991C12 /* testSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FE85EBB725B0DC1200991C12 /* testSequence.cpp */; };
+		FE85EBBC25B2081D00991C12 /* ScoreList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FE85EBBA25B2081D00991C12 /* ScoreList.cpp */; };
+		FE85EBBF25B2089000991C12 /* testScoreList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FE85EBBE25B2089000991C12 /* testScoreList.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -29,6 +31,9 @@
 		FE85EBAB25B00F6800991C12 /* Sequence.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sequence.h; sourceTree = "<group>"; };
 		FE85EBB425B0110300991C12 /* Sequence.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sequence.cpp; sourceTree = "<group>"; };
 		FE85EBB725B0DC1200991C12 /* testSequence.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = testSequence.cpp; sourceTree = "<group>"; };
+		FE85EBBA25B2081D00991C12 /* ScoreList.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ScoreList.cpp; sourceTree = "<group>"; };
+		FE85EBBB25B2081D00991C12 /* ScoreList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScoreList.h; sourceTree = "<group>"; };
+		FE85EBBE25B2089000991C12 /* testScoreList.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = testScoreList.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +69,9 @@
 				FE85EBAB25B00F6800991C12 /* Sequence.h */,
 				FE85EBB425B0110300991C12 /* Sequence.cpp */,
 				FE85EBB725B0DC1200991C12 /* testSequence.cpp */,
+				FE85EBBA25B2081D00991C12 /* ScoreList.cpp */,
+				FE85EBBB25B2081D00991C12 /* ScoreList.h */,
+				FE85EBBE25B2089000991C12 /* testScoreList.cpp */,
 			);
 			path = homework1;
 			sourceTree = "<group>";
@@ -126,6 +134,8 @@
 			files = (
 				FE85EBB525B0110300991C12 /* Sequence.cpp in Sources */,
 				FE85EBAC25B00F6800991C12 /* Sequence.h in Sources */,
+				FE85EBBF25B2089000991C12 /* testScoreList.cpp in Sources */,
+				FE85EBBC25B2081D00991C12 /* ScoreList.cpp in Sources */,
 				FE85EBB825B0DC1200991C12 /* testSequence.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -5,8 +5,8 @@
 //  Created by Grace Kwak on 1/13/21.
 //
 
-#ifndef SEQUENCE_H
-#define SEQUENCE_H
+#ifndef NEWSEQUENCE_H
+#define NEWSEQUENCE_H
 
 #include <string>
 

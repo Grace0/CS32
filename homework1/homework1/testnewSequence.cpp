@@ -34,6 +34,11 @@ int main()
     assert(e.insert(v) == -1);
     assert(f.insert(v) == -1);
     assert(g.insert(v) == -1);
+    
+    d = a;
+    c = g;
+    e = e;
+    
     //        // When two Sequences' contents are swapped, their capacities are
     //        // swapped as well:
     //      a.swap(b);

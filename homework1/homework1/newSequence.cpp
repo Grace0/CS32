@@ -35,6 +35,24 @@ Sequence::Sequence(const Sequence& src) {
    //don't need to return anything; it's just another constructor
 }
 
+Sequence& Sequence::operator=(const Sequence &src) { //return_type class_name function_name
+
+    if (&src == this) return *this; //why do we do &src instead of &this?
+
+    delete [] m_sequence;
+
+    m_maxItems = src.m_maxItems;
+    m_numItems = src.m_numItems;
+
+    m_sequence = new ItemType[m_maxItems];
+
+    for (int i = 0; i < m_numItems; i++) {
+        m_sequence[i] = src.m_sequence[i];
+    }
+    
+    return *this;
+}
+
 Sequence::~Sequence() {
     delete[] m_sequence;
 }
@@ -125,21 +143,23 @@ int Sequence::find(const ItemType& value) const {
 
 void Sequence::swap(Sequence& other) {
     
-    int tempSize = size();
-    m_numItems = other.size();
-    other.m_numItems = tempSize;
+    //AO
     
-    int max = size();
-    if (other.size() > max) {
-        max = other.size();
-    }
-
-    ItemType tempVal;
-    for (int i = 0; i < max; i++) { //not so efficient but clean and simple
-        tempVal = m_sequence[i];
-        m_sequence[i] = other.m_sequence[i];
-        other.m_sequence[i] = tempVal;
-    }
+//    int tempSize = size();
+//    m_numItems = other.size();
+//    other.m_numItems = tempSize;
+//
+//    int max = size();
+//    if (other.size() > max) {
+//        max = other.size();
+//    }
+//
+//    ItemType tempVal;
+//    for (int i = 0; i < max; i++) { //not so efficient but clean and simple
+//        tempVal = m_sequence[i];
+//        m_sequence[i] = other.m_sequence[i];
+//        other.m_sequence[i] = tempVal;
+//    }
 
 //    for (int i = 0; i < m_numItems; i++) { //need temp var!!!
 //        m_sequence[i] = other.m_sequence[i];

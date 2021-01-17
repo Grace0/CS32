@@ -24,6 +24,8 @@ class Sequence
     
     Sequence(const Sequence& src); // copy constructor
     
+    Sequence& operator=(const Sequence &src);
+    
     bool empty() const;  // Return true if the sequence is empty, otherwise false.
     int size() const;    // Return the number of items in the sequence.
     int insert(int pos, const ItemType& value);

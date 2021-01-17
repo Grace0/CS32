@@ -143,7 +143,18 @@ int Sequence::find(const ItemType& value) const {
 
 void Sequence::swap(Sequence& other) {
     
-    //AO
+    unsigned long *temp = other.m_sequence;
+    other.m_sequence = m_sequence;
+    m_sequence = temp;
+    
+    int tempSize = m_numItems;
+    m_numItems = other.size();
+    other.m_numItems = tempSize;
+    
+    int tempMax = m_maxItems;
+    m_maxItems = other.m_maxItems;
+    other.m_maxItems = tempMax;
+    
     
 //    int tempSize = size();
 //    m_numItems = other.size();

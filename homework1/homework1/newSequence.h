@@ -12,12 +12,18 @@
 
 using ItemType = unsigned long;
 
-const int DEFAULT_MAX_ITEMS = 150; //where to put this?
+const int DEFAULT_MAX_ITEMS = 150;
 
 class Sequence
 {
   public:
-    Sequence();    // Create an empty sequence (i.e., one with no items)
+    Sequence();
+    Sequence(const int MAX_ITEMS);    // Create an empty sequence (i.e., one with no items)
+    
+    ~Sequence();
+    
+    Sequence(const Sequence& src); // copy constructor
+    
     bool empty() const;  // Return true if the sequence is empty, otherwise false.
     int size() const;    // Return the number of items in the sequence.
     int insert(int pos, const ItemType& value);
@@ -69,9 +75,9 @@ class Sequence
       // Exchange the contents of this sequence with the other one.
     
 private:
-    
-    ItemType sequence[DEFAULT_MAX_ITEMS];
-    int numItems;
+    int m_maxItems;
+    int m_numItems;
+    ItemType *m_sequence;
 };
 
 #endif

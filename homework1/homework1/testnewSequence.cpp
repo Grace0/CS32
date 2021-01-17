@@ -19,12 +19,21 @@ int main()
     
     for (int k = 0; k < 150; k++)
       assert(c.insert(v) != -1);
+    
+    Sequence d = c;
+    Sequence e = d;
+    
+    Sequence f(a);
+    Sequence g(b);
 
     // Failure if we try to insert a sixth item into b
     assert(b.insert(v) == -1);
     assert(a.insert(v) == -1);
     assert(c.insert(v) == -1);
-
+    assert(d.insert(v) == -1);
+    assert(e.insert(v) == -1);
+    assert(f.insert(v) == -1);
+    assert(g.insert(v) == -1);
     //        // When two Sequences' contents are swapped, their capacities are
     //        // swapped as well:
     //      a.swap(b);

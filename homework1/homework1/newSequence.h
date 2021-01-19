@@ -1,10 +1,3 @@
-//
-//  main.cpp
-//  homework1
-//
-//  Created by Grace Kwak on 1/13/21.
-//
-
 #ifndef NEWSEQUENCE_H
 #define NEWSEQUENCE_H
 
@@ -19,13 +12,13 @@ class Sequence
   public:
     Sequence();
     Sequence(const int MAX_ITEMS);    // Create an empty sequence (i.e., one with no items)
-    
+
     ~Sequence();
-    
+
     Sequence(const Sequence& src); // copy constructor
-    
+
     Sequence& operator=(const Sequence &src);
-    
+
     bool empty() const;  // Return true if the sequence is empty, otherwise false.
     int size() const;    // Return the number of items in the sequence.
     int insert(int pos, const ItemType& value);
@@ -47,13 +40,13 @@ class Sequence
       // up at positions one higher than before.  Return p if the value
       // was actually inserted.  Return -1 if the value was not inserted
       // (perhaps because the sequence has a fixed capacity and is full).
-     
+
     bool erase(int pos);
       // If 0 <= pos < size(), remove the item at position pos from
       // the sequence (so that all items that followed that item end up at
       // positions one lower than they were at before), and return true.
       // Otherwise, leave the sequence unchanged and return false.
-     
+
     int remove(const ItemType& value);
       // Erase all items from the sequence that == value.  Return the
       // number of items removed (which will be 0 if no item == value).
@@ -75,7 +68,7 @@ class Sequence
 
     void swap(Sequence& other);
       // Exchange the contents of this sequence with the other one.
-    
+
 private:
     int m_maxItems;
     int m_numItems;

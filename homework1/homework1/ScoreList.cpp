@@ -5,7 +5,7 @@ ScoreList::ScoreList() {
 }
 
 bool ScoreList::add(unsigned long score) {
-    if (score < 0 || score > 100 || m_sequence.size() > DEFAULT_MAX_ITEMS) return false;
+    if (score < 0 || score > 100 || m_sequence.size() >= DEFAULT_MAX_ITEMS) return false;
     
     m_sequence.insert(score);
     return true;

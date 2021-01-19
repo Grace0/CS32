@@ -21,7 +21,7 @@ int Sequence::size() const {
 
 int Sequence::insert(int pos, const ItemType& value) {
     
-    if (pos > size()) return -1;
+    if (pos < 0 || pos > size() || size() == DEFAULT_MAX_ITEMS) return -1;
     
     for (int i = numItems; i > pos; i--) {
         sequence[i] = sequence[i-1];
@@ -33,7 +33,7 @@ int Sequence::insert(int pos, const ItemType& value) {
 
 int Sequence::insert(const ItemType& value) {
     
-    if (size() > DEFAULT_MAX_ITEMS) return -1;
+    if (size() == DEFAULT_MAX_ITEMS) return -1;
     
     for (int i = 0; i < size(); i++) {
         if (value <= sequence[i]) {

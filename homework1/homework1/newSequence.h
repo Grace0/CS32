@@ -1,8 +1,6 @@
 #ifndef NEWSEQUENCE_H
 #define NEWSEQUENCE_H
 
-#include <string>
-
 using ItemType = unsigned long;
 
 const int DEFAULT_MAX_ITEMS = 150;

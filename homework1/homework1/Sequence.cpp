@@ -7,9 +7,6 @@
 
 #include "Sequence.h"
 
-#include <iostream>
-#include <cassert>
-
 Sequence::Sequence() {
     numItems = 0;
 }
@@ -116,12 +113,5 @@ void Sequence::swap(Sequence& other) {
         other.sequence[i] = tempVal;
     }
 
-//    for (int i = 0; i < numItems; i++) { //need temp var!!!
-//        sequence[i] = other.sequence[i];
-//    }
-//
-//    for (int i = 0; i < other.size(); i++) {
-//        other.sequence[i] = sequence[i];
-//    }
 }
 

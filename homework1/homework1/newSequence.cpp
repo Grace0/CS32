@@ -7,9 +7,6 @@
 
 #include "newSequence.h"
 
-#include <iostream>
-#include <cassert>
-
 Sequence::Sequence() {
     m_maxItems = DEFAULT_MAX_ITEMS;
     m_sequence = new ItemType[m_maxItems];
@@ -143,7 +140,7 @@ int Sequence::find(const ItemType& value) const {
 
 void Sequence::swap(Sequence& other) {
 
-    unsigned long *temp = other.m_sequence;
+    ItemType *temp = other.m_sequence;
     other.m_sequence = m_sequence;
     m_sequence = temp;
 
@@ -155,29 +152,5 @@ void Sequence::swap(Sequence& other) {
     m_maxItems = other.m_maxItems;
     other.m_maxItems = tempMax;
 
-
-//    int tempSize = size();
-//    m_numItems = other.size();
-//    other.m_numItems = tempSize;
-//
-//    int max = size();
-//    if (other.size() > max) {
-//        max = other.size();
-//    }
-//
-//    ItemType tempVal;
-//    for (int i = 0; i < max; i++) { //not so efficient but clean and simple
-//        tempVal = m_sequence[i];
-//        m_sequence[i] = other.m_sequence[i];
-//        other.m_sequence[i] = tempVal;
-//    }
-
-//    for (int i = 0; i < m_numItems; i++) { //need temp var!!!
-//        m_sequence[i] = other.m_sequence[i];
-//    }
-//
-//    for (int i = 0; i < other.size(); i++) {
-//        other.m_sequence[i] = m_sequence[i];
-//    }
 }
 

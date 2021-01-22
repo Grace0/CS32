@@ -7,8 +7,6 @@
 
 using ItemType = unsigned long;
 
-const int DEFAULT_MAX_ITEMS = 150;
-
 class Sequence
 {
   public:
@@ -65,7 +63,15 @@ class Sequence
       // Exchange the contents of this sequence with the other one.
 
   private:
-    ItemType m_data[DEFAULT_MAX_ITEMS];  // the items in the sequence
+    
+    struct Node {
+        ItemType value;
+        Node *next, *prev;
+    };
+    
+    Node dummy;
+    Node *head;
+    
     int      m_size;                     // number of items in the sequence
 
       // At any time, the elements of m_data indexed from 0 to m_size-1
@@ -87,7 +93,7 @@ int Sequence::size() const
 inline
 bool Sequence::empty() const
 {
-    return size() == 0;
+    return (m_size == 0);
 }
 
 #endif // SEQUENCE_INCLUDED

@@ -6,9 +6,20 @@
 //
 
 #include <iostream>
+#include <cassert>
 
-int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
+#include "Sequence.h"
+using namespace std;
+
+int main() {
+    
+    Sequence s;
+    
+    assert(s.empty() == 1);
+    assert(s.size() == 0);
+    
+    s.insert(0, 1);
+    
+    cerr << "Hello, World!\n";
     return 0;
 }

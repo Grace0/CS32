@@ -11,6 +11,17 @@ Sequence::Sequence()
 
 }
 
+Sequence::~Sequence() {
+    
+    Node *deleteFirst = dummy;
+    
+    for (int i = 0; i < m_size; i++) {
+        Node *deleteNext = deleteFirst->next;
+        delete deleteFirst;
+        deleteFirst = deleteNext;
+    }
+}
+
 Sequence::Sequence(const Sequence& src) {
     m_size = src.m_size;
     
@@ -25,6 +36,16 @@ Sequence::Sequence(const Sequence& src) {
         insert(i, ptr->value);
     }
 
+}
+
+Sequence& Sequence::operator=(const Sequence& src) {
+    
+    Sequence temp = src;
+    
+    if (this != &src) {
+        swap(temp);
+    }
+    return *this;
 }
 
 int Sequence::insert(int pos, const ItemType& value)
@@ -160,30 +181,20 @@ int Sequence::find(const ItemType& value) const
 
 void Sequence::swap(Sequence& other)
 {
-    // Swap elements.  Since the only elements that matter are those up to
-    // m_size and other.m_size, only they have to be moved.
-//    int maxSize = (m_size > other.m_size ? m_size : other.m_size);
     
-    //Make pointers to each Sequence's dummy node so that we can traverse each Sequence's LL
+    //Swap pointers to dummy nodes
     Node *ptrTemp = dummy;
     dummy = other.dummy;
     other.dummy = ptrTemp;
     
-//    for (int k = 0; k < maxSize; k++)
-//    {
-//        //Move to the next Node
-//        ptrThis = ptrThis->next;
-//        ptrOther = ptrOther->next;
-//
-//        //Swap Node values
-//        ItemType tempItem = ptrThis->value;
-//        ptrThis->value = ptrOther->value;
-//        ptrOther->value = tempItem;
-//    }
-//
-//    // Swap sizes
+
+    // Swap sizes
     int tempSize = m_size;
     m_size = other.m_size;
     other.m_size = tempSize;
 }
 
+//int subsequence(const Sequence& seq1, const Sequence& seq2) {
+//    if (seq2.empty()) return -1;
+//
+//}

@@ -11,7 +11,9 @@ class Sequence
 {
   public:
     Sequence();          // Create an empty sequence (i.e., one whose size() is 0).
+    ~Sequence();
     Sequence(const Sequence& src);
+    Sequence& operator=(const Sequence& src);
     bool empty() const;  // Return true if the sequence is empty, otherwise false.
     int size() const;    // Return the number of items in the sequence.
 
@@ -87,6 +89,8 @@ class Sequence
       // Insert value at position pos, shifting items to the right to make
       // room for it.  Assume pos is valid and there's room.
 };
+
+int subsequence(const Sequence& seq1, const Sequence& seq2);
 
 // Inline implementations
 

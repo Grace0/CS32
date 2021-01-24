@@ -45,13 +45,14 @@ int main() {
     assert(s.erase(2) == 1); //erase last Node
     assert(s.size() == 4);
     
-    //TODO: Copy constructor
-    
     Sequence t;
     t.insert(1);
     t.insert(2);
     t.insert(3);
     t.insert(4);
+    
+ //   Sequence u = t;
+ //   Sequence v(u);
     
     unsigned long g = 0;
     assert(t.get(0, g) == 1); //get first val

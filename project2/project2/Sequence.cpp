@@ -23,7 +23,8 @@ Sequence::~Sequence() {
 }
 
 Sequence::Sequence(const Sequence& src) {
-    m_size = src.m_size;
+    
+    m_size = 0; //initialize m_size to 0
     
     dummy = new Node;
     dummy->next = dummy;
@@ -31,9 +32,9 @@ Sequence::Sequence(const Sequence& src) {
     
     Node *ptr = src.dummy;
     
-    for (int i = 0; i < m_size; i++) {
+    for (int i = 0; i < src.m_size; i++) { //call insert() for however many nodes are in src
         ptr = ptr->next;
-        insert(i, ptr->value);
+        insert(i, ptr->value); //insert() will increment m_size
     }
 
 }

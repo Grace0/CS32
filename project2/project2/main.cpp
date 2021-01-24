@@ -114,6 +114,9 @@ int main() {
     assert(e.empty() == 1);
     assert(e2.empty() == 1); //test empty when empty
     
+    Sequence r = t; //copy constructor on a non-empty LL
+    Sequence w = e; //copy constructor on an empty LL
+    
     cerr << "Passed all tests." << endl;
     return 0;
 }

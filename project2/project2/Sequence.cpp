@@ -99,27 +99,23 @@ bool Sequence::erase(int pos)
     m_size--;
     return true;
 }
-//
-//int Sequence::remove(const ItemType& value)
-//{
-//    int keepPos = find(value);
-//    if (keepPos == -1)
-//    return 0;
-//    int count = 1;
-//    for (int examinePos = keepPos+1; examinePos < size(); examinePos++)
-//    {
-//    if (m_data[examinePos] == value)
-//        count++;
-//    else
-//    {
-//        m_data[keepPos] = m_data[examinePos];
-//        keepPos++;
-//    }
-//    }
-//    m_size -= count;
-//    return count;
-//}
-//
+
+int Sequence::remove(const ItemType& value)
+{
+    int count = 0;
+
+    Node *ptr = dummy;
+    for (int i = 0; i < m_size; i++) {
+        ptr = ptr->next;
+        if (ptr->value == value) {
+            erase(i); //erase() already decrements m_size
+            count++;
+        }
+    }
+
+    return count;
+}
+
 bool Sequence::get(int pos, ItemType& value) const
 {
     if (pos < 0  ||  pos >= size())
@@ -133,40 +129,61 @@ bool Sequence::get(int pos, ItemType& value) const
     value = traverse->next->value;
     return true;
 }
-//
-//bool Sequence::set(int pos, const ItemType& value)
-//{
-//    if (pos < 0  ||  pos >= size())
-//        return false;
-//    m_data[pos] = value;
-//    return true;
-//}
-//
-//int Sequence::find(const ItemType& value) const
-//{
-//    for (int pos = 0; pos < size(); pos++)
-//        if (m_data[pos] == value)
-//        return pos;
-//    return -1;
-//}
-//
-//void Sequence::swap(Sequence& other)
-//{
-//      // Swap elements.  Since the only elements that matter are those up to
-//      // m_size and other.m_size, only they have to be moved.
-//
+
+bool Sequence::set(int pos, const ItemType& value)
+{
+    if (pos < 0  ||  pos >= size())
+        return false;
+    
+    Node *traverse = dummy; //traverse points to the Node right before
+    for (int i = 0; i < pos; i++) {
+        traverse = traverse->next;
+    }
+    
+    traverse->next->value = value;
+    return true;
+}
+
+int Sequence::find(const ItemType& value) const
+{
+    Node *traverse = dummy;
+    for (int i = 0; i < size(); i++) { //iterate through the linked list
+        traverse = traverse->next;
+        if (traverse->value == value) {
+            return i;
+        }
+    }
+    
+    //No Node with that value was found
+    return -1;
+}
+
+void Sequence::swap(Sequence& other)
+{
+    // Swap elements.  Since the only elements that matter are those up to
+    // m_size and other.m_size, only they have to be moved.
 //    int maxSize = (m_size > other.m_size ? m_size : other.m_size);
+    
+    //Make pointers to each Sequence's dummy node so that we can traverse each Sequence's LL
+    Node *ptrTemp = dummy;
+    dummy = other.dummy;
+    other.dummy = ptrTemp;
+    
 //    for (int k = 0; k < maxSize; k++)
 //    {
-//        ItemType tempItem = m_data[k];
-//        m_data[k] = other.m_data[k];
-//        other.m_data[k] = tempItem;
+//        //Move to the next Node
+//        ptrThis = ptrThis->next;
+//        ptrOther = ptrOther->next;
+//
+//        //Swap Node values
+//        ItemType tempItem = ptrThis->value;
+//        ptrThis->value = ptrOther->value;
+//        ptrOther->value = tempItem;
 //    }
 //
-//      // Swap sizes
-//
-//    int tempSize = m_size;
-//    m_size = other.m_size;
-//    other.m_size = tempSize;
-//}
-//
+//    // Swap sizes
+    int tempSize = m_size;
+    m_size = other.m_size;
+    other.m_size = tempSize;
+}
+

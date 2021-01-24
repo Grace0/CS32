@@ -51,28 +51,33 @@ int Sequence::insert(int pos, const ItemType& value)
     return pos;
 }
 
-//int Sequence::insert(const ItemType& value)
-//{
-//
-//    Node *traverse = dummy; //traverse points to the Node right before
-//    for (int i = 0; i < pos; i++) {
-//        traverse = traverse->next;
-//    }
-//
-//    //Create a new node
-//    Node *p = new Node(traverse, traverse->next, value);
-//
-//    //Update the previous node's *next
-//    traverse->next = p;
-//
-//    //Update the following node's *prev
-//    p->next->prev = p;
-//
-//    m_size++;
-//
-//    return pos;
-//}
-//
+int Sequence::insert(const ItemType& value)
+{
+
+    Node *traverse = dummy; //traverse points to the Node right before
+    
+    int i;
+    for (i = 0; i < m_size; i++) {
+        traverse = traverse->next;
+        if (value <= traverse->value) {
+            break;
+        }
+    }
+
+    //Create a new node
+    Node *p = new Node(traverse, traverse->next, value);
+
+    //Update the previous node's *next
+    traverse->next = p;
+
+    //Update the following node's *prev
+    p->next->prev = p;
+
+    m_size++;
+
+    return i;
+}
+
 bool Sequence::erase(int pos)
 {
     if (pos < 0  ||  pos >= size())
@@ -115,13 +120,19 @@ bool Sequence::erase(int pos)
 //    return count;
 //}
 //
-//bool Sequence::get(int pos, ItemType& value) const
-//{
-//    if (pos < 0  ||  pos >= size())
-//        return false;
-//    value = m_data[pos];
-//    return true;
-//}
+bool Sequence::get(int pos, ItemType& value) const
+{
+    if (pos < 0  ||  pos >= size())
+        return false;
+    
+    Node *traverse = dummy; //traverse points to the Node right before
+    for (int i = 0; i < pos; i++) {
+        traverse = traverse->next;
+    }
+    
+    value = traverse->next->value;
+    return true;
+}
 //
 //bool Sequence::set(int pos, const ItemType& value)
 //{

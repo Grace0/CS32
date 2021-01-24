@@ -5,10 +5,26 @@
 Sequence::Sequence()
  : m_size(0)
 {
-    head = &dummy;
-    dummy.next = &dummy; //circular
-    dummy.prev = &dummy;
-//    dummy.value = NULL;
+    dummy = new Node;
+    dummy->next = dummy;
+    dummy->prev = dummy;
+
+}
+
+Sequence::Sequence(const Sequence& src) {
+    m_size = src.m_size;
+    
+    dummy = new Node;
+    dummy->next = dummy;
+    dummy->prev = dummy;
+    
+    Node *ptr = src.dummy;
+    
+    for (int i = 0; i < m_size; i++) {
+        ptr = ptr->next;
+        insert(i, ptr->value);
+    }
+
 }
 
 int Sequence::insert(int pos, const ItemType& value)
@@ -16,34 +32,20 @@ int Sequence::insert(int pos, const ItemType& value)
     if (pos < 0  ||  pos > size())
     return -1;
     
-    //Create a new node
-    Node *p = new Node;
-    p->value = value;
-    
-    //insert at beginning
-    if (pos == 0) {
-        
-        p->next = head->next;
-        p->prev = head;
-        
-        //Update the previous node's *next
-        dummy.next = p;
-        
-        //Update the following node's *prev
-        p->next->next = p;
-
-    } else {
-        
-        Node *traverse = head->next;
-        for (int i = 0; i < pos; i++) {
-            traverse = traverse->next;
-        }
-        
-        p->prev = traverse;
-        
-        
+    Node *traverse = dummy; //traverse points to the Node right before
+    for (int i = 0; i < pos; i++) {
+        traverse = traverse->next;
     }
     
+    //Create a new node
+    Node *p = new Node(traverse, traverse->next, value);
+
+    //Update the previous node's *next
+    traverse->next = p;
+    
+    //Update the following node's *prev
+    p->next->prev = p;
+        
     m_size++;
     
     return pos;
@@ -52,22 +54,46 @@ int Sequence::insert(int pos, const ItemType& value)
 //int Sequence::insert(const ItemType& value)
 //{
 //
-//    int pos;
-//    for (pos = 0; pos < size()  &&  value > m_data[pos]; pos++)
-//    ;
-//    uncheckedInsert(pos, value);
+//    Node *traverse = dummy; //traverse points to the Node right before
+//    for (int i = 0; i < pos; i++) {
+//        traverse = traverse->next;
+//    }
+//
+//    //Create a new node
+//    Node *p = new Node(traverse, traverse->next, value);
+//
+//    //Update the previous node's *next
+//    traverse->next = p;
+//
+//    //Update the following node's *prev
+//    p->next->prev = p;
+//
+//    m_size++;
+//
 //    return pos;
 //}
 //
-//bool Sequence::erase(int pos)
-//{
-//    if (pos < 0  ||  pos >= size())
-//    return false;
-//    for ( ; pos < size() - 1; pos++)
-//    m_data[pos] = m_data[pos+1];
-//    m_size--;
-//    return true;
-//}
+bool Sequence::erase(int pos)
+{
+    if (pos < 0  ||  pos >= size())
+    return false;
+
+    Node *traverse = dummy; //traverse points to the Node right before
+    for (int i = 0; i < pos; i++) {
+        traverse = traverse->next;
+    }
+    
+    //traverse points to the node right before the one we want to delete
+    Node *toDelete = traverse->next;
+    
+    traverse->next = toDelete->next;
+    toDelete->next->prev = traverse;
+    
+    delete toDelete;
+    
+    m_size--;
+    return true;
+}
 //
 //int Sequence::remove(const ItemType& value)
 //{

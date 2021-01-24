@@ -11,6 +11,7 @@ class Sequence
 {
   public:
     Sequence();          // Create an empty sequence (i.e., one whose size() is 0).
+    Sequence(const Sequence& src);
     bool empty() const;  // Return true if the sequence is empty, otherwise false.
     int size() const;    // Return the number of items in the sequence.
 
@@ -67,10 +68,15 @@ class Sequence
     struct Node {
         ItemType value;
         Node *next, *prev;
+        Node() {} //default cons, for dummy node
+        Node(Node *n_prev, Node *n_next, ItemType n_value) {
+            prev = n_prev;
+            next = n_next;
+            value = n_value;
+        }
     };
     
-    Node dummy;
-    Node *head;
+    Node *dummy;
     
     int      m_size;                     // number of items in the sequence
 

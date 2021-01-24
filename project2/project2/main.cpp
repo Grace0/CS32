@@ -117,6 +117,9 @@ int main() {
     Sequence r = t; //copy constructor on a non-empty LL
     Sequence w = e; //copy constructor on an empty LL
     
+    r = w; //call assignment operator to assign a non-empty LL to an empty LL
+    e = t; //call assignment operator to assign an empty LL to a non-empty LL
+    
     cerr << "Passed all tests." << endl;
     return 0;
 }

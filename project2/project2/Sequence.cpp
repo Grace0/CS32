@@ -20,6 +20,8 @@ Sequence::~Sequence() {
         delete deleteFirst;
         deleteFirst = deleteNext;
     }
+    
+    delete deleteFirst; //delete the last node
 }
 
 Sequence::Sequence(const Sequence& src) {
@@ -126,12 +128,16 @@ int Sequence::remove(const ItemType& value)
 {
     int count = 0;
 
-    Node *ptr = dummy;
-    for (int i = 0; i < m_size; i++) {
-        ptr = ptr->next;
+    Node *ptr = dummy->next;
+        
+    for (int i = 0; i < m_size; ) {
         if (ptr->value == value) {
+            ptr = ptr->next; // after we call erase(), the ptr to Node i will be a dangling pointer, so before we delete that node, we increment ptr to point to the Node i+1, which will be the new Node i (after we call erase()) //we only increment ptr when we do find a value to remove
             erase(i); //erase() already decrements m_size
             count++;
+        } else {
+            i++;
+            ptr = ptr->next;
         }
     }
 

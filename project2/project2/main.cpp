@@ -91,10 +91,20 @@ int main() {
     assert(t.find(40) == 3); //val found at end
     
     assert(t.remove(348) == 0); //removes no values
-    assert(t.remove(10) == 1); //removes one value
+    assert(t.remove(10) == 1); //removes one value: the first value
     t.insert(20);
     assert(t.remove(20) == 2); //removes multiple values
+    assert(t.remove(40) == 1); //removes one value: the last value
+    assert(t.remove(30) == 1); //removes one value: the one remaining value
     
+    t.insert(1);
+    t.insert(1);
+    t.insert(1);
+    t.insert(1);
+    assert(t.remove(1) == 4); //remove all the values
+    
+    t.insert(319);
+    t.insert(124);
     t.swap(s); //swap two non-empty LL
     assert(s.size() == 2);
     assert(t.size() == 4);

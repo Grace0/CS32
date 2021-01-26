@@ -1,26 +1,24 @@
 #  Design
-I implemented a circular doubly-linked list with a dummy node. Each list node has a value, a pointer to the next node, and a pointer to the previous node in the list.
+I implemented a circular doubly-linked list with a dummy node. Each list node has a value, a pointer to the next node, and a pointer to the previous node in the list. This way, there are fewer edge cases to deal with, since a circular doubly-linked lists has no null pointers.
 An empty list looks like this:
 
 A typical list looks like this (this list has three nodes):
 
 # Pseudocode
-Sequence();
-
-bool empty() const;
-
-int size() const;
 
 int insert(int pos, const ItemType& value);
 
 int insert(const ItemType& value);
 
 bool erase(int pos);
+
 int remove(const ItemType& value);
-bool get(int pos, ItemType& value) const;
-bool set(int pos, const ItemType& value);
-int find(const ItemType& value) const;
+
 void swap(Sequence& other);
+
+int subsequence(const Sequence& seq1, const Sequence& seq2)
+
+void interleave(const Sequence& seq1, const Sequence& seq2, Sequence& result) 
 
 # Test Cases
 ## For Sequence class function implementations:
@@ -221,7 +219,7 @@ assert(z.empty() == false); //seq1 empty, seq2 non-empty
 Sequence aa;
 interleave(t, w, aa);
 assert(aa.empty() == false); //seq1 non-empty, seq2 empty
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 Sequence ab; // m = n
 interleave(p, q, ab);
 

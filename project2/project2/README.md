@@ -254,3 +254,9 @@ rb.insert(1,3107);
 interleave(qa, rb, rb); //seq2 and result refer to the same Sequence
 
 interleave(qa, qa, ra); //seq1 and seq2 refer to the same Sequence
+
+Sequence af;
+Sequence ag;
+interleave(af, qa, ra); //seq1 is empty
+interleave(qa, af, ra); //seq2 is empty
+interleave(af, ag, ra); //both seq1 and seq2 are empty

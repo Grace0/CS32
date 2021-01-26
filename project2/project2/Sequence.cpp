@@ -5,6 +5,7 @@
 Sequence::Sequence()
  : m_size(0)
 {
+    //Initialize a dummy node, circularly and doubly linked
     dummy = new Node;
     dummy->next = dummy;
     dummy->prev = dummy;
@@ -15,6 +16,7 @@ Sequence::~Sequence() {
     
     Node *deleteFirst = dummy;
     
+    //Loop through all list nodes and call delete
     for (int i = 0; i < m_size; i++) {
         Node *deleteNext = deleteFirst->next;
         delete deleteFirst;
@@ -28,12 +30,14 @@ Sequence::Sequence(const Sequence& src) {
     
     m_size = 0; //initialize m_size to 0
     
+    //Create a new dummy node for the new list
     dummy = new Node;
     dummy->next = dummy;
     dummy->prev = dummy;
     
     Node *ptr = src.dummy;
     
+    //"Copy" each node over to the new list by calling insert()
     for (int i = 0; i < src.m_size; i++) { //call insert() for however many nodes are in src
         ptr = ptr->next;
         insert(i, ptr->value); //insert() will increment m_size
@@ -43,6 +47,7 @@ Sequence::Sequence(const Sequence& src) {
 
 Sequence& Sequence::operator=(const Sequence& src) {
     
+    //Copy src to a temporary Sequence, since src itself is const
     Sequence temp = src;
     
     if (this != &src) {
@@ -80,6 +85,7 @@ int Sequence::insert(const ItemType& value)
 
     Node *traverse = dummy; //traverse points to the Node right before
     
+    //Move to the node position where we want to insert the new node
     int i;
     for (i = 0; i < m_size; i++) {
         traverse = traverse->next;
@@ -115,6 +121,7 @@ bool Sequence::erase(int pos)
     //traverse points to the node right before the one we want to delete
     Node *toDelete = traverse->next;
     
+    //Re-adjust links
     traverse->next = toDelete->next;
     toDelete->next->prev = traverse;
     
@@ -130,13 +137,14 @@ int Sequence::remove(const ItemType& value)
 
     Node *ptr = dummy->next;
         
+    //Loop through each node
     for (int i = 0; i < m_size; ) {
         if (ptr->value == value) {
-            ptr = ptr->next; // after we call erase(), the ptr to Node i will be a dangling pointer, so before we delete that node, we increment ptr to point to the Node i+1, which will be the new Node i (after we call erase()) //we only increment ptr when we do find a value to remove
+            ptr = ptr->next; // after we call erase(), the ptr to Node i will be a dangling pointer, so before we delete that node, we increment ptr to point to the Node i+1, which will be the new Node i (after we call erase())
             erase(i); //erase() already decrements m_size
             count++;
         } else {
-            i++;
+            i++; //We only increment i when we haven't found (and deleted) a node at i
             ptr = ptr->next;
         }
     }
@@ -211,12 +219,15 @@ int subsequence(const Sequence& seq1, const Sequence& seq2) {
     seq2.get(0, seq2FirstVal);
     
     int next;
-    for (int pos = 0; pos < seq1.size()-seq2.size()+1; pos++) {
+    for (int pos = 0; pos < seq1.size()-seq2.size()+1; pos++) { //iterate though the nodes in seq1 that could be the start of a subsequence seq2
         seq1.get(pos, seq1Val);
+        
         if (seq1Val == seq2FirstVal) {
-            for (next = 1; next < seq2.size(); next++) {
+            
+            for (next = 1; next < seq2.size(); next++) { //iterate though the next consecutive nodes in seq1 to check if they correspond to each of the remaining nodes in seq2
                 seq1.get(pos + next, seq1Val);
                 seq2.get(next, seq2Val);
+                
                 if (seq1Val != seq2Val) {
                     break; //break out of the for() loop because we know it's not a match
                 }
@@ -233,11 +244,14 @@ int subsequence(const Sequence& seq1, const Sequence& seq2) {
 void interleave(const Sequence& seq1, const Sequence& seq2, Sequence& result) {
     
     if (seq1.empty() && seq2.empty()) {
+        while (!result.empty()) {
+            result.erase(0);
+        }
         return;
     }
     
     if (seq1.empty()) {
-        result = seq2; //AO
+        result = seq2;
         return;
     }
     
@@ -249,20 +263,22 @@ void interleave(const Sequence& seq1, const Sequence& seq2, Sequence& result) {
     //Create a temp Sequence that we will use to create the result Sequence without changing seq1 and seq2
     Sequence thisResult;
 
-    bool seq1IsBigger;
-    int smallerSize;
+    bool seq1IsBigger; //to determine which seq may have items left over, to add to the end of Result
+    int smallerSize; //to determine the positions of the extra nodes in the longer seq
     int largerSize;
+    
     if (seq1.size() > seq2.size()) {
         smallerSize = seq2.size();
         largerSize = seq1.size();
         seq1IsBigger = true;
-    } else { //will also be fine if sizes are equal
+    } else {
         smallerSize = seq1.size();
         largerSize = seq2.size();
         seq1IsBigger = false;
     }
     
     ItemType one, two;
+    //Up until we run out of nodes in the smaller seq, we alternate inserting the nodes into Result
     for (int i = 0; i < smallerSize; i++) {
         seq1.get(i, one);
         seq2.get(i, two);
@@ -271,6 +287,7 @@ void interleave(const Sequence& seq1, const Sequence& seq2, Sequence& result) {
         thisResult.insert(thisResult.size(), two);
     }
     
+    //Once we run out of nodes in the smaller seq, we insert the remaining nodes of the longer sequence into Result
     if (seq1IsBigger) {
         for (int j = smallerSize; j < largerSize; j++) {
             seq1.get(j, one);

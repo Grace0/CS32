@@ -5,15 +5,18 @@
   // way of enabling us to have Sequences of different types.  For now,
   // we'll use a type alias.
 
-using ItemType = unsigned long;
+#include <string>
+using ItemType = std::string;
 
 class Sequence
 {
   public:
     Sequence();          // Create an empty sequence (i.e., one whose size() is 0).
+    
     ~Sequence();
     Sequence(const Sequence& src);
     Sequence& operator=(const Sequence& src);
+    
     bool empty() const;  // Return true if the sequence is empty, otherwise false.
     int size() const;    // Return the number of items in the sequence.
 

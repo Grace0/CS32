@@ -34,6 +34,8 @@ int main() {
     assert(subsequence(s, t) == 5); //one possible k exists
     assert(subsequence(t, s) == -1); //seq1.size < seq2.size
     
+    assert(subsequence(t, t) == 0); //subsequence of itself
+    
     Sequence u;
     u.insert(0,63);
     u.insert(1,17);
@@ -68,6 +70,10 @@ int main() {
     q.insert(2,84);
     q.insert(3,19);
     
+    Sequence r;
+    r.insert(0,3131);
+    r.insert(1,3107);
+    
     //if seq1 is empty
     //if seq2 is empty
     Sequence w;
@@ -82,16 +88,43 @@ int main() {
     Sequence z;
     interleave(w, t, z);
     assert(z.empty() == false); //seq1 empty, seq2 non-empty
-    
+   
     Sequence aa;
     interleave(t, w, aa);
     assert(aa.empty() == false); //seq1 non-empty, seq2 empty
-    
-    Sequence ab;
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    Sequence ab; // m = n
     interleave(p, q, ab);
     
-    Sequence ac;
+    Sequence ac; // n = m
     interleave(q, p, ac);
+    
+    Sequence ad; // m > n
+    interleave(q, r, ad);
+    
+    Sequence ae; // m < n
+    interleave(r, q, ae);
+    
+    interleave(r, r, r); //seq1, seq2, result refer to the same Sequence
+    
+    Sequence qa;
+    qa.insert(0,42);
+    qa.insert(1,63);
+    qa.insert(2,84);
+    qa.insert(3,19);
+    
+    Sequence ra;
+    ra.insert(0,3131);
+    ra.insert(1,3107);
+    interleave(ra, qa, ra); //seq1 and result refer to the same Sequence
+    
+    
+    Sequence rb;
+    rb.insert(0,3131);
+    rb.insert(1,3107);
+    interleave(qa, rb, rb); //seq2 and result refer to the same Sequence
+    
+    interleave(qa, qa, ra); //seq1 and seq2 refer to the same Sequence
     
     cerr << "Passed all tests." << endl;
     return 0;

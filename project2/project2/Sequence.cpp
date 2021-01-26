@@ -232,15 +232,9 @@ int subsequence(const Sequence& seq1, const Sequence& seq2) {
 
 void interleave(const Sequence& seq1, const Sequence& seq2, Sequence& result) {
     
-    //Empty the result
-    while (!result.empty()) {
-        result.erase(0);
-    }
-    
     if (seq1.empty() && seq2.empty()) {
         return;
     }
-    
     
     if (seq1.empty()) {
         result = seq2; //AO
@@ -251,16 +245,44 @@ void interleave(const Sequence& seq1, const Sequence& seq2, Sequence& result) {
         result = seq1;
         return;
     }
-
     
-    //if m = n
+    //Create a temp Sequence that we will use to create the result Sequence without changing seq1 and seq2
+    Sequence thisResult;
+
+    bool seq1IsBigger;
+    int smallerSize;
+    int largerSize;
+    if (seq1.size() > seq2.size()) {
+        smallerSize = seq2.size();
+        largerSize = seq1.size();
+        seq1IsBigger = true;
+    } else { //will also be fine if sizes are equal
+        smallerSize = seq1.size();
+        largerSize = seq2.size();
+        seq1IsBigger = false;
+    }
+    
     ItemType one, two;
-    for (int i = 0; i < seq1.size(); i++) {
+    for (int i = 0; i < smallerSize; i++) {
         seq1.get(i, one);
         seq2.get(i, two);
         
-        result.insert(result.size(), one); //add to the end of the sequence
-        result.insert(result.size(), two);
+        thisResult.insert(thisResult.size(), one); //add to the end of the sequence
+        thisResult.insert(thisResult.size(), two);
     }
+    
+    if (seq1IsBigger) {
+        for (int j = smallerSize; j < largerSize; j++) {
+            seq1.get(j, one);
+            thisResult.insert(thisResult.size(), one);
+        }
+    } else {
+        for (int j = smallerSize; j < largerSize; j++) {
+            seq2.get(j, two);
+            thisResult.insert(thisResult.size(), two);
+        }
+    }
+
+    result = thisResult;
 
 }

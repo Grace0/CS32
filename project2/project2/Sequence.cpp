@@ -201,7 +201,31 @@ void Sequence::swap(Sequence& other)
     other.m_size = tempSize;
 }
 
-//int subsequence(const Sequence& seq1, const Sequence& seq2) {
-//    if (seq2.empty()) return -1;
-//
-//}
+int subsequence(const Sequence& seq1, const Sequence& seq2) {
+    if (seq1.empty() || seq2.empty() || (seq1.size() < seq2.size())) return -1;
+    
+    ItemType seq1Val;
+    ItemType seq2Val;
+    
+    ItemType seq2FirstVal;
+    seq2.get(0, seq2FirstVal);
+    
+    int next;
+    for (int pos = 0; pos < seq1.size()-seq2.size()+1; pos++) {
+        seq1.get(pos, seq1Val);
+        if (seq1Val == seq2FirstVal) {
+            for (next = 1; next < seq2.size(); next++) {
+                seq1.get(pos + next, seq1Val);
+                seq2.get(next, seq2Val);
+                if (seq1Val != seq2Val) {
+                    break; //break out of the for() loop because we know it's not a match
+                }
+            }
+            if (next == seq2.size()) { //we made it though the entire for()
+                return pos;
+            }
+        }
+    }
+
+    return -1;
+}

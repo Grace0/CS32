@@ -229,3 +229,38 @@ int subsequence(const Sequence& seq1, const Sequence& seq2) {
 
     return -1;
 }
+
+void interleave(const Sequence& seq1, const Sequence& seq2, Sequence& result) {
+    
+    //Empty the result
+    while (!result.empty()) {
+        result.erase(0);
+    }
+    
+    if (seq1.empty() && seq2.empty()) {
+        return;
+    }
+    
+    
+    if (seq1.empty()) {
+        result = seq2; //AO
+        return;
+    }
+    
+    if (seq2.empty()) {
+        result = seq1;
+        return;
+    }
+
+    
+    //if m = n
+    ItemType one, two;
+    for (int i = 0; i < seq1.size(); i++) {
+        seq1.get(i, one);
+        seq2.get(i, two);
+        
+        result.insert(result.size(), one); //add to the end of the sequence
+        result.insert(result.size(), two);
+    }
+
+}

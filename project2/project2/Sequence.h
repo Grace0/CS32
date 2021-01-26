@@ -85,12 +85,10 @@ class Sequence
       // At any time, the elements of m_data indexed from 0 to m_size-1
       // are in use.
 
-    void uncheckedInsert(int pos, const ItemType& value);
-      // Insert value at position pos, shifting items to the right to make
-      // room for it.  Assume pos is valid and there's room.
 };
 
 int subsequence(const Sequence& seq1, const Sequence& seq2);
+void interleave(const Sequence& seq1, const Sequence& seq2, Sequence& result);
 
 // Inline implementations
 

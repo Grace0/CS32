@@ -56,12 +56,42 @@ int main() {
     u.insert(7,2);
     assert(subsequence(v, t) == -1); //no such k exists
     
+    Sequence p;
+    p.insert(0,30);
+    p.insert(1,21);
+    p.insert(2,63);
+    p.insert(3,42);
+
+    Sequence q;
+    q.insert(0,42);
+    q.insert(1,63);
+    q.insert(2,84);
+    q.insert(3,19);
+    
     //if seq1 is empty
     //if seq2 is empty
     Sequence w;
     Sequence x;
     assert(subsequence(w, x) == -1);
     assert(subsequence(x, w) == -1);
+    
+    Sequence y;
+    interleave(w, x, y);
+    assert(y.empty() == true); //both seq1 and seq2 empty
+    
+    Sequence z;
+    interleave(w, t, z);
+    assert(z.empty() == false); //seq1 empty, seq2 non-empty
+    
+    Sequence aa;
+    interleave(t, w, aa);
+    assert(aa.empty() == false); //seq1 non-empty, seq2 empty
+    
+    Sequence ab;
+    interleave(p, q, ab);
+    
+    Sequence ac;
+    interleave(q, p, ac);
     
     cerr << "Passed all tests." << endl;
     return 0;

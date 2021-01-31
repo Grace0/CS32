@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include <string>
-#include <stack>
+#include <queue>
 #include <cassert>
 
 using namespace std;
@@ -25,23 +25,34 @@ class Coord
 
 bool pathExists(string maze[], int nRows, int nCols, int sr, int sc, int er, int ec) {
     
-    stack<Coord> coordStack;     // declare a stack of Coords
+    queue<Coord> coordQueue;       // declare a queue of Coords
+
+//    Coord a(5,6);
+//    coordQueue.push(a);            // enqueue item at back of queue
+//    coordQueue.push(Coord(3,4));   // enqueue item at back of queue
+//    ...
+//    Coord b = coordQueue.front();  // look at front item
+//    coordQueue.pop();              // remove the front item from queue
+//    if (coordQueue.empty())        // Is the queue empty?
+//        cout << "empty!" << endl;
+//    cout << coordQueue.size() << endl;  // number of elements
+  
 
     //Push the starting coordinate (sr,sc) onto the coordinate stack and
     //    update maze[sr][sc] to indicate that the algorithm has encountered
     //    it (i.e., set maze[sr][sc] to have a value other than '.').
     Coord start(sr,sc);
-    coordStack.push(start);
+    coordQueue.push(start);
     maze[sr][sc] = '#';
     
     int rr, cc;
     
-    while (!coordStack.empty()) { //While the stack is not empty,
+    while (!coordQueue.empty()) { //While the stack is not empty,
         
         //{   Pop the top coordinate off the stack. This gives you the current
         //        (r,c) location that your algorithm is exploring.
-        Coord next = coordStack.top();
-        coordStack.pop();
+        Coord next = coordQueue.front();
+        coordQueue.pop();
         
         //    If the current (r,c) coordinate is equal to the ending coordinate,
         //        then we've solved the maze so return true!
@@ -54,19 +65,19 @@ bool pathExists(string maze[], int nRows, int nCols, int sr, int sc, int er, int
         
         if (maze[rr-1][cc] == '.') {
             Coord north(rr-1, cc);
-            coordStack.push(north);
+            coordQueue.push(north);
             maze[rr-1][cc] = '#';
         } if (maze[rr][cc+1] == '.') {
             Coord east(rr, cc+1);
-            coordStack.push(east);
+            coordQueue.push(east);
             maze[rr][cc+1] = '#';
         } if (maze[rr+1][cc] == '.') {
             Coord south(rr+1, cc);
-            coordStack.push(south);
+            coordQueue.push(south);
             maze[rr+1][cc] = '#';
         } if (maze[rr][cc-1] == '.') {
             Coord west(rr, cc-1);
-            coordStack.push(west);
+            coordQueue.push(west);
             maze[rr][cc-1] = '#';
         }
         

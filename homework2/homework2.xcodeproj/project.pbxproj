@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		FE17D08325C5E35600F93BA6 /* mazestack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FE17D08225C5E35600F93BA6 /* mazestack.cpp */; };
+		FE17D08C25C666DD00F93BA6 /* mazequeue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FE17D08B25C666DD00F93BA6 /* mazequeue.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,7 @@
 /* Begin PBXFileReference section */
 		FE17D07F25C5E35600F93BA6 /* homework2 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = homework2; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE17D08225C5E35600F93BA6 /* mazestack.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mazestack.cpp; sourceTree = "<group>"; };
+		FE17D08B25C666DD00F93BA6 /* mazequeue.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mazequeue.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 			isa = PBXGroup;
 			children = (
 				FE17D08225C5E35600F93BA6 /* mazestack.cpp */,
+				FE17D08B25C666DD00F93BA6 /* mazequeue.cpp */,
 			);
 			path = homework2;
 			sourceTree = "<group>";
@@ -118,6 +121,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE17D08C25C666DD00F93BA6 /* mazequeue.cpp in Sources */,
 				FE17D08325C5E35600F93BA6 /* mazestack.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -23,6 +23,7 @@ class Coord
     int m_col;
 };
 
+//implementation is exactly the same as for stacks; just replace all vars with "queue"
 bool pathExists(string maze[], int nRows, int nCols, int sr, int sc, int er, int ec) {
     
     queue<Coord> coordQueue;       // declare a queue of Coords
@@ -138,9 +139,9 @@ int main() {
 
     assert(pathExists(maze, 10,10, 6,4, 1,1) == 1); //needed to do each assert one at a time because calling pathExists changes the maze[]
 //    assert(pathExists(maze, 10,10, 6,4, 7,8) == 1);
-//    assert(pathExists(maze, 10,10, 6,4, 7,1) == 0);
+ //   assert(pathExists(maze, 10,10, 6,4, 7,1) == 0);
    // assert(pathExists(maze, 10,10, 6,4, 5,8) == 1);
-   // assert(pathExists(maze, 10,10, 6,4, 1,5) == 1);
+ //   assert(pathExists(maze, 10,10, 6,4, 1,5) == 1);
 
     cerr << "Passed all tests" << endl;
     return 0;

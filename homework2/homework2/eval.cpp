@@ -28,17 +28,36 @@ using namespace std;
 //        a main routine to test your function
 
 int evaluate(string infix, const bool values[], string& postfix, bool& result) {
-    stack<char> evalStack;
+    
+    stack<bool> evalStack;
+    bool op1, op2, res; //res of the individual op
     
     char currChar;
     
     for (int i = 0; i < postfix.length(); i++) {
+        
         currChar = postfix[i];
-        if (currChar ) {
+        
+        if (currChar != '&' && currChar != '|' && currChar != '!') { //check for if not valid
+            evalStack.push(values[currChar-'0']);
+        } else {
+            op2 = evalStack.top();
+            evalStack.pop();
             
+            op1 = evalStack.top();
+            evalStack.pop();
+            
+            if (currChar == '&') {
+                res = op1 && op2;
+            } else if (currChar == '|') {
+                res = op1 || op2;
+            } // (), !
+            
+            evalStack.push(res);
         }
     }
-    return 1;
+    result = evalStack.top();
+    return 0;
 }
           // Evaluates a boolean expression
           //   If infix is a syntactically valid infix boolean expression,
@@ -50,6 +69,8 @@ int evaluate(string infix, const bool values[], string& postfix, bool& result) {
           //   result must be unchanged.)
 
 int main() {
+    
+    
 //    0     1     2     3     4     5     6     7     8     9
 //  true  true  true  false false false true  false true  false
 //
@@ -62,10 +83,17 @@ int main() {
 //  6|4&5                      evaluates to true
 //  1&!(9|1&1|9) | !!!(9&1&9)  evaluates to true
     
-//    bool ba[10] = {
-//                  //  0      1      2      3      4      5      6      7      8      9
-//                    true,  true,  true,  false, false, false, true,  false, true,  false
-//                };
+    bool ba[10] = {
+                  //  0      1      2      3      4      5      6      7      8      9
+                    true,  true,  true,  false, false, false, true,  false, true,  false
+                };
+    
+    string infix = "ABC";
+    string postfix = ""; // 01&=TT&  03&=TF& 48&=FT& 99&=FF& , 01|=TT|   03|=TF|   48|=FT|  99|=FF|
+    bool answer;
+    evaluate(infix, ba, postfix, answer);
+    cout << answer << endl; //false
+    
 //                string pf;
 //                bool answer;
 //                assert(evaluate("2| 3", ba, pf, answer) == 0  &&  pf == "23|" &&  answer);

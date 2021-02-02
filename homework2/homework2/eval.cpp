@@ -27,6 +27,10 @@ using namespace std;
 //
 //        a main routine to test your function
 
+void infixToPostfix(string& infix, string& postfix) {
+    
+}
+
 int evaluate(string infix, const bool values[], string& postfix, bool& result) {
     
     stack<bool> evalStack;
@@ -38,23 +42,40 @@ int evaluate(string infix, const bool values[], string& postfix, bool& result) {
         
         currChar = postfix[i];
         
-        if (currChar != '&' && currChar != '|' && currChar != '!') { //check for if not valid
-            evalStack.push(values[currChar-'0']);
-        } else {
+        if (currChar == '!') {
+            
+            op1 = evalStack.top();
+            evalStack.pop();
+            
+            res = !op1;
+            evalStack.push(res);
+            
+        } else if (currChar == '&') {
+            
             op2 = evalStack.top();
             evalStack.pop();
             
             op1 = evalStack.top();
             evalStack.pop();
             
-            if (currChar == '&') {
-                res = op1 && op2;
-            } else if (currChar == '|') {
-                res = op1 || op2;
-            } // (), !
-            
+            res = op1 && op2;
             evalStack.push(res);
+            
+        } else if (currChar == '|') {
+            
+            op2 = evalStack.top();
+            evalStack.pop();
+            
+            op1 = evalStack.top();
+            evalStack.pop();
+            
+            res = op1 || op2;
+            evalStack.push(res);
+            
+        } else { //currChar is a digit
+            evalStack.push(values[currChar-'0']);
         }
+        
     }
     result = evalStack.top();
     return 0;
@@ -89,7 +110,8 @@ int main() {
                 };
     
     string infix = "ABC";
-    string postfix = ""; // 01&=TT&  03&=TF& 48&=FT& 99&=FF& , 01|=TT|   03|=TF|   48|=FT|  99|=FF|
+    string postfix = "0!!0!!&"; // T!=0    F!=1    F!F!|=1  F!T|=1  F!T&=1  F!F!&=1      T!T!|=0    T!T!&=0
+    // 01&=TT&  03&=TF& 48&=FT& 99&=FF& , 01|=TT|   03|=TF|   48|=FT|  99|=FF|
     bool answer;
     evaluate(infix, ba, postfix, answer);
     cout << answer << endl; //false

@@ -27,9 +27,11 @@ using namespace std;
 //
 //        a main routine to test your function
 
-void infixToPostfix(const string& infix, string& postfix) {
+bool infixToPostfix(string infix, string& postfix) {
     postfix = "";
     stack<char> opStack;
+    
+    infix.erase(remove(infix.begin(), infix.end(), ' '), infix.end()); //deletes all blank spaces
     
     for (int i = 0; i < infix.length(); i++) {
         char ch = infix[i];
@@ -57,8 +59,26 @@ void infixToPostfix(const string& infix, string& postfix) {
                 break;
             case ' ': //blanks do nothing; just skip it
                 break;
-            default: //ch is an operand
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9': //ch is an operand
                 postfix += ch;
+                if (i != 0 && isdigit(infix[i-1])) { //if we're not at index 0 and the previous index is also a digit
+                    return false;
+                }
+//                if (isdigit(postfix[postfix.length()-2]) && opStack.empty()) { //if the second-to-last char added to postfix is also a digit, and there is nothing in the opStack, this is bad
+//                    return false;
+//                }
+                break;
+            default: //ch is some not-allowed char
+                return false;
                 break;
         }
     }
@@ -67,11 +87,15 @@ void infixToPostfix(const string& infix, string& postfix) {
         postfix += opStack.top();
         opStack.pop();
     }
+    
+    if (postfix == "") return false;
+    
+    return true;
 }
 
 int evaluate(string infix, const bool values[], string& postfix, bool& result) {
     
-    infixToPostfix(infix, postfix);
+    if (!infixToPostfix(infix, postfix)) return 1;
     
     stack<bool> evalStack;
     bool op1, op2, res; //res of the individual op
@@ -161,15 +185,15 @@ int main() {
                 assert(evaluate("2| 3", ba, pf, answer) == 0  &&  pf == "23|" &&  answer);
 //                assert(evaluate("8|", ba, pf, answer) == 1);
 //                assert(evaluate(" &6", ba, pf, answer) == 1);
-//                assert(evaluate("4 5", ba, pf, answer) == 1);
-//                assert(evaluate("01", ba, pf, answer) == 1);
-//                assert(evaluate("()", ba, pf, answer) == 1);
+                assert(evaluate("4 5", ba, pf, answer) == 1);
+                assert(evaluate("01", ba, pf, answer) == 1);
+                assert(evaluate("()", ba, pf, answer) == 1);
 //                assert(evaluate("()4", ba, pf, answer) == 1);
 //                assert(evaluate("2(9|8)", ba, pf, answer) == 1);
 //                assert(evaluate("2(&8)", ba, pf, answer) == 1);
 //                assert(evaluate("(6&(7|7)", ba, pf, answer) == 1);
-//                assert(evaluate("x+5", ba, pf, answer) == 1);
-//                assert(evaluate("", ba, pf, answer) == 1);
+                assert(evaluate("x+5", ba, pf, answer) == 1);
+                assert(evaluate("", ba, pf, answer) == 1);
                 assert(evaluate("2|3|4", ba, pf, answer) == 0
                                        &&  pf == "23|4|"  &&  answer);
                 assert(evaluate("2|(3|4)", ba, pf, answer) == 0

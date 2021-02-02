@@ -27,8 +27,42 @@ using namespace std;
 //
 //        a main routine to test your function
 
-void infixToPostfix(string& infix, string& postfix) {
+void infixToPostfix(const string& infix, string& postfix) {
+    postfix = "";
+    stack<char> opStack;
     
+    for (int i = 0; i < infix.length(); i++) {
+        char ch = infix[i];
+        switch (ch) {
+            case '(':
+                opStack.push(ch);
+                break;
+            case ')':
+                while (opStack.top() != '(') {
+                    postfix += opStack.top();
+                    opStack.pop();
+                }
+                opStack.pop();
+                break;
+            case '!': //ch is an operator
+            case '&':
+            case '|':
+                while (!opStack.empty() && (opStack.top() != '(') && (ch >= opStack.top())) {
+                    postfix += opStack.top();
+                    opStack.pop();
+                }
+                opStack.push(ch);
+                break;
+            default: //ch is an operand
+                postfix += ch;
+                break;
+        }
+    }
+    
+    while (!opStack.empty()) {
+        postfix += opStack.top();
+        opStack.pop();
+    }
 }
 
 int evaluate(string infix, const bool values[], string& postfix, bool& result) {

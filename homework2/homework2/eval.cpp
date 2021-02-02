@@ -44,7 +44,9 @@ void infixToPostfix(const string& infix, string& postfix) {
                 }
                 opStack.pop();
                 break;
-            case '!': //ch is an operator
+            case '!': //ch is a UNARY operator
+                opStack.push(ch);
+                break;
             case '&':
             case '|':
                 while (!opStack.empty() && (opStack.top() != '(') && (ch >= opStack.top())) {
@@ -52,6 +54,8 @@ void infixToPostfix(const string& infix, string& postfix) {
                     opStack.pop();
                 }
                 opStack.push(ch);
+                break;
+            case ' ': //blanks do nothing; just skip it
                 break;
             default: //ch is an operand
                 postfix += ch;
@@ -66,6 +70,8 @@ void infixToPostfix(const string& infix, string& postfix) {
 }
 
 int evaluate(string infix, const bool values[], string& postfix, bool& result) {
+    
+    infixToPostfix(infix, postfix);
     
     stack<bool> evalStack;
     bool op1, op2, res; //res of the individual op
@@ -143,16 +149,16 @@ int main() {
                     true,  true,  true,  false, false, false, true,  false, true,  false
                 };
     
-    string infix = "ABC";
-    string postfix = "0!!0!!&"; // T!=0    F!=1    F!F!|=1  F!T|=1  F!T&=1  F!F!&=1      T!T!|=0    T!T!&=0
-    // 01&=TT&  03&=TF& 48&=FT& 99&=FF& , 01|=TT|   03|=TF|   48|=FT|  99|=FF|
-    bool answer;
-    evaluate(infix, ba, postfix, answer);
-    cout << answer << endl; //false
+//    string infix = "ABC";
+//    string postfix = "0!!0!!&"; // T!=0    F!=1    F!F!|=1  F!T|=1  F!T&=1  F!F!&=1      T!T!|=0    T!T!&=0
+//    // 01&=TT&  03&=TF& 48&=FT& 99&=FF& , 01|=TT|   03|=TF|   48|=FT|  99|=FF|
+//    bool answer;
+//    evaluate(infix, ba, postfix, answer);
+//    cout << answer << endl; //false
     
-//                string pf;
-//                bool answer;
-//                assert(evaluate("2| 3", ba, pf, answer) == 0  &&  pf == "23|" &&  answer);
+                string pf;
+                bool answer;
+                assert(evaluate("2| 3", ba, pf, answer) == 0  &&  pf == "23|" &&  answer);
 //                assert(evaluate("8|", ba, pf, answer) == 1);
 //                assert(evaluate(" &6", ba, pf, answer) == 1);
 //                assert(evaluate("4 5", ba, pf, answer) == 1);
@@ -164,16 +170,16 @@ int main() {
 //                assert(evaluate("(6&(7|7)", ba, pf, answer) == 1);
 //                assert(evaluate("x+5", ba, pf, answer) == 1);
 //                assert(evaluate("", ba, pf, answer) == 1);
-//                assert(evaluate("2|3|4", ba, pf, answer) == 0
-//                                       &&  pf == "23|4|"  &&  answer);
-//                assert(evaluate("2|(3|4)", ba, pf, answer) == 0
-//                                       &&  pf == "234||"  &&  answer);
-//                assert(evaluate("4  |  !3 & (0&3) ", ba, pf, answer) == 0
-//                                       &&  pf == "43!03&&|"  &&  !answer);
-//                assert(evaluate(" 9  ", ba, pf, answer) == 0  &&  pf == "9"  &&  !answer);
-//                ba[2] = false;
-//                ba[9] = true;
-//                assert(evaluate("((9))", ba, pf, answer) == 0  &&  pf == "9"  &&  answer);
-//                assert(evaluate("2| 3", ba, pf, answer) == 0  &&  pf == "23|" &&  !answer);
-//                cout << "Passed all tests" << endl;
+                assert(evaluate("2|3|4", ba, pf, answer) == 0
+                                       &&  pf == "23|4|"  &&  answer);
+                assert(evaluate("2|(3|4)", ba, pf, answer) == 0
+                                       &&  pf == "234||"  &&  answer);
+                assert(evaluate("4  |  !3 & (0&3) ", ba, pf, answer) == 0
+                                       &&  pf == "43!03&&|"  &&  !answer);
+                assert(evaluate(" 9  ", ba, pf, answer) == 0  &&  pf == "9"  &&  !answer);
+                ba[2] = false;
+                ba[9] = true;
+                assert(evaluate("((9))", ba, pf, answer) == 0  &&  pf == "9"  &&  answer);
+                assert(evaluate("2| 3", ba, pf, answer) == 0  &&  pf == "23|" &&  !answer);
+                cout << "Passed all tests" << endl;
 }

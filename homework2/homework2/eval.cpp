@@ -11,7 +11,7 @@
 #include <cassert>
 
 using namespace std;
-
+ 
 //#include lines you need
 //
 //        declarations of any additional functions you might have written
@@ -27,19 +27,35 @@ using namespace std;
 //
 //        a main routine to test your function
 
-bool infixToPostfix(string infix, string& postfix) {
+bool infixToPostfix(string& infix_p, string& postfix) {
     postfix = "";
     stack<char> opStack;
-    
-    infix.erase(remove(infix.begin(), infix.end(), ' '), infix.end()); //deletes all blank spaces
+  
+    string infix = ""; //remove spaces from infix
+    for (int i = 0; i < infix_p.length(); i++) {
+        if (infix_p[i] != ' ') {
+            infix += infix_p[i];
+        }
+    }
+   
+    int count = 0; //there should be an even # of parenthesis
+    for (int i = 0; i < infix.length(); i++) {
+        if (infix[i] == '(' || infix[i] == ')') {
+            count++;
+        }
+    }
+    if (count % 2 != 0) return false;
     
     for (int i = 0; i < infix.length(); i++) {
         char ch = infix[i];
         switch (ch) {
             case '(':
+                if (i == infix.length()-1) return false;
+                if (infix[i+1] == '&' || infix[i+1] == '|') return false;
                 opStack.push(ch);
                 break;
             case ')':
+                if (i == 0) return false;
                 while (opStack.top() != '(') {
                     postfix += opStack.top();
                     opStack.pop();
@@ -47,17 +63,23 @@ bool infixToPostfix(string infix, string& postfix) {
                 opStack.pop();
                 break;
             case '!': //ch is a UNARY operator
+                if (i == infix.length()-1) return false;
+                if (infix[i+1] == '&' || infix[i+1] == '|' || infix[i+1] == ')') return false;
+                if (i != 0 && (isdigit(infix[i-1]) || infix[i-1] == '(' || infix[i-1] == ')')) return false;
                 opStack.push(ch);
                 break;
             case '&':
             case '|':
+                if (i == 0 || i == infix.length()-1) return false;
+                if (infix[i-1] == '|' || infix[i-1] == '&' || infix[i-1] == '!' || infix[i-1] == '(' || infix[i-1] == ')') {
+                    return false;
+                }
+//                if (!isdigit(infix[i+1]) || !isdigit(infix[i-1])) return false;
                 while (!opStack.empty() && (opStack.top() != '(') && (ch >= opStack.top())) {
                     postfix += opStack.top();
                     opStack.pop();
                 }
                 opStack.push(ch);
-                break;
-            case ' ': //blanks do nothing; just skip it
                 break;
             case '0':
             case '1':
@@ -69,13 +91,19 @@ bool infixToPostfix(string infix, string& postfix) {
             case '7':
             case '8':
             case '9': //ch is an operand
-                postfix += ch;
-                if (i != 0 && isdigit(infix[i-1])) { //if we're not at index 0 and the previous index is also a digit
-                    return false;
+                
+                if (i != 0) { //if we're not at index 0 and the previous index is also a digit
+                    if (isdigit(infix[i-1]) || infix[i-1] == ')') {
+                        return false;
+                    }
                 }
-//                if (isdigit(postfix[postfix.length()-2]) && opStack.empty()) { //if the second-to-last char added to postfix is also a digit, and there is nothing in the opStack, this is bad
-//                    return false;
-//                }
+                 
+                if (i != infix.length()-1) {
+                    if (infix[i+1] == '!' || infix[i+1] == '(') {
+                            return false;
+                    }
+                }
+                postfix += ch;
                 break;
             default: //ch is some not-allowed char
                 return false;
@@ -183,15 +211,15 @@ int main() {
                 string pf;
                 bool answer;
                 assert(evaluate("2| 3", ba, pf, answer) == 0  &&  pf == "23|" &&  answer);
-//                assert(evaluate("8|", ba, pf, answer) == 1);
-//                assert(evaluate(" &6", ba, pf, answer) == 1);
+                assert(evaluate("8|", ba, pf, answer) == 1);
+                assert(evaluate(" &6", ba, pf, answer) == 1);
                 assert(evaluate("4 5", ba, pf, answer) == 1);
                 assert(evaluate("01", ba, pf, answer) == 1);
                 assert(evaluate("()", ba, pf, answer) == 1);
-//                assert(evaluate("()4", ba, pf, answer) == 1);
-//                assert(evaluate("2(9|8)", ba, pf, answer) == 1);
-//                assert(evaluate("2(&8)", ba, pf, answer) == 1);
-//                assert(evaluate("(6&(7|7)", ba, pf, answer) == 1);
+                assert(evaluate("()4", ba, pf, answer) == 1);
+                assert(evaluate("2(9|8)", ba, pf, answer) == 1);
+                assert(evaluate("2(&8)", ba, pf, answer) == 1);
+                assert(evaluate("(6&(7|7)", ba, pf, answer) == 1);
                 assert(evaluate("x+5", ba, pf, answer) == 1);
                 assert(evaluate("", ba, pf, answer) == 1);
                 assert(evaluate("2|3|4", ba, pf, answer) == 0

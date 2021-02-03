@@ -11,21 +11,20 @@
 #include <cassert>
 
 using namespace std;
- 
-//#include lines you need
-//
-//        declarations of any additional functions you might have written
-//                to help you evaluate an expression
-//
-//        int evaluate(string infix, const bool values[], string& postfix, bool& result)
-//        {
-//            your expression evaluation code
-//        }
-//
-//        implementations of any additional functions you might have written
-//                to help you evaluate an expression
-//
-//        a main routine to test your function
+
+bool hasHigherPrecedence(char a, char b) {
+
+    const char arr[3] = { '!' , '&', '|' };
+    
+    for (int i = 0; i < 3; i++) {
+        if (arr[i] == a) {
+            return true;
+        } else if (arr[i] == b) {
+            return false;
+        }
+    }
+    return true;
+}
 
 bool infixToPostfix(string& infix_p, string& postfix) {
     postfix = "";
@@ -74,8 +73,7 @@ bool infixToPostfix(string& infix_p, string& postfix) {
                 if (infix[i-1] == '|' || infix[i-1] == '&' || infix[i-1] == '!' || infix[i-1] == '(' || infix[i-1] == ')') {
                     return false;
                 }
-//                if (!isdigit(infix[i+1]) || !isdigit(infix[i-1])) return false;
-                while (!opStack.empty() && (opStack.top() != '(') && (ch >= opStack.top())) {
+                while (!opStack.empty() && (opStack.top() != '(') && hasHigherPrecedence(opStack.top(), ch)) {  //ch has smaller prcedence
                     postfix += opStack.top();
                     opStack.pop();
                 }
@@ -171,67 +169,4 @@ int evaluate(string infix, const bool values[], string& postfix, bool& result) {
     }
     result = evalStack.top();
     return 0;
-}
-          // Evaluates a boolean expression
-          //   If infix is a syntactically valid infix boolean expression,
-          //   then set postfix to the postfix form of that expression, set
-          //   result to the value of the expression (where in that expression,
-          //   each digit k represents element k of the values array), and
-          //   return zero.  If infix is not a syntactically valid expression,
-          //   return 1.  (In that case, postfix may or may not be changed, but
-          //   result must be unchanged.)
-
-int main() {
-    
-    
-//    0     1     2     3     4     5     6     7     8     9
-//  true  true  true  false false false true  false true  false
-//
-//  2                          evaluates to true
-//  (3)                        evaluates to false
-//  2&(3)                      evaluates to false
-//  0 & !9                     evaluates to true
-//  !(7|8)                     evaluates to false
-//  !7|8                       evaluates to true
-//  6|4&5                      evaluates to true
-//  1&!(9|1&1|9) | !!!(9&1&9)  evaluates to true
-    
-    bool ba[10] = {
-                  //  0      1      2      3      4      5      6      7      8      9
-                    true,  true,  true,  false, false, false, true,  false, true,  false
-                };
-    
-//    string infix = "ABC";
-//    string postfix = "0!!0!!&"; // T!=0    F!=1    F!F!|=1  F!T|=1  F!T&=1  F!F!&=1      T!T!|=0    T!T!&=0
-//    // 01&=TT&  03&=TF& 48&=FT& 99&=FF& , 01|=TT|   03|=TF|   48|=FT|  99|=FF|
-//    bool answer;
-//    evaluate(infix, ba, postfix, answer);
-//    cout << answer << endl; //false
-    
-                string pf;
-                bool answer;
-                assert(evaluate("2| 3", ba, pf, answer) == 0  &&  pf == "23|" &&  answer);
-                assert(evaluate("8|", ba, pf, answer) == 1);
-                assert(evaluate(" &6", ba, pf, answer) == 1);
-                assert(evaluate("4 5", ba, pf, answer) == 1);
-                assert(evaluate("01", ba, pf, answer) == 1);
-                assert(evaluate("()", ba, pf, answer) == 1);
-                assert(evaluate("()4", ba, pf, answer) == 1);
-                assert(evaluate("2(9|8)", ba, pf, answer) == 1);
-                assert(evaluate("2(&8)", ba, pf, answer) == 1);
-                assert(evaluate("(6&(7|7)", ba, pf, answer) == 1);
-                assert(evaluate("x+5", ba, pf, answer) == 1);
-                assert(evaluate("", ba, pf, answer) == 1);
-                assert(evaluate("2|3|4", ba, pf, answer) == 0
-                                       &&  pf == "23|4|"  &&  answer);
-                assert(evaluate("2|(3|4)", ba, pf, answer) == 0
-                                       &&  pf == "234||"  &&  answer);
-                assert(evaluate("4  |  !3 & (0&3) ", ba, pf, answer) == 0
-                                       &&  pf == "43!03&&|"  &&  !answer);
-                assert(evaluate(" 9  ", ba, pf, answer) == 0  &&  pf == "9"  &&  !answer);
-                ba[2] = false;
-                ba[9] = true;
-                assert(evaluate("((9))", ba, pf, answer) == 0  &&  pf == "9"  &&  answer);
-                assert(evaluate("2| 3", ba, pf, answer) == 0  &&  pf == "23|" &&  !answer);
-                cout << "Passed all tests" << endl;
 }

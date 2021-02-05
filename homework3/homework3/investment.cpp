@@ -2,8 +2,6 @@
 #include <string>
 using namespace std;
 
-//Your declarations and implementations would go here
-
 class Investment {
 public:
     Investment(string name, int price) {
@@ -21,8 +19,10 @@ public:
         return m_name;
     }
     
-    virtual string description() const = 0;
-    virtual bool fungible() const = 0;
+    virtual string description() const = 0; //pure virtual functions; must be overriden in subclasses
+    virtual bool fungible() const {
+        return false;
+    }
 
     
 private:
@@ -45,11 +45,7 @@ public:
         return "painting";
     }
     
-    virtual bool fungible() const {
-        return false;
-    }
-    
-private:
+private: //no member variables in addition to those in Investment superclass
  
 };
 
@@ -59,7 +55,13 @@ public:
     House(string address, int price) : Investment(address, price) {
         
     }
-    virtual ~House() {}
+    virtual ~House() {
+        cout << "Destroying the house " << name() << endl;
+    }
+    
+    virtual string description() const {
+        return "house";
+    }
     
 private:
     
@@ -68,7 +70,25 @@ private:
 class Stock : public Investment {
     
 public:
+    
+    Stock(string company, int price, string ticker) : Investment(company, price) {
+        m_ticker = ticker;
+    }
+    
+    virtual ~Stock() {
+        cout << "Destroying " << name() << ", a stock holding" << endl;
+    }
+    
+    virtual string description() const {
+        return "stock trading as " + m_ticker;
+    }
+    
+    virtual bool fungible() const {
+        return true;
+    }
+    
 private:
+    string m_ticker;
 };
 
 void display(const Investment* inv)
@@ -84,17 +104,17 @@ int main()
     Investment* portfolio[4];
     portfolio[0] = new Painting("Salvator Mundi", 450300000);
       // Stock holdings have a name, value, and ticker symbol
- //   portfolio[1] = new Stock("Lyft", 50000, "LYFT");
-//    portfolio[2] = new Stock("GameStop", 10000, "GME");
- //   portfolio[3] = new House("4 Privet Drive", 660000);
+    portfolio[1] = new Stock("Lyft", 50000, "LYFT");
+    portfolio[2] = new Stock("GameStop", 10000, "GME");
+    portfolio[3] = new House("4 Privet Drive", 660000);
 
-//    for (int k = 0; k < 4; k++)
-        display(portfolio[0]);
+    for (int k = 0; k < 4; k++)
+        display(portfolio[k]);
 
       // Clean up the investments before exiting
     cout << "Cleaning up" << endl;
-  //  for (int k = 0; k < 4; k++)
-        delete portfolio[0];
+    for (int k = 0; k < 4; k++)
+        delete portfolio[k];
 }
 
 //Salvator Mundi: painting bought for $450300000

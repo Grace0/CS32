@@ -5,19 +5,70 @@ using namespace std;
 //Your declarations and implementations would go here
 
 class Investment {
+public:
+    Investment(string name, int price) {
+        m_name = name;
+        m_price = price;
+    }
+    
+    virtual ~Investment() {} //virtual so that subclass' destructors get called; note that subclasses get destructed first
+    
+    int purchasePrice() const {
+        return m_price;
+    }
+    
+    string name() const {
+        return m_name;
+    }
+    
+    virtual string description() const = 0;
+    virtual bool fungible() const = 0;
+
+    
+private:
+    string m_name;
+    int m_price;
+};
+
+class Painting : public Investment {
+    
+public:
+    Painting(string name, int price) : Investment(name, price) {
+
+    }
+    
+    virtual ~Painting() {
+        cout << "Destroying " << name() << ", a painting" << endl;
+    }
+    
+    virtual string description() const {
+        return "painting";
+    }
+    
+    virtual bool fungible() const {
+        return false;
+    }
+    
+private:
+ 
+};
+
+class House : public Investment {
+    
+public:
+    House(string address, int price) : Investment(address, price) {
+        
+    }
+    virtual ~House() {}
+    
+private:
     
 };
 
-class House {
+class Stock : public Investment {
     
-};
-
-class Stock {
-    
-};
-
-class Painting {
-    
+public:
+private:
 };
 
 void display(const Investment* inv)
@@ -33,17 +84,17 @@ int main()
     Investment* portfolio[4];
     portfolio[0] = new Painting("Salvator Mundi", 450300000);
       // Stock holdings have a name, value, and ticker symbol
-    portfolio[1] = new Stock("Lyft", 50000, "LYFT");
-    portfolio[2] = new Stock("GameStop", 10000, "GME");
-    portfolio[3] = new House("4 Privet Drive", 660000);
+ //   portfolio[1] = new Stock("Lyft", 50000, "LYFT");
+//    portfolio[2] = new Stock("GameStop", 10000, "GME");
+ //   portfolio[3] = new House("4 Privet Drive", 660000);
 
-    for (int k = 0; k < 4; k++)
-        display(portfolio[k]);
+//    for (int k = 0; k < 4; k++)
+        display(portfolio[0]);
 
       // Clean up the investments before exiting
     cout << "Cleaning up" << endl;
-    for (int k = 0; k < 4; k++)
-        delete portfolio[k];
+  //  for (int k = 0; k < 4; k++)
+        delete portfolio[0];
 }
 
 //Salvator Mundi: painting bought for $450300000

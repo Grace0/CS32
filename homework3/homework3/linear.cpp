@@ -39,7 +39,16 @@ bool anyTrue(const double a[], int n)
 // somePredicate function returns true.
 int countTrue(const double a[], int n)
 {
-  return -999;  // This is incorrect.
+    if (n == 0) {
+        return 0;
+    }
+    if (n == 1) {
+        return somePredicate(a[0]); //returning a bool as an int will give 0 or 1
+    }
+    
+    int first = countTrue(a, n/2);
+    int second = countTrue(a+n/2, n-n/2);
+    return first + second;
 }
 
 // Return the subscript of the first element in the array for which
@@ -81,11 +90,15 @@ bool isIn(const double a1[], int n1, const double a2[], int n2)
 
 int main() {
    
-    const double arr[10] = { 3.4, 0.0, 4.0, 2.338, 5.987, -5.9, 6.0, 8.0, 10.9, -4987};
+    const double arr[10] = { 3.4, 0.0, -4.0, 20.338, 5.987, 599.9, 6.0, 8.0, 10.9, -4987};
     int n = 10;
     
     assert(anyTrue(arr, n) == true);
-    assert(anyTrue(arr, 8) == false);
+    assert(anyTrue(arr, 3) == false);
+    
+    assert(countTrue(arr, 3) == 0);
+    assert(countTrue(arr, 7) == 2);
+    assert(countTrue(arr, 4) == 1);
     cout << "Passed all tests" << endl;
     
 }

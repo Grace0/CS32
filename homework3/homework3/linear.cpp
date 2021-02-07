@@ -39,7 +39,7 @@ bool anyTrue(const double a[], int n)
 // somePredicate function returns true.
 int countTrue(const double a[], int n)
 {
-    if (n == 0) {
+    if (n <= 0) {
         return 0;
     }
     if (n == 1) {
@@ -56,7 +56,36 @@ int countTrue(const double a[], int n)
 // element, return -1.
 int firstTrue(const double a[], int n)
 {
-  return -999;  // This is incorrect.
+
+    if (n <= 0) { //empty array
+        return -1;
+    }
+    
+    if (n == 1) {
+        if (somePredicate(a[0])) {
+            return 0;
+        } else {
+            return -1;
+        }
+    }
+    
+    if (somePredicate(a[n-1])) {
+        return n-1;
+    } else {
+        return firstTrue(a, n-1);
+    }
+
+//    if (somePredicate(a[n-1])) { //first element is true
+//        return n-1;
+//    } else {
+//        return firstTrue(a, n-1);
+//    }
+
+  //  int prevTrue = firstTrue(a, n-1); //simplifying step, magic func
+    
+  //  if (prevTrue < )
+
+    
 }
 
 // Return the subscript of the largest element in the array (i.e.,
@@ -65,7 +94,22 @@ int firstTrue(const double a[], int n)
 // elements, return -1.
 int positionOfMax(const double a[], int n)
 {
-  return -999;  // This is incorrect.
+    if (n <= 0) { //if an empty array
+        return -1;
+    }
+    
+    if (n == 1) {
+        return 0;
+    }
+
+    int maxPrev = positionOfMax(a, n-1); //starts checking on the way back
+    
+    if (a[maxPrev] >= a[n-1]) {
+        return maxPrev;
+    } else {
+        return n-1;
+    }
+    
 }
 
 // If all n1 elements of a1 appear in the n2 element array a2, in
@@ -85,7 +129,19 @@ int positionOfMax(const double a[], int n)
 //    10 20 20
 bool isIn(const double a1[], int n1, const double a2[], int n2)
 {
-  return false;  // This is not always correct.
+    if (n1 == 0) {
+        return true;
+    }
+    
+    if (n2 == 0) {
+        return false;
+    }
+ 
+    if (a1[n1-1] == a2[n2-1]) {
+        return isIn(a1, n1-1, a2, n2-1);
+    } else {
+        return isIn(a1, n1, a2, n2-1);
+    }
 }
 
 int main() {
@@ -99,6 +155,14 @@ int main() {
     assert(countTrue(arr, 3) == 0);
     assert(countTrue(arr, 7) == 2);
     assert(countTrue(arr, 4) == 1);
+    
+    const double a1[3] = {50, 30, 20};
+    const double a2[7] = {10, 50, 40, 20, 50, 40, 30};
+    assert(isIn(a1, 3, a2, 7) == false);
+
+    assert(positionOfMax(arr, 3) == 0);
+    assert(positionOfMax(arr, 10) == 5);
+    
     cout << "Passed all tests" << endl;
     
 }

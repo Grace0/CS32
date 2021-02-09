@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		FE17D09E25CCD06E00F93BA6 /* investment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FE17D09D25CCD06E00F93BA6 /* investment.cpp */; };
 		FE17D0A725CCED5600F93BA6 /* linear.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FE17D0A625CCED5600F93BA6 /* linear.cpp */; };
+		FE17D0AA25D0825300F93BA6 /* maze.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FE17D0A925D0825300F93BA6 /* maze.cpp */; };
+		FE17D0AD25D0978E00F93BA6 /* tree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FE17D0AC25D0978E00F93BA6 /* tree.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,6 +29,8 @@
 		FE17D09A25CCD06E00F93BA6 /* homework3 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = homework3; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE17D09D25CCD06E00F93BA6 /* investment.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = investment.cpp; sourceTree = "<group>"; };
 		FE17D0A625CCED5600F93BA6 /* linear.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = linear.cpp; sourceTree = "<group>"; };
+		FE17D0A925D0825300F93BA6 /* maze.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = maze.cpp; sourceTree = "<group>"; };
+		FE17D0AC25D0978E00F93BA6 /* tree.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = tree.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +65,8 @@
 			children = (
 				FE17D09D25CCD06E00F93BA6 /* investment.cpp */,
 				FE17D0A625CCED5600F93BA6 /* linear.cpp */,
+				FE17D0A925D0825300F93BA6 /* maze.cpp */,
+				FE17D0AC25D0978E00F93BA6 /* tree.cpp */,
 			);
 			path = homework3;
 			sourceTree = "<group>";
@@ -122,7 +128,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				FE17D0A725CCED5600F93BA6 /* linear.cpp in Sources */,
+				FE17D0AD25D0978E00F93BA6 /* tree.cpp in Sources */,
 				FE17D09E25CCD06E00F93BA6 /* investment.cpp in Sources */,
+				FE17D0AA25D0825300F93BA6 /* maze.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

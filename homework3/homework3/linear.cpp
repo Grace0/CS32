@@ -56,35 +56,41 @@ int countTrue(const double a[], int n)
 // element, return -1.
 int firstTrue(const double a[], int n)
 {
-
     if (n <= 0) { //empty array
         return -1;
     }
     
-    if (n == 1) {
-        if (somePredicate(a[0])) {
-            return 0;
-        } else {
-            return -1;
-        }
+    if (somePredicate(a[0])) {
+        return 0;
     }
     
-    if (somePredicate(a[n-1])) {
-        return n-1;
+    int prevTrue = firstTrue(a+1, n-1);
+    
+    if (prevTrue == -1) {
+        return -1;
     } else {
-        return firstTrue(a, n-1);
+        return prevTrue+1;
     }
-
-//    if (somePredicate(a[n-1])) { //first element is true
-//        return n-1;
-//    } else {
-//        return firstTrue(a, n-1);
-//    }
-
-  //  int prevTrue = firstTrue(a, n-1); //simplifying step, magic func
     
-  //  if (prevTrue < )
-
+//    if (n == 1) {
+//        if (somePredicate(a[0])) {
+//            return 0;
+//        } else {
+//            return -1;
+//        }
+//    }
+//
+//    int prevTrue = firstTrue(a, n-1);
+//
+//    if (prevTrue == -1) {
+//        if (somePredicate(a[n-1])) {
+//            return n-1;
+//        } else {
+//            return -1;
+//        } //check the last index
+//    } else {
+//        return prevTrue; //return that index
+//    }
     
 }
 
@@ -145,17 +151,17 @@ bool isIn(const double a1[], int n1, const double a2[], int n2)
 }
 
 int main() {
-   
+
     const double arr[10] = { 3.4, 0.0, -4.0, 20.338, 5.987, 599.9, 6.0, 8.0, 10.9, -4987};
     int n = 10;
-    
+
     assert(anyTrue(arr, n) == true);
     assert(anyTrue(arr, 3) == false);
-    
+
     assert(countTrue(arr, 3) == 0);
     assert(countTrue(arr, 7) == 2);
     assert(countTrue(arr, 4) == 1);
-    
+
     const double a1[3] = {50, 30, 20};
     const double a2[7] = {10, 50, 40, 20, 50, 40, 30};
     assert(isIn(a1, 3, a2, 7) == false);
@@ -163,6 +169,13 @@ int main() {
     assert(positionOfMax(arr, 3) == 0);
     assert(positionOfMax(arr, 10) == 5);
     
-    cout << "Passed all tests" << endl;
+    const double a3[4] = {6, 8, 11, 40};
     
+    assert(firstTrue(a1, 3) == 0);
+    assert(firstTrue(a2, 7) == 1);
+    assert(firstTrue(arr, 3) == -1);
+    assert(firstTrue(a3, 4) == 2);
+
+    cout << "Passed all tests" << endl;
+
 }

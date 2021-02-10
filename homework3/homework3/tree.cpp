@@ -1,7 +1,3 @@
-#include <iostream>
-#include <cassert>
-
-using namespace std;
 
 // Return the number of ways that all n1 elements of a1 appear in
     // the n2 element array a2 in the same order (though not necessarily
@@ -16,7 +12,24 @@ using namespace std;
     //    50 40 30            3
   int countIsIn(const double a1[], int n1, const double a2[], int n2)
   {
-      return -999;  // This is incorrect.
+      
+      if (n1 <= 0) {
+          return 1;
+      }
+      
+      if (n2 <= 0) {
+          return 0;
+      }
+      
+      if (n1 > n2) {
+          return 0;
+      }
+   
+      if (a1[n1-1] == a2[n2-1]) {
+          return countIsIn(a1, n1-1, a2, n2-1);
+      } else {
+          return countIsIn(a1, n1, a2, n2-1);
+      }
   }
 
     // Exchange two doubles
@@ -87,9 +100,14 @@ using namespace std;
       if (n <= 1) {
           return;
       }
+      
+      int firstNotGreater, firstLess;
+      divide(a, n, a[n/2], firstNotGreater, firstLess);
+      order(a, n/2);
+
+      order(a+n/2, n-n/2);
+      
+
       return;  // This is not always correct.
   }
 
-//int main() {
-//    
-//}

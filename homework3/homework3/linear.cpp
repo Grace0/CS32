@@ -1,18 +1,3 @@
-//
-//  linear.cpp
-//  homework3
-//
-//  Created by Grace Kwak on 2/4/21.
-//
-
-#include <iostream>
-#include <cassert>
-
-using namespace std;
-
-bool somePredicate(double x) {
-    return x > 10;
-}
 
 // Return true if the somePredicate function returns true for at
 // least one of the array elements, false otherwise.
@@ -72,26 +57,6 @@ int firstTrue(const double a[], int n)
         return prevTrue+1;
     }
     
-//    if (n == 1) {
-//        if (somePredicate(a[0])) {
-//            return 0;
-//        } else {
-//            return -1;
-//        }
-//    }
-//
-//    int prevTrue = firstTrue(a, n-1);
-//
-//    if (prevTrue == -1) {
-//        if (somePredicate(a[n-1])) {
-//            return n-1;
-//        } else {
-//            return -1;
-//        } //check the last index
-//    } else {
-//        return prevTrue; //return that index
-//    }
-    
 }
 
 // Return the subscript of the largest element in the array (i.e.,
@@ -148,34 +113,4 @@ bool isIn(const double a1[], int n1, const double a2[], int n2)
     } else {
         return isIn(a1, n1, a2, n2-1);
     }
-}
-
-int main() {
-
-    const double arr[10] = { 3.4, 0.0, -4.0, 20.338, 5.987, 599.9, 6.0, 8.0, 10.9, -4987};
-    int n = 10;
-
-    assert(anyTrue(arr, n) == true);
-    assert(anyTrue(arr, 3) == false);
-
-    assert(countTrue(arr, 3) == 0);
-    assert(countTrue(arr, 7) == 2);
-    assert(countTrue(arr, 4) == 1);
-
-    const double a1[3] = {50, 30, 20};
-    const double a2[7] = {10, 50, 40, 20, 50, 40, 30};
-    assert(isIn(a1, 3, a2, 7) == false);
-
-    assert(positionOfMax(arr, 3) == 0);
-    assert(positionOfMax(arr, 10) == 5);
-    
-    const double a3[4] = {6, 8, 11, 40};
-    
-    assert(firstTrue(a1, 3) == 0);
-    assert(firstTrue(a2, 7) == 1);
-    assert(firstTrue(arr, 3) == -1);
-    assert(firstTrue(a3, 4) == 2);
-
-    cout << "Passed all tests" << endl;
-
 }

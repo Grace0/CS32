@@ -47,6 +47,17 @@ class Sequence
         }
         return *this;
     }
+    
+
+    int size() const
+    {
+        return m_size;
+    }
+
+    bool empty() const
+    {
+        return size() == 0;
+    }
 
     int insert(int pos, const ItemType& value)
     {
@@ -152,6 +163,26 @@ class Sequence
         m_size = s;
     }
 
+  private:
+      // Representation:
+      //   a circular doubly-linked list with a dummy node.
+      //   m_head points to the dummy node.
+      //   m_head->m_prev->m_next == m_head and m_head->m_next->m_prev == m_head
+      //   m_size == 0  iff  m_head->m_next == m_head->m_prev == m_head
+      //   if m_size > 0
+      //       m_head->next points to the node at position 0.
+      //       m_head->prev points to the node at position m_size-1.
+
+    struct Node
+    {
+        ItemType m_value;
+        Node*    m_next;
+        Node*    m_prev;
+    };
+
+    Node* m_head;
+    int   m_size;
+    
     void createEmpty()
     {
         m_size = 0;
@@ -219,46 +250,11 @@ class Sequence
 
         return p;
     }
-
-
-  private:
-      // Representation:
-      //   a circular doubly-linked list with a dummy node.
-      //   m_head points to the dummy node.
-      //   m_head->m_prev->m_next == m_head and m_head->m_next->m_prev == m_head
-      //   m_size == 0  iff  m_head->m_next == m_head->m_prev == m_head
-      //   if m_size > 0
-      //       m_head->next points to the node at position 0.
-      //       m_head->prev points to the node at position m_size-1.
-
-    struct Node
-    {
-        ItemType m_value;
-        Node*    m_next;
-        Node*    m_prev;
-    };
-
-    Node* m_head;
-    int   m_size;
-
-    void createEmpty();
-      // Create an empty list.  (Should be called only by constructors.)
-
-    void insertBefore(Node* p, const ItemType& value);
-      // Insert value in a new Node before Node p, incrementing m_size.
-
-    Node* doErase(Node* p);
-      // Remove the Node p, decrementing m_size.  Return the Node that
-      // followed p.
-
-    Node* nodeAtPos(int pos) const;
-      // Return pointer to Node at position pos.  If pos == m_size, return
-      // m_head.  (Will be called only when 0 <= pos <= size().)
 };
 
 // Declarations of non-member functions
 template <typename ItemType>
-int subsequence(const Sequence& seq1, const Sequence& seq2)
+int subsequence(const Sequence<ItemType>& seq1, const Sequence<ItemType>& seq2)
 {
     if (seq2.empty())
         return -1;
@@ -298,7 +294,7 @@ int subsequence(const Sequence& seq1, const Sequence& seq2)
 }
 
 template <typename ItemType>
-void interleave(const Sequence& seq1, const Sequence& seq2, Sequence& result)
+void interleave(const Sequence<ItemType>& seq1, const Sequence<ItemType>& seq2, Sequence<ItemType>& result)
 {
       // Guard against the case that result is an alias for seq1 or seq2
       // (i.e., that result is a reference to the same sequence that seq1 or
@@ -306,7 +302,7 @@ void interleave(const Sequence& seq1, const Sequence& seq2, Sequence& result)
       // done, swap res with result; the old value of result (now in res) will
       // be destroyed when res is destroyed.
 
-    Sequence res;
+    Sequence<ItemType> res;
 
       // Interleave elements until one or both sequences runs out.
 
@@ -328,7 +324,7 @@ void interleave(const Sequence& seq1, const Sequence& seq2, Sequence& result)
       // Append the remaining elements from the longer sequence.  (If the
       // sequences are the same length, this does nothing.)
 
-    const Sequence& s = (n1 > nmin ? seq1 : seq2);
+    const Sequence<ItemType>& s = (n1 > nmin ? seq1 : seq2);
     int n = (n1 > nmin ? n1 : n2);
     for (int k = nmin ; k < n; k++)
     {
@@ -339,20 +335,6 @@ void interleave(const Sequence& seq1, const Sequence& seq2, Sequence& result)
     }
 
     result.swap(res);
-}
-
-// Inline implementations
-
-inline
-int Sequence::size() const
-{
-    return m_size;
-}
-
-inline
-bool Sequence::empty() const
-{
-    return size() == 0;
 }
 
 #endif // SEQUENCE_INCLUDED

@@ -10,6 +10,7 @@
 		FE17D0BC25D4F7C300F93BA6 /* Sequence.h in Sources */ = {isa = PBXBuildFile; fileRef = FE17D0BB25D4F7C300F93BA6 /* Sequence.h */; };
 		FE17D0C525D4FC6A00F93BA6 /* test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FE17D0C425D4FC6A00F93BA6 /* test.cpp */; };
 		FE17D0C825D75A0D00F93BA6 /* odds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FE17D0C725D75A0D00F93BA6 /* odds.cpp */; };
+		FE17D0CB25D75C2700F93BA6 /* bad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FE17D0CA25D75C2700F93BA6 /* bad.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -29,6 +30,7 @@
 		FE17D0BB25D4F7C300F93BA6 /* Sequence.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sequence.h; sourceTree = "<group>"; };
 		FE17D0C425D4FC6A00F93BA6 /* test.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test.cpp; sourceTree = "<group>"; };
 		FE17D0C725D75A0D00F93BA6 /* odds.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = odds.cpp; sourceTree = "<group>"; };
+		FE17D0CA25D75C2700F93BA6 /* bad.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bad.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +64,7 @@
 			isa = PBXGroup;
 			children = (
 				FE17D0BB25D4F7C300F93BA6 /* Sequence.h */,
+				FE17D0CA25D75C2700F93BA6 /* bad.cpp */,
 				FE17D0C725D75A0D00F93BA6 /* odds.cpp */,
 				FE17D0C425D4FC6A00F93BA6 /* test.cpp */,
 			);
@@ -127,6 +130,7 @@
 				FE17D0BC25D4F7C300F93BA6 /* Sequence.h in Sources */,
 				FE17D0C525D4FC6A00F93BA6 /* test.cpp in Sources */,
 				FE17D0C825D75A0D00F93BA6 /* odds.cpp in Sources */,
+				FE17D0CB25D75C2700F93BA6 /* bad.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

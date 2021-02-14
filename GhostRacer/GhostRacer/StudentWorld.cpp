@@ -17,6 +17,7 @@ StudentWorld::StudentWorld(string assetPath)
 
 int StudentWorld::init()
 {
+   ghostRacer = new GhostRacer();
     return GWSTATUS_CONTINUE_GAME;
 }
 

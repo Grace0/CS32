@@ -2,6 +2,7 @@
 #define SPRITEMANAGER_H_
 
 #include "freeglut.h"
+#include <memory>
 
 #ifndef GL_BGR
 #define GL_BGR GL_BGR_EXT

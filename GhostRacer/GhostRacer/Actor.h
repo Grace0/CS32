@@ -22,25 +22,35 @@
 //    int getDirection() const; // in degrees (0-359)
 //    void setDirection(int d); // in degrees (0-359)
 
+class StudentWorld; //since Actor uses a pointer to a StudentWorld
+
 class Actor : public GraphObject { //Actor is derived from GraphObject
 
 public:
-    Actor(int imageID, double startX, double startY, int startDirection = 0, double size = 1.0, int depth = 0) : GraphObject(imageID, startX, startY, startDirection, size, depth) {
-        
+    Actor(int imageID, double startX, double startY, int startDirection = 0, double size = 1.0, int depth = 0, StudentWorld* studentWorld = nullptr) : GraphObject(imageID, startX, startY, startDirection, size, depth) { //default params at the end
+        m_studentWorld = studentWorld;
     }
  
+    StudentWorld* getWorld() { return m_studentWorld; }
     virtual ~Actor() {} //virtual so that subclass' destructors get called; note that subclasses get destructed first
 private:
-    
+    StudentWorld* m_studentWorld;
 };
 
 class GhostRacer : public Actor { //GhostRacer is derived from Actor
 public:
-    GhostRacer() : Actor(IID_GHOST_RACER, 128, 32, 90, 4.0, 0) {
+    GhostRacer(StudentWorld *studentWorld) : Actor(IID_GHOST_RACER, 128, 32, 90, 4.0, 0, studentWorld) {
         
     }
     virtual ~GhostRacer() {} //virtual functions must be defined (Even if they're empty)
     void doNothing() {}
+private:
+};
+
+class BorderLine : public Actor {
+public:
+    BorderLine(int imageID, double startX, double startY) : Actor(imageID, startX, startY, 0, 2.0, 0) { }
+    virtual ~BorderLine();
 private:
 };
 

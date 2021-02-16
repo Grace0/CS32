@@ -20,7 +20,7 @@ StudentWorld::StudentWorld(string assetPath)
 
 int StudentWorld::init()
 {
-    //yellow border lines
+    //yellow border lines //StudentWorld can't have a data member that's a pointer to a single border line object
     for (int n = 0; n < VIEW_HEIGHT/SPRITE_HEIGHT; n++) {
         BorderLine* leftBorderLine = new BorderLine(IID_YELLOW_BORDER_LINE, LEFT_EDGE, n * SPRITE_HEIGHT);
         actorVec.push_back(leftBorderLine);

@@ -29,17 +29,53 @@ class Actor : public GraphObject { //Actor is derived from GraphObject
 public:
     Actor(int imageID, double startX, double startY, int startDirection = 0, double size = 1.0, int depth = 0, StudentWorld* studentWorld = nullptr) : GraphObject(imageID, startX, startY, startDirection, size, depth) { //default params at the end
         m_studentWorld = studentWorld;
+        m_isAlive = true;
     }
+    virtual ~Actor() {} //virtual so that subclass' destructors get called; note that subclasses get destructed first
  
     StudentWorld* getWorld() { return m_studentWorld; }
-    virtual ~Actor() {} //virtual so that subclass' destructors get called; note that subclasses get destructed first
+    bool isAlive() { return m_isAlive; }
+    virtual bool collisionAvoidanceWorthy() { return true; }
     
     virtual void doSomething() = 0;
-    virtual bool collisionAvoidanceWorthy() { return false; }
     
+    virtual void doDamage() {} //?
 private:
     StudentWorld* m_studentWorld;
+    bool m_isAlive;
 };
+
+//class Pedestrian : public Actor {
+//public:
+//    Pedestrian(int imageID, double startX, double startY, double size) : Actor(imageID, startX, startY) { //direction=0, depth=0
+//        m_movementPlanDis = 0;
+//        m_vertSpeed = -4.0;
+//        m_horizSpeed = 0.0;
+//        m_hitPoints = 2;
+//    }
+//    virtual ~Pedestrian();
+//    virtual bool collisionAvoidanceWorthy() { return false; }
+//private:
+//    int m_movementPlanDis;
+//    double m_vertSpeed, m_horizSpeed;
+//    int m_hitPoints;
+//};
+//
+//class HumanPed : public Pedestrian {
+//public:
+//    HumanPed(double startX, double startY) : Pedestrian(IID_HUMAN_PED, startX, startY) {}
+//    virtual ~HumanPed();
+//private:
+//    
+//};
+//
+//class ZombiePed : public Pedestrian {
+//public:
+//    ZombiePed(double startX, double startY) : Pedestrian(IID_ZOMBIE_PED, startX, startY) {}
+//    virtual ~ZombiePed();
+//private:
+//    
+//};
 
 class GhostRacer : public Actor { //GhostRacer is derived from Actor
 public:
@@ -51,10 +87,9 @@ public:
     void doNothing() {}
     virtual void doSomething();
 private:
-    bool m_isAlive;
     double m_speed;
     int m_holyWaterUnits;
-    int m_health;
+    int m_hitPoints;
     
 };
 

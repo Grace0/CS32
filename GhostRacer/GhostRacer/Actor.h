@@ -33,25 +33,39 @@ public:
  
     StudentWorld* getWorld() { return m_studentWorld; }
     virtual ~Actor() {} //virtual so that subclass' destructors get called; note that subclasses get destructed first
+    
+    virtual void doSomething() = 0;
+    virtual bool collisionAvoidanceWorthy() { return false; }
+    
 private:
     StudentWorld* m_studentWorld;
 };
 
 class GhostRacer : public Actor { //GhostRacer is derived from Actor
 public:
-    GhostRacer(StudentWorld *studentWorld) : Actor(IID_GHOST_RACER, 128, 32, 90, 4.0, 0, studentWorld) {
-        
-    }
+    GhostRacer(StudentWorld *studentWorld);
     virtual ~GhostRacer() {} //virtual functions must be defined (Even if they're empty)
+    
+    virtual bool collisionAvoidanceWorthy() { return true; }
+    
     void doNothing() {}
+    virtual void doSomething();
 private:
+    bool m_isAlive;
+    double m_speed;
+    int m_holyWaterUnits;
+    int m_health;
+    
 };
 
 class BorderLine : public Actor {
 public:
-    BorderLine(int imageID, double startX, double startY) : Actor(imageID, startX, startY, 0, 2.0, 0) { }
-    virtual ~BorderLine();
+    BorderLine(int imageID, double startX, double startY);
+    
+    virtual ~BorderLine() {}
+    virtual void doSomething() {}
 private:
+    double m_speed;
 };
 
 #endif // ACTOR_H_

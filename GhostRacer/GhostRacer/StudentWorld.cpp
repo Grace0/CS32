@@ -3,7 +3,10 @@
 #include <string>
 using namespace std;
 
-GameWorld* createStudentWorld(string assetPath)
+const int LEFT_EDGE = ROAD_CENTER-ROAD_WIDTH/2;
+const int RIGHT_EDGE = ROAD_CENTER+ROAD_WIDTH/2;
+
+GameWorld* createStudentWorld(string assetPath) //called in main.cpp
 {
 	return new StudentWorld(assetPath); //returning a pointer to an object of itself?
 }
@@ -13,12 +16,25 @@ GameWorld* createStudentWorld(string assetPath)
 StudentWorld::StudentWorld(string assetPath)
 : GameWorld(assetPath)
 {
-    createStudentWorld(assetPath);
 }
 
 int StudentWorld::init()
 {
-//create border lines
+    //yellow border lines
+    for (int n = 0; n < VIEW_HEIGHT/SPRITE_HEIGHT; n++) {
+        BorderLine* leftBorderLine = new BorderLine(IID_YELLOW_BORDER_LINE, LEFT_EDGE, n * SPRITE_HEIGHT);
+        actorVec.push_back(leftBorderLine);
+        BorderLine* rightBorderLine = new BorderLine(IID_YELLOW_BORDER_LINE, RIGHT_EDGE, n * SPRITE_HEIGHT);
+        actorVec.push_back(rightBorderLine);
+    }
+    //white border lines
+    for (int m = 0; m < VIEW_HEIGHT/(4*SPRITE_HEIGHT); m++) {
+        BorderLine* leftBorderLine = new BorderLine(IID_WHITE_BORDER_LINE, LEFT_EDGE + ROAD_WIDTH/3, m * 4*SPRITE_HEIGHT);
+        actorVec.push_back(leftBorderLine);
+        BorderLine* rightBorderLine = new BorderLine(IID_WHITE_BORDER_LINE, RIGHT_EDGE - ROAD_WIDTH/3, m * 4*SPRITE_HEIGHT);
+        actorVec.push_back(rightBorderLine);
+    }
+    
    ghostRacer = new GhostRacer(this);
     return GWSTATUS_CONTINUE_GAME;
 }

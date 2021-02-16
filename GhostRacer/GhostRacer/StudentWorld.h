@@ -17,7 +17,7 @@ public:
 
 private:
     GhostRacer* ghostRacer;
-    std::vector<Actor> actorVec;
+    std::vector<Actor*> actorVec;
 };
 
 #endif // STUDENTWORLD_H_

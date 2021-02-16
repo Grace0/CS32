@@ -8,6 +8,7 @@
 //GraphObject functions
 //GraphObject(int imageID, double startX, double startY,
 //    int startDirection = 0, double size = 1.0, int depth = 0);
+
 //    double getX() const; // in pixels (0-255)
 //    double getY() const; // in pixels (0-255)
 //    void moveTo(double x, double y); // in pixels (0-255)
@@ -38,7 +39,7 @@ public:
     virtual bool collisionAvoidanceWorthy() { return true; }
     
     virtual void doSomething() = 0;
-    
+    virtual void activate() {}
     virtual void doDamage() {} //?
 private:
     StudentWorld* m_studentWorld;
@@ -66,7 +67,7 @@ private:
 //    HumanPed(double startX, double startY) : Pedestrian(IID_HUMAN_PED, startX, startY) {}
 //    virtual ~HumanPed();
 //private:
-//    
+//
 //};
 //
 //class ZombiePed : public Pedestrian {
@@ -74,7 +75,7 @@ private:
 //    ZombiePed(double startX, double startY) : Pedestrian(IID_ZOMBIE_PED, startX, startY) {}
 //    virtual ~ZombiePed();
 //private:
-//    
+//
 //};
 
 class GhostRacer : public Actor { //GhostRacer is derived from Actor
@@ -85,12 +86,13 @@ public:
     virtual bool collisionAvoidanceWorthy() { return true; }
     
     void doNothing() {}
+    void move();
     virtual void doSomething();
 private:
     double m_speed;
+    double m_direction;
     int m_holyWaterUnits;
     int m_hitPoints;
-    
 };
 
 class BorderLine : public Actor {

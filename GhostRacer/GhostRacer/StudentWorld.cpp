@@ -41,15 +41,18 @@ int StudentWorld::init()
 
 int StudentWorld::move()
 {
-    // This code is here merely to allow the game to build, run, and terminate after you hit enter.
-    // Notice that the return value GWSTATUS_PLAYER_DIED will cause our framework to end the current level.
-    ghostRacer->doNothing();
-//    decLives();
-    
+
     // The term "actors" refers to all actors, Ghost Racer, pedestrians,
      // vehicles, goodies, oil slicks, holy water, spray, lost souls, etc.
      // Give each actor a chance to do something, including Ghost Racer
-//    for each of the actors in the game world
+  //  for (std::vector<Actor*>::iterator i = actorVec.begin(); i != actorVec.end(); i++) { //    for each of the actors in the game world
+   // }
+    
+    for (int i = 0; i < actorVec.size(); i++) {
+        if (actorVec[i]->isAlive()) {
+            actorVec[i]->doSomething();
+        }
+    }
 //    {
 //     if (the actor is still active/alive)
 //     {
@@ -73,9 +76,9 @@ int StudentWorld::move()
 //    Update display text // update the score/lives/level text at screen top
 //     // the player hasn’t completed the current level and hasn’t died, so
 //     // continue playing the current level
-//    return GWSTATUS_CONTINU
+//    return GWSTATUS_CONTINUE
     
-    return 1;//GWSTATUS_PLAYER_DIED;
+    return GWSTATUS_CONTINUE_GAME;
 }
 
 void StudentWorld::cleanUp()

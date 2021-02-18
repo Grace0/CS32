@@ -28,7 +28,7 @@ class StudentWorld; //since Actor uses a pointer to a StudentWorld
 class Actor : public GraphObject { //Actor is derived from GraphObject
 
 public:
-    Actor(int imageID, double startX, double startY, int startDirection = 0, double size = 1.0, int depth = 0, StudentWorld* studentWorld = nullptr) : GraphObject(imageID, startX, startY, startDirection, size, depth) { //default params at the end
+    Actor(int imageID, double startX, double startY, int startDirection, double size, int depth, StudentWorld* studentWorld) : GraphObject(imageID, startX, startY, startDirection, size, depth) { //default params at the end
         m_studentWorld = studentWorld;
         m_isAlive = true;
     }
@@ -36,7 +36,9 @@ public:
  
     StudentWorld* getWorld() { return m_studentWorld; }
     bool isAlive() { return m_isAlive; }
+    
     virtual bool collisionAvoidanceWorthy() { return true; }
+    
     
     virtual void doSomething() = 0;
     virtual void activate() {}
@@ -44,6 +46,7 @@ public:
 private:
     StudentWorld* m_studentWorld;
     bool m_isAlive;
+    double m_vertSpeed, m_horizSpeed;
 };
 
 //class Pedestrian : public Actor {
@@ -83,9 +86,9 @@ public:
     GhostRacer(StudentWorld *studentWorld);
     virtual ~GhostRacer() {} //virtual functions must be defined (Even if they're empty)
     
+    double getSpeed() { return m_speed; } 
     virtual bool collisionAvoidanceWorthy() { return true; }
     
-    void doNothing() {}
     void move();
     virtual void doSomething();
 private:
@@ -97,12 +100,14 @@ private:
 
 class BorderLine : public Actor {
 public:
-    BorderLine(int imageID, double startX, double startY);
-    
+    BorderLine(int imageID, double startX, double startY, StudentWorld* studentWorld);
     virtual ~BorderLine() {}
-    virtual void doSomething() {}
+    
+    virtual void doSomething();
+    virtual bool collisionAvoidanceWorthy() { return true; }
 private:
-    double m_speed;
+    double m_vertSpeed, m_horizSpeed;
+    bool m_isAlive;
 };
 
 #endif // ACTOR_H_

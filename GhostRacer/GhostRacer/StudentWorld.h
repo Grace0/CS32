@@ -14,10 +14,12 @@ public:
     virtual int init();
     virtual int move();
     virtual void cleanUp();
+    
+    GhostRacer* getGhostRacer() { return m_ghostRacer; }
 
 private:
-    GhostRacer* ghostRacer;
-    std::vector<Actor*> actorVec;
+    GhostRacer* m_ghostRacer;
+    std::vector<Actor*> m_actorVec;
 };
 
 #endif // STUDENTWORLD_H_

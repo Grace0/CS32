@@ -59,6 +59,21 @@ void GhostRacer::move() {
     moveTo(cur_x + delta_x, cur_y);
 }
 
-BorderLine::BorderLine(int imageID, double startX, double startY): Actor(imageID, startX, startY, 0, 2.0, 0) {
-    m_speed = 0;
+BorderLine::BorderLine(int imageID, double startX, double startY, StudentWorld* studentWorld): Actor(imageID, startX, startY, 0, 2.0, 2.0, studentWorld) {
+    m_isAlive = true;
+    m_vertSpeed = -4;
+    m_horizSpeed = 0;
+}
+
+void BorderLine::doSomething() {
+    m_vertSpeed = m_vertSpeed - getWorld()->getGhostRacer()->getSpeed();
+    double new_y = getY() + m_vertSpeed;
+    double new_x = getX() + m_horizSpeed;
+    moveTo(new_x, new_y);
+    
+    if (getX() < 0 || getY() < 0 || getX() > VIEW_WIDTH || getY() > VIEW_HEIGHT) {
+        m_isAlive = false;
+        return;
+    }
+    
 }

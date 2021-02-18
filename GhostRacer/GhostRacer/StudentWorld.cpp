@@ -22,20 +22,16 @@ int StudentWorld::init()
 {
     //yellow border lines //StudentWorld can't have a data member that's a pointer to a single border line object
     for (int n = 0; n < VIEW_HEIGHT/SPRITE_HEIGHT; n++) {
-        BorderLine* leftBorderLine = new BorderLine(IID_YELLOW_BORDER_LINE, LEFT_EDGE, n * SPRITE_HEIGHT);
-        actorVec.push_back(leftBorderLine);
-        BorderLine* rightBorderLine = new BorderLine(IID_YELLOW_BORDER_LINE, RIGHT_EDGE, n * SPRITE_HEIGHT);
-        actorVec.push_back(rightBorderLine);
+        m_actorVec.push_back(new BorderLine(IID_YELLOW_BORDER_LINE, LEFT_EDGE, n * SPRITE_HEIGHT, this));
+        m_actorVec.push_back(new BorderLine(IID_YELLOW_BORDER_LINE, RIGHT_EDGE, n * SPRITE_HEIGHT, this));
     }
     //white border lines
     for (int m = 0; m < VIEW_HEIGHT/(4*SPRITE_HEIGHT); m++) {
-        BorderLine* leftBorderLine = new BorderLine(IID_WHITE_BORDER_LINE, LEFT_EDGE + ROAD_WIDTH/3, m * 4*SPRITE_HEIGHT);
-        actorVec.push_back(leftBorderLine);
-        BorderLine* rightBorderLine = new BorderLine(IID_WHITE_BORDER_LINE, RIGHT_EDGE - ROAD_WIDTH/3, m * 4*SPRITE_HEIGHT);
-        actorVec.push_back(rightBorderLine);
+        m_actorVec.push_back(new BorderLine(IID_WHITE_BORDER_LINE, LEFT_EDGE + ROAD_WIDTH/3, m * 4*SPRITE_HEIGHT, this));
+        m_actorVec.push_back(new BorderLine(IID_WHITE_BORDER_LINE, RIGHT_EDGE - ROAD_WIDTH/3, m * 4*SPRITE_HEIGHT, this));
     }
     
-   ghostRacer = new GhostRacer(this);
+    m_ghostRacer = new GhostRacer(this);
     return GWSTATUS_CONTINUE_GAME;
 }
 
@@ -48,9 +44,9 @@ int StudentWorld::move()
   //  for (std::vector<Actor*>::iterator i = actorVec.begin(); i != actorVec.end(); i++) { //    for each of the actors in the game world
    // }
     
-    for (int i = 0; i < actorVec.size(); i++) {
-        if (actorVec[i]->isAlive()) {
-            actorVec[i]->doSomething();
+    for (int i = 0; i < m_actorVec.size(); i++) {
+        if (m_actorVec[i]->isAlive()) {
+            m_actorVec[i]->doSomething();
         }
     }
 //    {
@@ -83,5 +79,5 @@ int StudentWorld::move()
 
 void StudentWorld::cleanUp()
 {
-    delete ghostRacer;
+    delete m_ghostRacer;
 }

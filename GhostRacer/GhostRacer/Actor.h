@@ -36,9 +36,13 @@ public:
  
     StudentWorld* getWorld() { return m_studentWorld; }
     bool isAlive() { return m_isAlive; }
-    
+    bool doOverlap(Actor* otherActor);
+//    1. Compute the delta_x between A and B (which is the absolute value of the distance between A’s center x coordinate and B’s center x coordinate).
+//    2. Compute the delta_y between A and B (which is the absolute value of the distance between A’s center y coordinate and B’s center y coordinate).
+//    3. Compute the sum of the radiuses of A and B. While most of our graphics are rectangular, you can treat them a bit like a circle to simplify things.
+//    4. If delta_x < radius_sum*.25 AND delta_y < radius_sum*.6 then the two objects
+//    2 are said to overlap .
     virtual bool collisionAvoidanceWorthy() { return true; }
-    
     
     virtual void doSomething() = 0;
     virtual void activate() {}
@@ -49,37 +53,66 @@ private:
     double m_vertSpeed, m_horizSpeed;
 };
 
-//class Pedestrian : public Actor {
-//public:
-//    Pedestrian(int imageID, double startX, double startY, double size) : Actor(imageID, startX, startY) { //direction=0, depth=0
-//        m_movementPlanDis = 0;
-//        m_vertSpeed = -4.0;
-//        m_horizSpeed = 0.0;
-//        m_hitPoints = 2;
-//    }
-//    virtual ~Pedestrian();
-//    virtual bool collisionAvoidanceWorthy() { return false; }
-//private:
-//    int m_movementPlanDis;
-//    double m_vertSpeed, m_horizSpeed;
-//    int m_hitPoints;
-//};
-//
-//class HumanPed : public Pedestrian {
-//public:
-//    HumanPed(double startX, double startY) : Pedestrian(IID_HUMAN_PED, startX, startY) {}
-//    virtual ~HumanPed();
-//private:
-//
-//};
-//
-//class ZombiePed : public Pedestrian {
-//public:
-//    ZombiePed(double startX, double startY) : Pedestrian(IID_ZOMBIE_PED, startX, startY) {}
-//    virtual ~ZombiePed();
-//private:
-//
-//};
+class Pedestrian : public Actor {
+public:
+    Pedestrian(int imageID, double startX, double startY, double size, StudentWorld* studentWorld) : Actor(imageID, startX, startY, 0, size, 0, studentWorld) { //direction=0, depth=0
+        m_movementPlanDis = 0;
+        m_vertSpeed = -4.0;
+        m_horizSpeed = 0.0;
+        m_hitPoints = 2;
+    }
+    
+    double getVertSpeed() {
+        return m_vertSpeed;
+    }
+    double getHorizSpeed() {
+        return m_horizSpeed;
+    }
+    void setHorizSpeed(double horizSpeed) {
+        m_horizSpeed = horizSpeed;
+    }
+    void setVertSpeed(double vertSpeed) {
+        m_vertSpeed = vertSpeed;
+    }
+    
+    virtual void doSomething() {
+        if (!isAlive()) return;
+//        If the Ghost Racer overlaps with me on the road, then Damage the player by 5 hit points
+//        Set my alive state to false
+//        Else if I still want to wander in the same direction Move one pixel in my chosen wandering direction
+//        Else if I’m done wandering in the same direction Pick a new direction to wander
+//        Pick a new number of ticks to wander in that direction Else if I have fallen off the bottom of the screen
+//        Set my alive state to false Else ...
+    }
+
+    virtual ~Pedestrian();
+    virtual bool collisionAvoidanceWorthy() { return true; }
+private:
+    int m_movementPlanDis;
+    double m_vertSpeed, m_horizSpeed;
+    int m_hitPoints;
+};
+
+class HumanPed : public Pedestrian {
+public:
+    HumanPed(double startX, double startY, StudentWorld* studentWorld) : Pedestrian(IID_HUMAN_PED, startX, startY, 2.0, studentWorld) {
+    }
+    virtual ~HumanPed();
+    
+
+private:
+
+};
+
+class ZombiePed : public Pedestrian {
+public:
+    ZombiePed(double startX, double startY, StudentWorld* studentWorld) : Pedestrian(IID_ZOMBIE_PED, startX, startY, 3.0, studentWorld) {
+        m_ticksUntilGrunt = 0;
+    }
+    virtual ~ZombiePed();
+private:
+    int m_ticksUntilGrunt;
+};
 
 class GhostRacer : public Actor { //GhostRacer is derived from Actor
 public:

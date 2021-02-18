@@ -3,6 +3,16 @@
 
 // Students:  Add code to this file, Actor.h, StudentWorld.h, and StudentWorld.cpp
 
+bool Actor::doOverlap(Actor* otherActor) {
+    double delta_x = abs(getX() - otherActor->getX());
+    double delta_y = abs(getY() - otherActor->getY());
+    double radius_sum = getRadius() + otherActor->getRadius();
+    if (delta_x < radius_sum*.25 && delta_y < radius_sum*.6) {
+        return true;
+    }
+    return false;
+}
+
 GhostRacer::GhostRacer(StudentWorld *studentWorld) : Actor(IID_GHOST_RACER, 128, 32, 90, 4.0, 0, studentWorld) {
    m_speed = 0;
    m_holyWaterUnits = 10;
@@ -53,7 +63,7 @@ void GhostRacer::doSomething() {
 void GhostRacer::move() {
     const double max_shift_per_tick = 4.0;
     double direction = getDirection();
-    double delta_x = cos(direction) * max_shift_per_tick;
+    double delta_x = cos(direction * 3.14 / 180.0) * max_shift_per_tick;
     double cur_x = getX();
     double cur_y = getY();
     moveTo(cur_x + delta_x, cur_y);
@@ -66,8 +76,8 @@ BorderLine::BorderLine(int imageID, double startX, double startY, StudentWorld* 
 }
 
 void BorderLine::doSomething() {
-    m_vertSpeed = m_vertSpeed - getWorld()->getGhostRacer()->getSpeed();
-    double new_y = getY() + m_vertSpeed;
+    double vert_speed = m_vertSpeed - getWorld()->getGhostRacer()->getSpeed(); //temporary variable; shouldn't be changing m_vertSpeed itself each loop because that would make the speed keep changing
+    double new_y = getY() + vert_speed;
     double new_x = getX() + m_horizSpeed;
     moveTo(new_x, new_y);
     

@@ -20,6 +20,8 @@ public:
 private:
     GhostRacer* m_ghostRacer;
     std::vector<Actor*> m_actorVec;
+    
+    double m_lastWhite;
 };
 
 #endif // STUDENTWORLD_H_

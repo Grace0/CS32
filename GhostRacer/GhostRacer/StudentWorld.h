@@ -16,10 +16,10 @@ public:
     virtual int move();
     virtual void cleanUp();
     
-    GhostRacer* getGhostRacer() { return m_ghostRacer; }
+    Actor* getGhostRacer() { return m_ghostRacer; }
 
 private:
-    GhostRacer* m_ghostRacer;
+    Actor* m_ghostRacer;
     std::vector<Actor*> m_actorVec;
     
     double m_lastWhite;

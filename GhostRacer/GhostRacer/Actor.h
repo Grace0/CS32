@@ -3,6 +3,7 @@
 
 #include "GraphObject.h"
 #include "GameConstants.h" //to include imageID's
+#include "StudentWorld.h"
 // Students:  Add code to this file, Actor.cpp, StudentWorld.h, and StudentWorld.cpp
 
 //GraphObject functions
@@ -23,7 +24,7 @@
 //    int getDirection() const; // in degrees (0-359)
 //    void setDirection(int d); // in degrees (0-359)
 
-class StudentWorld; //since Actor uses a pointer to a StudentWorld
+//class StudentWorld; //since Actor uses a pointer to a StudentWorld
 
 class Actor : public GraphObject { //Actor is derived from GraphObject
 
@@ -36,6 +37,7 @@ public:
  
     StudentWorld* getWorld() { return m_studentWorld; }
     bool isAlive() { return m_isAlive; }
+    void setToDead() { m_isAlive = false; }
     bool doOverlap(Actor* otherActor);
 //    1. Compute the delta_x between A and B (which is the absolute value of the distance between A’s center x coordinate and B’s center x coordinate).
 //    2. Compute the delta_y between A and B (which is the absolute value of the distance between A’s center y coordinate and B’s center y coordinate).
@@ -44,9 +46,11 @@ public:
 //    2 are said to overlap .
     virtual bool collisionAvoidanceWorthy() { return true; }
     
+    virtual double getSpeed() { return m_vertSpeed; } //GR overrides this
     virtual void doSomething() = 0;
     virtual void activate() {}
-    virtual void doDamage() {} //?
+    virtual void receiveDamage(int damage) {
+    } //?
 private:
     StudentWorld* m_studentWorld;
     bool m_isAlive;
@@ -77,12 +81,45 @@ public:
     
     virtual void doSomething() {
         if (!isAlive()) return;
+        
+        if (doOverlap(getWorld()->getGhostRacer())) {
+            getWorld()->getGhostRacer()->receiveDamage(5);
+            receiveDamage(2);
+            return;
+        }
+        
+        if (((getX() - getWorld()->getGhostRacer()->getX()) <= 30) && (getY() > getWorld()->getGhostRacer()->getY())) {
+            setDirection(270);
+            if (getX() > getWorld()->getGhostRacer()->getX()) {
+                m_horizSpeed = -1;
+            } else if (getX() < getWorld()->getGhostRacer()->getX()) {
+                m_horizSpeed = 1;
+            } else {
+                m_horizSpeed = 0;
+            }
+            //if ()
+        }
 //        If the Ghost Racer overlaps with me on the road, then Damage the player by 5 hit points
 //        Set my alive state to false
 //        Else if I still want to wander in the same direction Move one pixel in my chosen wandering direction
 //        Else if I’m done wandering in the same direction Pick a new direction to wander
 //        Pick a new number of ticks to wander in that direction Else if I have fallen off the bottom of the screen
 //        Set my alive state to false Else ...
+    }
+    
+    virtual void receiveDamage(int hitPoints) {
+        m_hitPoints -= hitPoints;
+        if (m_hitPoints <= 0) {
+            setToDead();
+            //getWorld()->playSound(SOUND_PED_DIE);
+            if (doOverlap(getWorld()->getGhostRacer())) {
+                //add new healing goodie in its current position
+            }
+                //ensure the player receives 150 points
+        } else {
+            //getWorld()->playSound(SOUND_PED_HURT);
+        }
+
     }
 
     virtual ~Pedestrian();
@@ -111,7 +148,35 @@ public:
     }
     virtual ~ZombiePed();
 private:
+    
     int m_ticksUntilGrunt;
+    
+    virtual void doSomething() {
+        if (!isAlive()) return;
+        
+        if (doOverlap(getWorld()->getGhostRacer())) {
+            getWorld()->getGhostRacer()->receiveDamage(5);
+            receiveDamage(2);
+            return;
+        }
+        
+        if (((getX() - getWorld()->getGhostRacer()->getX()) <= 30) && (getY() > getWorld()->getGhostRacer()->getY())) {
+            setDirection(270);
+            if (getX() > getWorld()->getGhostRacer()->getX()) {
+                setHorizSpeed(-1);
+            } else if (getX() < getWorld()->getGhostRacer()->getX()) {
+                setHorizSpeed(1);
+            } else {
+                setHorizSpeed(0);
+            }
+            m_ticksUntilGrunt--;
+            if (m_ticksUntilGrunt <= 0) {
+                //getWorld()->playSound(SOUND_ZOMBIE_ATTACK);
+                m_ticksUntilGrunt = 20;
+            }
+        }
+    }
+
 };
 
 class GhostRacer : public Actor { //GhostRacer is derived from Actor
@@ -119,8 +184,15 @@ public:
     GhostRacer(StudentWorld *studentWorld);
     virtual ~GhostRacer() {} //virtual functions must be defined (Even if they're empty)
     
-    double getSpeed() { return m_speed; } 
+    virtual double getSpeed() { return m_speed; }
     virtual bool collisionAvoidanceWorthy() { return true; }
+    virtual void receiveDamage(int hitPoints) {
+        m_hitPoints -= hitPoints;
+        if (m_hitPoints <= 0) {
+            setToDead();
+            //getWorld()->playSound(SOUND_PLAYER_DIE);
+        }
+    }
     
     void move();
     virtual void doSomething();

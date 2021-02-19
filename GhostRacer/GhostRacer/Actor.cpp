@@ -31,33 +31,37 @@ void GhostRacer::doSomething() {
         case KEY_PRESS_LEFT:
             if (getDirection() < 114) {
                 setDirection(getDirection()+8);
-                move();
+       //         move();
             }
             break;
         case KEY_PRESS_RIGHT:
             if (getDirection() > 66) {
                 setDirection(getDirection()-8);
-                move();
+         //       move();
             }
             break;
         case KEY_PRESS_UP:
             if (getVertSpeed() < 5) {
                 setVertSpeed(getVertSpeed()+1);
-                move();
+         //       move();
             }
             break;
         case KEY_PRESS_DOWN:
             if (getVertSpeed() > -1) {
                 setVertSpeed(getVertSpeed()-1);
-                move();
+         //       move();
             }
             break;
         case KEY_PRESS_SPACE:
       //  ... add spray in front of Ghost Racer...;
             break;
     }
+        
+        
     
     }
+    
+    move(); //regardless of whether the player hit a key, GR should move for the give tick
 }
 
 void GhostRacer::move() {

@@ -166,28 +166,21 @@ void Pedestrian::receiveDamage(int hitPoints) {
    }
 }
 
-void ZombiePed::doSomething() {
-   if (!isAlive()) return;
-   
-   if (doOverlap(getWorld()->getGhostRacer())) {
-       getWorld()->getGhostRacer()->receiveDamage(5);
-       receiveDamage(2);
-       return;
-   }
-   
-   if (((getX() - getWorld()->getGhostRacer()->getX()) <= 30) && (getY() > getWorld()->getGhostRacer()->getY())) {
-       setDirection(270);
-       if (getX() > getWorld()->getGhostRacer()->getX()) {
-           setHorizSpeed(-1);
-       } else if (getX() < getWorld()->getGhostRacer()->getX()) {
-           setHorizSpeed(1);
-       } else {
-           setHorizSpeed(0);
-       }
-       m_ticksUntilGrunt--;
-       if (m_ticksUntilGrunt <= 0) {
-           //getWorld()->playSound(SOUND_ZOMBIE_ATTACK);
-           m_ticksUntilGrunt = 20;
-       }
-   }
-}
+//void ZombiePed::grunt() {
+//   
+//   if (((getX() - getWorld()->getGhostRacer()->getX()) <= 30) && (getY() > getWorld()->getGhostRacer()->getY())) {
+//       setDirection(270);
+//       if (getX() > getWorld()->getGhostRacer()->getX()) {
+//           setHorizSpeed(-1);
+//       } else if (getX() < getWorld()->getGhostRacer()->getX()) {
+//           setHorizSpeed(1);
+//       } else {
+//           setHorizSpeed(0);
+//       }
+//       m_ticksUntilGrunt--;
+//       if (m_ticksUntilGrunt <= 0) {
+//           //getWorld()->playSound(SOUND_ZOMBIE_ATTACK);
+//           m_ticksUntilGrunt = 20;
+//       }
+//   }
+//}

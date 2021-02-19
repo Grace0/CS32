@@ -65,29 +65,14 @@ class Pedestrian : public Actor {
 public:
     Pedestrian(int imageID, double startX, double startY, double size, StudentWorld* studentWorld) : Actor(imageID, startX, startY, 0, size, 0, studentWorld) { //direction=0, depth=0
         m_movementPlanDis = 0;
-        m_vertSpeed = -4.0;
-        m_horizSpeed = 0.0;
+        setVertSpeed(-4.0);
+        setHorizSpeed(0.0);
         m_hitPoints = 2;
-    }
-    
-    double getVertSpeed() {
-        return m_vertSpeed;
-    }
-    double getHorizSpeed() {
-        return m_horizSpeed;
-    }
-    void setHorizSpeed(double horizSpeed) {
-        m_horizSpeed = horizSpeed;
-    }
-    void setVertSpeed(double vertSpeed) {
-        m_vertSpeed = vertSpeed;
     }
     
     virtual void doSomething();
     virtual void grunt() {}
-    
-    //virtual void damageWithWater();
-    
+  
     virtual void overlapWithRacer() = 0; //varies between Zombie and human
     
     virtual void receiveDamage(int hitPoints);
@@ -96,7 +81,6 @@ public:
     virtual bool collisionAvoidanceWorthy() { return true; }
 private:
     int m_movementPlanDis;
-    double m_vertSpeed, m_horizSpeed;
     int m_hitPoints;
 };
 
@@ -104,14 +88,12 @@ class HumanPed : public Pedestrian {
 public:
     HumanPed(double startX, double startY, StudentWorld* studentWorld) : Pedestrian(IID_HUMAN_PED, startX, startY, 2.0, studentWorld) {
     }
-    virtual ~HumanPed();
-    
-    virtual void overlapWithRacer();
-    virtual void doSomething();
+    virtual ~HumanPed() {}
     
 
 private:
 
+    virtual void overlapWithRacer();
 };
 
 class ZombiePed : public Pedestrian {
@@ -119,16 +101,14 @@ public:
     ZombiePed(double startX, double startY, StudentWorld* studentWorld) : Pedestrian(IID_ZOMBIE_PED, startX, startY, 3.0, studentWorld) {
         m_ticksUntilGrunt = 0;
     }
-    virtual ~ZombiePed();
-    
-    virtual void grunt();
+    virtual ~ZombiePed() {}
     
 private:
     
     int m_ticksUntilGrunt;
     
+    virtual void grunt();
     virtual void overlapWithRacer();
-    virtual void doSomething();
 
 };
 

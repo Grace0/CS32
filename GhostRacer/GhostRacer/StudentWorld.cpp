@@ -101,23 +101,29 @@ void StudentWorld::removeDeadActors() {
     }
 }
 void StudentWorld::addNewActors() {
-    //     // Potentially add new actors to the game
-    //     // (e.g., oil slicks or goodies or border lines)
-    //    Add new actors
-        double new_border_y = VIEW_HEIGHT-SPRITE_HEIGHT;
-        double delta_y = new_border_y - m_lastWhite;
+   
+    //Borderlines
+    double new_border_y = VIEW_HEIGHT-SPRITE_HEIGHT;
+    double delta_y = new_border_y - m_lastWhite;
+    
+    if (delta_y >= SPRITE_HEIGHT) {
+        m_actorVec.push_back(new BorderLine(IID_YELLOW_BORDER_LINE, LEFT_EDGE, new_border_y, this));
+        m_actorVec.push_back(new BorderLine(IID_YELLOW_BORDER_LINE, RIGHT_EDGE, new_border_y, this));
         
-        if (delta_y >= SPRITE_HEIGHT) {
-            m_actorVec.push_back(new BorderLine(IID_YELLOW_BORDER_LINE, LEFT_EDGE, new_border_y, this));
-            m_actorVec.push_back(new BorderLine(IID_YELLOW_BORDER_LINE, RIGHT_EDGE, new_border_y, this));
-            
-        }
-        
-        if (delta_y >= 4*SPRITE_HEIGHT) {
-            m_actorVec.push_back(new BorderLine(IID_WHITE_BORDER_LINE, LEFT_EDGE + ROAD_WIDTH/3, new_border_y, this));
-            m_actorVec.push_back(new BorderLine(IID_WHITE_BORDER_LINE, RIGHT_EDGE - ROAD_WIDTH/3, new_border_y, this));
-            m_lastWhite = m_actorVec[m_actorVec.size()-1]->getY();
-        }
+    }
+    
+    if (delta_y >= 4*SPRITE_HEIGHT) {
+        m_actorVec.push_back(new BorderLine(IID_WHITE_BORDER_LINE, LEFT_EDGE + ROAD_WIDTH/3, new_border_y, this));
+        m_actorVec.push_back(new BorderLine(IID_WHITE_BORDER_LINE, RIGHT_EDGE - ROAD_WIDTH/3, new_border_y, this));
+        m_lastWhite = m_actorVec[m_actorVec.size()-1]->getY();
+    }
+    
+    //Zombie Peds
+    int chanceZombiePed = max(100 - getLevel() * 10, 20);
+    if (randInt(0, chanceZombiePed-1) == 0) {
+        m_actorVec.push_back(new ZombiePed(randInt(0, VIEW_WIDTH-1), VIEW_HEIGHT-1, this));
+    }
+    
 }
 
 void StudentWorld::updateDisplayText() {

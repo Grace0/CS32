@@ -23,6 +23,10 @@ private:
     Actor* m_ghostRacer;
     std::vector<Actor*> m_actorVec;
     
+    void removeDeadActors();
+    void addNewActors();
+    void updateDisplayText();
+    
     double m_lastWhite;
 };
 

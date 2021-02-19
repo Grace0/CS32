@@ -2,6 +2,7 @@
 #include "GameConstants.h"
 #include "Actor.h" //actor->anything is used in function implementations
 #include <string>
+#include <sstream>
 using namespace std;
 
 const int LEFT_EDGE = ROAD_CENTER-ROAD_WIDTH/2;
@@ -35,6 +36,8 @@ int StudentWorld::init()
     }
     
     m_ghostRacer = new GhostRacer(this);
+    
+    ostringstream oss;
     return GWSTATUS_CONTINUE_GAME;
 }
 
@@ -95,7 +98,10 @@ int StudentWorld::move()
         m_actorVec.push_back(new BorderLine(IID_WHITE_BORDER_LINE, RIGHT_EDGE - ROAD_WIDTH/3, new_border_y, this));
         m_lastWhite = m_actorVec[m_actorVec.size()-1]->getY();
     }
-//     // Update the Game Status Line
+
+    
+    string text = "Score: " + to_string(getScore()) + "  Lvl: " + to_string(getLevel()) + "  Souls2Save: " + "999" + "  Lives: " + to_string(getLives()) + "  Health: " + "999" + "  Sprays: " + "999" + "  Bonus: " + "999";
+    setGameStatText(text); //Score: 2100 Lvl: 1 Souls2Save: 5 Lives: 3 Health: 95 Sprays: 22 Bonus: 4321
 //    Update display text // update the score/lives/level text at screen top
 //     // the player hasn’t completed the current level and hasn’t died, so
 //     // continue playing the current level

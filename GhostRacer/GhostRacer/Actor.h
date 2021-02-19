@@ -86,7 +86,7 @@ public:
     virtual void doSomething();
     virtual void grunt() {}
     
-    virtual void damageWithWater();
+    //virtual void damageWithWater();
     
     virtual void overlapWithRacer() = 0; //varies between Zombie and human
     

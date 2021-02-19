@@ -141,8 +141,8 @@ void Pedestrian::doSomething() {
 }
 
 void HumanPed::overlapWithRacer() {
-   // getWorld()->loseALife();
-    //getWorld()->endLevel();
+   getWorld()->decLives();
+   //getWorld()->endLevel();
 }
 
 void ZombiePed::overlapWithRacer() {

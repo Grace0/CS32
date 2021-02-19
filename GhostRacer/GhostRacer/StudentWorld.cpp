@@ -1,5 +1,6 @@
 #include "StudentWorld.h"
 #include "GameConstants.h"
+#include "Actor.h" //actor->anything is used in function implementations
 #include <string>
 using namespace std;
 
@@ -40,7 +41,7 @@ int StudentWorld::init()
 int StudentWorld::move()
 {
     
-    m_lastWhite -= (4 + m_ghostRacer->getSpeed());
+    m_lastWhite -= (4 + m_ghostRacer->getVertSpeed());
 
     // The term "actors" refers to all actors, Ghost Racer, pedestrians,
      // vehicles, goodies, oil slicks, holy water, spray, lost souls, etc.

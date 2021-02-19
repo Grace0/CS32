@@ -1,11 +1,12 @@
 #ifndef STUDENTWORLD_H_
 #define STUDENTWORLD_H_
 
-#include "GameWorld.h"
-#include "Actor.h"
+#include "GameWorld.h" //StudentWorld inherits from GameWorld
 #include <string>
 #include <vector>
 // Students:  Add code to this file, StudentWorld.cpp, Actor.h, and Actor.cpp
+
+class Actor;
 
 class StudentWorld : public GameWorld
 {

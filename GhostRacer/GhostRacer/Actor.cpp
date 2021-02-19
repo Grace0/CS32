@@ -95,25 +95,28 @@ void Actor::useMoveAlg() {
     }
 }
 
+void ZombiePed::grunt() {
+   if (((getX() - getWorld()->getGhostRacer()->getX()) <= 30) && (getY() > getWorld()->getGhostRacer()->getY())) {
+       setDirection(270);
+       if (getX() > getWorld()->getGhostRacer()->getX()) {
+           setHorizSpeed(-1);
+       } else if (getX() < getWorld()->getGhostRacer()->getX()) {
+           setHorizSpeed(1);
+       } else {
+           setHorizSpeed(0);
+       }
+   }
+}
+
 void Pedestrian::doSomething() {
     if (!isAlive()) return;
     
     if (doOverlap(getWorld()->getGhostRacer())) {
-        getWorld()->getGhostRacer()->receiveDamage(5);
-        receiveDamage(2);
+        overlapWithRacer();
         return;
     }
     
-    if (((getX() - getWorld()->getGhostRacer()->getX()) <= 30) && (getY() > getWorld()->getGhostRacer()->getY())) {
-        setDirection(270);
-        if (getX() > getWorld()->getGhostRacer()->getX()) {
-            m_horizSpeed = -1;
-        } else if (getX() < getWorld()->getGhostRacer()->getX()) {
-            m_horizSpeed = 1;
-        } else {
-            m_horizSpeed = 0;
-        }
-    }
+    grunt();
     
     useMoveAlg();
     
@@ -136,6 +139,18 @@ void Pedestrian::doSomething() {
         }
     }
 }
+
+void HumanPed::overlapWithRacer() {
+   // getWorld()->loseALife();
+    //getWorld()->endLevel();
+}
+
+void ZombiePed::overlapWithRacer() {
+    getWorld()->getGhostRacer()->receiveDamage(5);
+    receiveDamage(2);
+}
+
+
 
 void Pedestrian::receiveDamage(int hitPoints) {
    m_hitPoints -= hitPoints;

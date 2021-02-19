@@ -84,6 +84,11 @@ public:
     }
     
     virtual void doSomething();
+    virtual void grunt() {}
+    
+    virtual void damageWithWater();
+    
+    virtual void overlapWithRacer() = 0; //varies between Zombie and human
     
     virtual void receiveDamage(int hitPoints);
 
@@ -101,6 +106,9 @@ public:
     }
     virtual ~HumanPed();
     
+    virtual void overlapWithRacer();
+    virtual void doSomething();
+    
 
 private:
 
@@ -112,10 +120,14 @@ public:
         m_ticksUntilGrunt = 0;
     }
     virtual ~ZombiePed();
+    
+    virtual void grunt();
+    
 private:
     
     int m_ticksUntilGrunt;
     
+    virtual void overlapWithRacer();
     virtual void doSomething();
 
 };

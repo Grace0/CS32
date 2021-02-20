@@ -223,7 +223,9 @@ public:
     virtual void receiveDamage(int hitPoints);
     void spin();
     void addWater(int charge);
-    
+    int getHealth();
+    int getSprays();
+    void addHealth(int health);
     void move();
     virtual void doSomething();
 private:
@@ -239,6 +241,18 @@ public:
     virtual void doSomething();
     virtual bool collisionAvoidanceWorthy() { return false; }
 private:
+};
+
+class HolyWaterProjectile : public Actor {
+public:
+    HolyWaterProjectile(double startX, double startY, int startDirection, StudentWorld* studentWorld) : Actor(IID_HOLY_WATER_PROJECTILE, startX, startY, startDirection, 1.0, 1, studentWorld) {
+        m_maxTravDis = 160;
+    }
+    virtual ~HolyWaterProjectile() {}
+    virtual void doSomething();
+    virtual bool collisionAvoidanceWorthy() { return false; }
+private:
+    int m_maxTravDis;
 };
 
 #endif // ACTOR_H_

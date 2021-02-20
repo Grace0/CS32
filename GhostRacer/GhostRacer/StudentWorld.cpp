@@ -22,6 +22,7 @@ StudentWorld::StudentWorld(string assetPath)
     m_lastWhite = 0;
     m_playerPoints = 0;
     m_numSaved = 0;
+    m_bonusPoints = 500;
 }
 
 int StudentWorld::init()
@@ -47,6 +48,7 @@ int StudentWorld::init()
 int StudentWorld::move()
 {
     
+    if (m_bonusPoints > 0) m_bonusPoints--;
     m_lastWhite -= (4 + m_ghostRacer->getVertSpeed());
 
     for (int i = 0; i < m_actorVec.size(); i++) {
@@ -58,11 +60,12 @@ int StudentWorld::move()
 
     m_ghostRacer->doSomething();
     if (!m_ghostRacer->isAlive()) return GWSTATUS_PLAYER_DIED;
-//    if ()
-//    {
-//    //add bonus points to the score
-//    return GWSTATUS_FINISHED_LEVEL;
-//    }
+    
+    if (m_numSaved == (2 * getLevel() + 5)) {
+        addPoints(m_bonusPoints);
+        m_bonusPoints = 500; //reset
+        return GWSTATUS_FINISHED_LEVEL;
+    }
 
     removeDeadActors();
 
@@ -136,7 +139,7 @@ void StudentWorld::addNewActors() {
 }
 
 void StudentWorld::updateDisplayText() {
-    string text = "Score: " + to_string(getScore()) + "  Lvl: " + to_string(getLevel()) + "  Souls2Save: " + "999" + "  Lives: " + to_string(getLives()) + "  Health: " + "999" + "  Sprays: " + "999" + "  Bonus: " + "999";
+    string text = "Score: " + to_string(getScore()) + "  Lvl: " + to_string(getLevel()) + "  Souls2Save: " + to_string(getSouls2Save()) + "  Lives: " + to_string(getLives()) + "  Health: " + to_string(getHealth()) + "  Sprays: " + to_string(getSprays()) + "  Bonus: " + to_string(getBonus()); //stringstream?
     setGameStatText(text); //Score: 2100 Lvl: 1 Souls2Save: 5 Lives: 3 Health: 95 Sprays: 22 Bonus: 4321
 }
 
@@ -161,3 +164,23 @@ void StudentWorld::addPoints(int numPoints) { m_playerPoints += numPoints; }
 GhostRacer* StudentWorld::getGhostRacer() { return m_ghostRacer; }
 
 void StudentWorld::incNumSaved() { m_numSaved++; }
+
+int StudentWorld::getScore() {
+    return m_playerPoints;
+}
+
+int StudentWorld::getHealth() {
+    return getGhostRacer()->getHealth();
+}
+
+int StudentWorld::getSouls2Save() {
+    return (getLevel() * 2 + 5) - m_numSaved; //I think?
+}
+
+int StudentWorld::getSprays() {
+    return getGhostRacer()->getSprays();
+}
+
+int StudentWorld::getBonus() {
+    return m_bonusPoints;
+}

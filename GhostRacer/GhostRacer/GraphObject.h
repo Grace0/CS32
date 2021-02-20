@@ -31,7 +31,8 @@ class GraphObject
 	}
 
 	virtual ~GraphObject()
-	{
+
+    {
 		getGraphObjects(m_depth).erase(this);
 	}
 

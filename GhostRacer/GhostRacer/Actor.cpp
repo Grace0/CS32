@@ -281,3 +281,29 @@ void SoulGoodie::handleOverlap() {
     getWorld()->playSound(SOUND_GOT_SOUL);
     getWorld()->addPoints(100);
 }
+
+void HolyWaterProjectile::doSomething() {
+    if (!isAlive()) return;
+    
+    
+}
+ 
+int GhostRacer::getHealth() {
+    return m_hitPoints;
+}
+
+int GhostRacer::getSprays() {
+    return m_holyWaterUnits;
+}
+
+void HealingGoodie::handleOverlap() {
+    getWorld()->getGhostRacer()->addHealth(10);
+    setToDead();
+    getWorld()->playSound(SOUND_GOT_GOODIE);
+    getWorld()->addPoints(250);
+}
+
+void GhostRacer::addHealth(int health) {
+    m_hitPoints += health;
+    if (m_hitPoints > 100) m_hitPoints = 100; //max
+}

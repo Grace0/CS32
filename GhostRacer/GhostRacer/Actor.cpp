@@ -119,8 +119,9 @@ void Pedestrian::doSomething() {
     
     useMoveAlg();
     
+    //zombieCabs and zombiePeds decrement first...?
+    m_movementPlanDis--;
     if (m_movementPlanDis > 0) {
-        m_movementPlanDis--;
         return;
     } else {
         
@@ -149,7 +150,20 @@ void ZombiePed::overlapWithRacer() {
     receiveDamage(2);
 }
 
-
+void ZombieCab::receiveDamage(int hitPoints) {
+    m_hitPoints -= hitPoints;
+    if (m_hitPoints <= 0) {
+        setToDead();
+        getWorld()->playSound(SOUND_VEHICLE_DIE);
+        if (randInt(0, 4) == 0) {
+            //add a new healing goodie at getX() getY()
+        }
+        getWorld()->addPoints(200);
+        return;
+    } else {
+        getWorld()->playSound(SOUND_VEHICLE_HURT);
+    }
+}
 
 void Pedestrian::receiveDamage(int hitPoints) {
    m_hitPoints -= hitPoints;
@@ -159,7 +173,7 @@ void Pedestrian::receiveDamage(int hitPoints) {
        if (doOverlap(getWorld()->getGhostRacer())) {
            //add new healing goodie in its current position
        }
-           //ensure the player receives 150 points
+       getWorld()->addPoints(150);
    } else {
        getWorld()->playSound(SOUND_PED_HURT);
    }
@@ -187,9 +201,23 @@ void ZombieCab::doSomething() {
         
         useMoveAlg();
         
-//        if ((getVertSpeed() > getWorld()->getGhostRacer()->getVertSpeed()) && ) {
-//
-//        }
+        if ((getVertSpeed() > getWorld()->getGhostRacer()->getVertSpeed())) {
+           // getWorld()->closestInLane(getLaneNum(), getY(), true);
+        } else {
+           // getWorld()->closestInLane(getLaneNum(), getY(), false);
+        }
+        
+        //Movement plan
+        if (m_movementPlanDis > 0) {
+            m_movementPlanDis--;
+            return;
+        } else {
+            
+            double added_speed = randInt(-2, 2);
+            setVertSpeed(getVertSpeed() + added_speed);
+            m_movementPlanDis = randInt(4, 32);
+        }
+        
     }
 }
 
@@ -199,4 +227,16 @@ void GhostRacer::receiveDamage(int hitPoints) {
        setToDead();
        getWorld()->playSound(SOUND_PLAYER_DIE);
    }
+}
+
+int Actor::getLaneNum() {
+    int x = getX();
+   
+    if (x < ROAD_CENTER - ROAD_WIDTH / 2 + ROAD_WIDTH/3) { //leftmost lane
+        return 1;
+    } else if (x > ROAD_CENTER + ROAD_WIDTH / 2 - ROAD_WIDTH/3) { //rightmost lane
+        return 2;
+    } else { //center lane
+        return 3;
+    }
 }

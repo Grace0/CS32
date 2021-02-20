@@ -43,6 +43,8 @@ public:
     bool doOverlap(Actor* otherActor);
     void useMoveAlg();
 
+    int getLaneNum();
+    
     virtual bool collisionAvoidanceWorthy() { return true; }
     
     virtual double getVertSpeed() { return m_vertSpeed; }

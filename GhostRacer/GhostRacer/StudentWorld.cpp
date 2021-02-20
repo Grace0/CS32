@@ -20,6 +20,7 @@ StudentWorld::StudentWorld(string assetPath)
 {
     m_ghostRacer = nullptr;
     m_lastWhite = 0;
+    m_playerPoints = 0;
 }
 
 int StudentWorld::init()
@@ -138,9 +139,22 @@ void StudentWorld::updateDisplayText() {
     setGameStatText(text); //Score: 2100 Lvl: 1 Souls2Save: 5 Lives: 3 Health: 95 Sprays: 22 Bonus: 4321
 }
 
-Actor* StudentWorld::closestInLane() {
-    for (int i = 0; i < m_actorVec.size(); i++) {
-        if (m_actorVec[i]->getX() )
-    }
-    return nullptr;
+Actor* StudentWorld::closestInLane(int laneNum, double y, bool inFront) {
+    
+    Actor* potentialClosest = nullptr;
+    
+//    for (int i = 0; i < m_actorVec.size(); i++) {
+//        if (m_actorVec[i]->getLaneNum() == laneNum) {
+//            if ((m_actorVec[i]->getY() > y) && (potentialClosest->getY() > m_actorVec[i]->getY())) {
+//                potentialClosest = m_actorVec[i];
+//            }
+//
+//        }
+//    }
+    
+    return potentialClosest; //no other actors in the lane
+}
+
+void StudentWorld::addPoints(int numPoints) {
+    m_playerPoints += numPoints;
 }

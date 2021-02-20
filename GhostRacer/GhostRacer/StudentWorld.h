@@ -18,8 +18,9 @@ public:
     virtual void cleanUp();
     
     Actor* getGhostRacer() { return m_ghostRacer; }
-    Actor* closestInLane(); //add two new white border lines
-    //between the three lanes (at x = ROAD_CENTER - ROAD_WIDTH / 2 + ROAD_WIDTH/3, and x = ROAD_CENTER + ROAD_WIDTH / 2 - ROAD_WIDTH/3)
+    Actor* closestInLane(int laneNum, double y, bool inFront); //add two new white border lines
+    void addPoints(int numPoints);
+    //between the three lanes (
     //void endLevel() { return GWSTATUS_PLAYER_DIED; } //for human ped
 
 private:
@@ -31,6 +32,7 @@ private:
     void updateDisplayText();
     
     double m_lastWhite;
+    int m_playerPoints;
 };
 
 #endif // STUDENTWORLD_H_

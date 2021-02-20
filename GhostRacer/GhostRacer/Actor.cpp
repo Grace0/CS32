@@ -2,8 +2,6 @@
 #include "StudentWorld.h" //getWorld()->anything is used in function implementations
 #include <cmath>
 
-// Students:  Add code to this file, Actor.h, StudentWorld.h, and StudentWorld.cpp
-
 bool Actor::doOverlap(Actor* otherActor) {
     double delta_x = abs(getX() - otherActor->getX());
     double delta_y = abs(getY() - otherActor->getY());
@@ -31,25 +29,21 @@ void GhostRacer::doSomething() {
         case KEY_PRESS_LEFT:
             if (getDirection() < 114) {
                 setDirection(getDirection()+8);
-       //         move();
             }
             break;
         case KEY_PRESS_RIGHT:
             if (getDirection() > 66) {
                 setDirection(getDirection()-8);
-         //       move();
             }
             break;
         case KEY_PRESS_UP:
             if (getVertSpeed() < 5) {
                 setVertSpeed(getVertSpeed()+1);
-         //       move();
             }
             break;
         case KEY_PRESS_DOWN:
             if (getVertSpeed() > -1) {
                 setVertSpeed(getVertSpeed()-1);
-         //       move();
             }
             break;
         case KEY_PRESS_SPACE:

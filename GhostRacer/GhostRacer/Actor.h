@@ -63,6 +63,71 @@ private:
     double m_vertSpeed, m_horizSpeed;
 };
 
+//depth, horiz speed, vert speed
+//collisionavoidanceworthy
+class Goodie : public Actor {
+public:
+    Goodie(int imageID, double startX, double startY, int startDirection, double size, int depth, StudentWorld* studentWorld) : Actor(imageID, startX, startY, startDirection, size, depth, studentWorld) {
+        
+    }
+    virtual ~Goodie();
+private:
+    
+};
+
+class OilSlick : public Goodie {
+public:
+    OilSlick(double startX, double startY, StudentWorld* studentWorld) : Goodie(IID_OIL_SLICK, startX, startY, 0, randInt(2,5), 2, studentWorld) {
+        setHorizSpeed(0);
+        setVertSpeed(-4);
+    }
+    virtual ~OilSlick();
+    
+    virtual bool collisionAvoidanceWorthy() { return false; }
+    
+private:
+};
+
+class HealingGoodie : public Goodie {
+public:
+    HealingGoodie(double startX, double startY, StudentWorld* studentWorld) : Goodie(IID_HEAL_GOODIE, startX, startY, 0, 1.0, 2, studentWorld) {
+        setHorizSpeed(0);
+        setVertSpeed(-4);
+    }
+    virtual ~HealingGoodie();
+    
+    virtual bool collisionAvoidanceWorthy() { return false; }
+    
+private:
+};
+
+class HolyWaterGoodie : public Goodie {
+public:
+    HolyWaterGoodie(double startX, double startY, StudentWorld* studentWorld) : Goodie(IID_HOLY_WATER_GOODIE, startX, startY, 90, 2.0, 2, studentWorld) {
+        setHorizSpeed(0);
+        setVertSpeed(-4);
+    }
+    virtual ~HolyWaterGoodie();
+    
+    virtual bool collisionAvoidanceWorthy() { return false; }
+private:
+};
+
+class SoulGoodie : public Goodie {
+public:
+    SoulGoodie(double startX, double startY, StudentWorld* studentWorld) : Goodie(IID_SOUL_GOODIE, startX, startY, 0, 4.0, 2, studentWorld) {
+        setHorizSpeed(0);
+        setVertSpeed(-4);
+    }
+    virtual ~SoulGoodie();
+    
+    virtual bool collisionAvoidanceWorthy() { return false; }
+    
+private:
+};
+
+
+
 class Pedestrian : public Actor {
 public:
     Pedestrian(int imageID, double startX, double startY, double size, StudentWorld* studentWorld) : Actor(imageID, startX, startY, 0, size, 0, studentWorld) { //direction=0, depth=0

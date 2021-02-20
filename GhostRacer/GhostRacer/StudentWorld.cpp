@@ -2,7 +2,6 @@
 #include "GameConstants.h"
 #include "Actor.h" //actor->anything is used in function implementations
 #include <string>
-#include <sstream>
 using namespace std;
 
 const int LEFT_EDGE = ROAD_CENTER-ROAD_WIDTH/2;
@@ -41,7 +40,6 @@ int StudentWorld::init()
     
     m_ghostRacer = new GhostRacer(this);
     
-    ostringstream oss;
     return GWSTATUS_CONTINUE_GAME;
 }
 
@@ -183,4 +181,25 @@ int StudentWorld::getSprays() {
 
 int StudentWorld::getBonus() {
     return m_bonusPoints;
+}
+
+//takes a pointer to a projectile
+//loops through all the Actors to see if there's one that isAffectedByProjectiles and overlaps with the projectile at hand
+//returns the first Actor it finds that meets those req's; if none found, returns nullptr
+Actor* StudentWorld::getProjectileOverlap(HolyWaterProjectile* proj) {
+    for (int i = 0; i < m_actorVec.size(); i++) {
+        if (m_actorVec[i]->isAffectedProjectiles() && m_actorVec[i]->doOverlap(proj)) {
+            return m_actorVec[i];
+        }
+    }
+    
+    return nullptr;
+}
+
+void StudentWorld::addHealingGoodie(double startX, double startY) {
+    m_actorVec.push_back(new HealingGoodie(startX, startY, this));
+}
+
+void StudentWorld::addOilSlick(double startX, double startY) {
+    m_actorVec.push_back(new OilSlick(startX, startY, this));
 }

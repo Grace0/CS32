@@ -152,7 +152,7 @@ void ZombieCab::receiveDamage(int hitPoints) {
         setToDead();
         getWorld()->playSound(SOUND_VEHICLE_DIE);
         if (randInt(0, 4) == 0) {
-            //add a new healing goodie at getX() getY()
+            getWorld()->addOilSlick(getX(), getY());
         }
         getWorld()->addPoints(200);
         return;
@@ -161,13 +161,13 @@ void ZombieCab::receiveDamage(int hitPoints) {
     }
 }
 
-void Pedestrian::receiveDamage(int hitPoints) {
-   m_hitPoints -= hitPoints;
-   if (m_hitPoints <= 0) {
+void ZombiePed::receiveDamage(int hitPoints) {
+    setHitPoints(getHitPoints()-hitPoints);
+   if (getHitPoints() <= 0) {
        setToDead();
        getWorld()->playSound(SOUND_PED_DIE);
-       if (doOverlap(getWorld()->getGhostRacer())) {
-           //add new healing goodie in its current position
+       if (!doOverlap(getWorld()->getGhostRacer()) && (randInt(0, 4) == 0)) {
+           getWorld()->addHealingGoodie(getX(), getY());
        }
        getWorld()->addPoints(150);
    } else {
@@ -285,6 +285,15 @@ void SoulGoodie::handleOverlap() {
 void HolyWaterProjectile::doSomething() {
     if (!isAlive()) return;
     
+    Actor* overlapped = getWorld()->getProjectileOverlap(this);
+    
+    if (overlapped != nullptr) {
+        overlapped->receiveDamage(1);
+        setToDead();
+        return;
+    } else {
+        moveForward();
+    }
     
 }
  
@@ -306,4 +315,23 @@ void HealingGoodie::handleOverlap() {
 void GhostRacer::addHealth(int health) {
     m_hitPoints += health;
     if (m_hitPoints > 100) m_hitPoints = 100; //max
+}
+
+void HumanPed::receiveDamage(int hitPoints) {
+    setHorizSpeed(getHorizSpeed() * -1);
+    if (getHorizSpeed() < 0) { //negative speed faces left
+        setDirection(180);
+    } else {
+        setDirection(0); //positive speed faces right
+    }
+    getWorld()->playSound(SOUND_PED_HURT);
+    
+}
+
+void HealingGoodie::receiveDamage(int damage) {
+    setToDead();
+}
+
+void HolyWaterGoodie::receiveDamage(int damage) {
+    setToDead();
 }

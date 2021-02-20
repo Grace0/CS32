@@ -5,8 +5,9 @@
 #include <string>
 #include <vector>
 
-class Actor;
-class GhostRacer; //is this OK?
+class Actor; //use pointers to these classes
+class GhostRacer;
+class HolyWaterProjectile;
 
 class StudentWorld : public GameWorld
 {
@@ -19,6 +20,9 @@ public:
     
     GhostRacer* getGhostRacer();
     Actor* closestInLane(int laneNum, double y, bool inFront);
+    Actor* getProjectileOverlap(HolyWaterProjectile* proj);
+    void addHealingGoodie(double startX, double startY);
+    void addOilSlick(double startX, double startY);
     void addPoints(int numPoints);
     
     int getScore();

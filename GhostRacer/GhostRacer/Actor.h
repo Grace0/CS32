@@ -54,6 +54,7 @@ public:
     virtual void setHorizSpeed(double horizSpeed) { m_horizSpeed = horizSpeed; }
     
     virtual void doSomething() = 0;
+    virtual bool isAffectedProjectiles() = 0;
     virtual void activate() {}
     virtual void receiveDamage(int damage) {
     } //?
@@ -70,8 +71,9 @@ public:
     Goodie(int imageID, double startX, double startY, int startDirection, double size, int depth, StudentWorld* studentWorld) : Actor(imageID, startX, startY, startDirection, size, depth, studentWorld) {
         
     }
-    void doSomething();
-    virtual void handleOverlap() = 0;
+    virtual bool isAffectedProjectiles() = 0;
+    virtual void doSomething();
+    virtual void handleOverlap() = 0; //handle overlap with GR
     virtual ~Goodie() {}
 private:
     
@@ -83,8 +85,8 @@ public:
         setHorizSpeed(0);
         setVertSpeed(-4);
     }
-    virtual ~OilSlick();
-    
+    virtual ~OilSlick() {}
+    virtual bool isAffectedProjectiles() { return false; }
     virtual void handleOverlap();
     
     virtual bool collisionAvoidanceWorthy() { return false; }
@@ -98,10 +100,11 @@ public:
         setHorizSpeed(0);
         setVertSpeed(-4);
     }
-    virtual ~HealingGoodie();
-    
+    virtual ~HealingGoodie() {}
     virtual void handleOverlap();
     
+    virtual bool isAffectedProjectiles() { return true; }
+    void receiveDamage(int damage); //only damaged by HWP
     virtual bool collisionAvoidanceWorthy() { return false; }
     
 private:
@@ -116,7 +119,8 @@ public:
     virtual ~HolyWaterGoodie();
     
     virtual void handleOverlap();
-    
+    virtual bool isAffectedProjectiles() { return true; }
+    void receiveDamage(int damage); //only damaged by HWP
     virtual bool collisionAvoidanceWorthy() { return false; }
 private:
 };
@@ -128,7 +132,7 @@ public:
         setVertSpeed(-4);
     }
     virtual ~SoulGoodie();
-    
+    virtual bool isAffectedProjectiles() { return false; }
     virtual void handleOverlap();
     
     virtual bool collisionAvoidanceWorthy() { return false; }
@@ -149,10 +153,13 @@ public:
     
     virtual void doSomething();
     virtual void grunt() {}
+    
+    int getHitPoints() { return m_hitPoints; }
+    void setHitPoints(double hitPoints) { m_hitPoints = hitPoints; }
   
     virtual void handleOverlap() = 0; //varies between Zombie and human
-    
-    virtual void receiveDamage(int hitPoints);
+    virtual bool isAffectedProjectiles() { return true; } //both zombie and human are
+    virtual void receiveDamage(int hitPoints) = 0; //peds are only damaged by HWP
 
     virtual ~Pedestrian() {}
     virtual bool collisionAvoidanceWorthy() { return true; }
@@ -166,6 +173,7 @@ public:
     HumanPed(double startX, double startY, StudentWorld* studentWorld) : Pedestrian(IID_HUMAN_PED, startX, startY, 2.0, studentWorld) {
     }
     virtual ~HumanPed() {}
+    virtual void receiveDamage(int hitPoints);
     
 
 private:
@@ -179,6 +187,7 @@ public:
         m_ticksUntilGrunt = 0;
     }
     virtual ~ZombiePed() {}
+    virtual void receiveDamage(int hitPoints);
     
 private:
     
@@ -201,10 +210,10 @@ public:
     
     virtual void doSomething();
     //virtual void grunt() {}
-  
+    virtual bool isAffectedProjectiles() { return true; }
     void handleOverlap(); //varies between Zombie and human
     
-    virtual void receiveDamage(int hitPoints);
+    virtual void receiveDamage(int hitPoints); //zombie cab is only damaged by HWP
 
     virtual ~ZombieCab() {}
     virtual bool collisionAvoidanceWorthy() { return true; }
@@ -219,8 +228,9 @@ public:
     GhostRacer(StudentWorld *studentWorld);
     virtual ~GhostRacer() {} //virtual functions must be defined (Even if they're empty)
     
+    virtual bool isAffectedProjectiles() { return false; }
     virtual bool collisionAvoidanceWorthy() { return true; }
-    virtual void receiveDamage(int hitPoints);
+    virtual void receiveDamage(int hitPoints); //GR is never damaged by HWP
     void spin();
     void addWater(int charge);
     int getHealth();
@@ -237,7 +247,7 @@ class BorderLine : public Actor {
 public:
     BorderLine(int imageID, double startX, double startY, StudentWorld* studentWorld);
     virtual ~BorderLine() {}
-    
+    virtual bool isAffectedProjectiles() { return false; }
     virtual void doSomething();
     virtual bool collisionAvoidanceWorthy() { return false; }
 private:
@@ -249,6 +259,7 @@ public:
         m_maxTravDis = 160;
     }
     virtual ~HolyWaterProjectile() {}
+    virtual bool isAffectedProjectiles() { return false; }
     virtual void doSomething();
     virtual bool collisionAvoidanceWorthy() { return false; }
 private:

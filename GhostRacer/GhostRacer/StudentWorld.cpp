@@ -21,7 +21,7 @@ StudentWorld::StudentWorld(string assetPath)
     m_lastWhite = 0;
     m_playerPoints = 0;
     m_numSaved = 0;
-    m_bonusPoints = 500;
+    m_bonusPoints = 5000;
 }
 
 int StudentWorld::init()
@@ -61,7 +61,7 @@ int StudentWorld::move()
     
     if (m_numSaved == (2 * getLevel() + 5)) {
         addPoints(m_bonusPoints);
-        m_bonusPoints = 500; //reset
+        m_bonusPoints = 5000; //reset
         return GWSTATUS_FINISHED_LEVEL;
     }
 
@@ -82,6 +82,7 @@ void StudentWorld::cleanUp()
 {
     delete m_ghostRacer;
     
+    //SOMETHING HERE tries to follow a dangling pointer
     for (std::vector<Actor*>::iterator it = m_actorVec.begin(); it != m_actorVec.end(); it++) {
         delete *it; // delete what "it" points to
         it = m_actorVec.erase(it); //"it" now points to the next element of the vector
@@ -134,11 +135,17 @@ void StudentWorld::addNewActors() {
         m_actorVec.push_back(new HumanPed(randInt(0, VIEW_WIDTH-1), VIEW_HEIGHT-1, this));
     }
     
+    //Oil Slick
+    int chanceOilSlick = max(150 - level * 10, 40);
+    if (randInt(0, chanceOilSlick-1) == 0) {
+        m_actorVec.push_back(new OilSlick(randInt(0, VIEW_WIDTH-1), VIEW_HEIGHT-1, this));
+    }
+    
 }
 
 void StudentWorld::updateDisplayText() {
     string text = "Score: " + to_string(getScore()) + "  Lvl: " + to_string(getLevel()) + "  Souls2Save: " + to_string(getSouls2Save()) + "  Lives: " + to_string(getLives()) + "  Health: " + to_string(getHealth()) + "  Sprays: " + to_string(getSprays()) + "  Bonus: " + to_string(getBonus()); //stringstream?
-    setGameStatText(text); //Score: 2100 Lvl: 1 Souls2Save: 5 Lives: 3 Health: 95 Sprays: 22 Bonus: 4321
+    setGameStatText(text);
 }
 
 Actor* StudentWorld::closestInLane(int laneNum, double y, bool inFront) {

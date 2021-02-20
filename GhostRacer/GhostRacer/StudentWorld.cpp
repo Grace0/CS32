@@ -21,6 +21,7 @@ StudentWorld::StudentWorld(string assetPath)
     m_ghostRacer = nullptr;
     m_lastWhite = 0;
     m_playerPoints = 0;
+    m_numSaved = 0;
 }
 
 int StudentWorld::init()
@@ -155,6 +156,8 @@ Actor* StudentWorld::closestInLane(int laneNum, double y, bool inFront) {
     return potentialClosest; //no other actors in the lane
 }
 
-void StudentWorld::addPoints(int numPoints) {
-    m_playerPoints += numPoints;
-}
+void StudentWorld::addPoints(int numPoints) { m_playerPoints += numPoints; }
+
+GhostRacer* StudentWorld::getGhostRacer() { return m_ghostRacer; }
+
+void StudentWorld::incNumSaved() { m_numSaved++; }

@@ -4,9 +4,9 @@
 #include "GameWorld.h" //StudentWorld inherits from GameWorld
 #include <string>
 #include <vector>
-// Students:  Add code to this file, StudentWorld.cpp, Actor.h, and Actor.cpp
 
 class Actor;
+class GhostRacer; //is this OK?
 
 class StudentWorld : public GameWorld
 {
@@ -17,14 +17,13 @@ public:
     virtual int move();
     virtual void cleanUp();
     
-    Actor* getGhostRacer() { return m_ghostRacer; }
-    Actor* closestInLane(int laneNum, double y, bool inFront); //add two new white border lines
+    GhostRacer* getGhostRacer();
+    Actor* closestInLane(int laneNum, double y, bool inFront);
     void addPoints(int numPoints);
-    //between the three lanes (
-    //void endLevel() { return GWSTATUS_PLAYER_DIED; } //for human ped
+    void incNumSaved();
 
 private:
-    Actor* m_ghostRacer;
+    GhostRacer* m_ghostRacer;
     std::vector<Actor*> m_actorVec;
     
     void removeDeadActors();
@@ -33,6 +32,7 @@ private:
     
     double m_lastWhite;
     int m_playerPoints;
+    int m_numSaved;
 };
 
 #endif // STUDENTWORLD_H_

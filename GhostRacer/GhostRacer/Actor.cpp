@@ -73,10 +73,10 @@ BorderLine::BorderLine(int imageID, double startX, double startY, StudentWorld* 
 }
 
 void BorderLine::doSomething() {
-    useMoveAlg();
+   useMoveAlg();
 }
 
-void Actor::useMoveAlg() {
+bool Actor::useMoveAlg() {
     double vert_speed = m_vertSpeed - getWorld()->getGhostRacer()->getVertSpeed(); //temporary variable; shouldn't be changing m_vertSpeed itself each loop because that would make the speed keep changing
     double new_y = getY() + vert_speed;
     double new_x = getX() + m_horizSpeed;
@@ -84,7 +84,9 @@ void Actor::useMoveAlg() {
     
     if (getX() < 0 || getY() < 0 || getX() > VIEW_WIDTH || getY() > VIEW_HEIGHT) {
         m_isAlive = false;
-        return;
+        return false;
+    } else {
+        return true;
     }
 }
 
@@ -105,13 +107,13 @@ void Pedestrian::doSomething() {
     if (!isAlive()) return;
     
     if (doOverlap(getWorld()->getGhostRacer())) {
-        overlapWithRacer();
+        handleOverlap();
         return;
     }
     
     grunt();
     
-    useMoveAlg();
+    if (!useMoveAlg()) return;
     
     //zombieCabs and zombiePeds decrement first...?
     m_movementPlanDis--;
@@ -134,12 +136,12 @@ void Pedestrian::doSomething() {
     }
 }
 
-void HumanPed::overlapWithRacer() {
+void HumanPed::handleOverlap() {
    getWorld()->decLives();
    getWorld()->getGhostRacer()->setToDead();
 }
 
-void ZombiePed::overlapWithRacer() {
+void ZombiePed::handleOverlap() {
     getWorld()->getGhostRacer()->receiveDamage(5);
     receiveDamage(2);
 }
@@ -193,7 +195,7 @@ void ZombieCab::doSomething() {
             m_hasOverlapped = true;
         }
         
-        useMoveAlg();
+        if (!useMoveAlg()) return;
         
         if ((getVertSpeed() > getWorld()->getGhostRacer()->getVertSpeed())) {
            // getWorld()->closestInLane(getLaneNum(), getY(), true);
@@ -233,4 +235,49 @@ int Actor::getLaneNum() {
     } else { //center lane
         return 3;
     }
+}
+
+void Goodie::doSomething() {
+    useMoveAlg();
+    
+    if (doOverlap(getWorld()->getGhostRacer())) {
+        handleOverlap();
+    }
+}
+
+void OilSlick::handleOverlap() {
+    getWorld()->playSound(SOUND_OIL_SLICK);
+    getWorld()->getGhostRacer()->spin();
+}
+
+void HolyWaterGoodie::handleOverlap() {
+    getWorld()->getGhostRacer()->addWater(10);
+    setToDead();
+    getWorld()->playSound(SOUND_GOT_GOODIE);
+    getWorld()->addPoints(50);
+}
+
+void GhostRacer::spin() {
+    
+    double new_dir = randInt(5,20);
+    
+    if (randInt(0, 1) == 0) { //50-50 chance that GR will spin the other dir
+        new_dir *= -1;
+    }
+    
+    if ((getDirection() + new_dir) >= 60 && (getDirection() + new_dir) <= 120) {
+        setDirection(new_dir);
+    }
+
+}
+
+void GhostRacer::addWater(int charge) {
+    m_holyWaterUnits += charge;
+}
+
+void SoulGoodie::handleOverlap() {
+    getWorld()->incNumSaved();
+    setToDead();
+    getWorld()->playSound(SOUND_GOT_SOUL);
+    getWorld()->addPoints(100);
 }

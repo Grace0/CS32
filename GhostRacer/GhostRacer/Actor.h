@@ -41,7 +41,7 @@ public:
     bool isAlive() { return m_isAlive; }
     void setToDead() { m_isAlive = false; }
     bool doOverlap(Actor* otherActor);
-    void useMoveAlg();
+    bool useMoveAlg();
 
     int getLaneNum();
     
@@ -70,7 +70,9 @@ public:
     Goodie(int imageID, double startX, double startY, int startDirection, double size, int depth, StudentWorld* studentWorld) : Actor(imageID, startX, startY, startDirection, size, depth, studentWorld) {
         
     }
-    virtual ~Goodie();
+    void doSomething();
+    virtual void handleOverlap() = 0;
+    virtual ~Goodie() {}
 private:
     
 };
@@ -82,6 +84,8 @@ public:
         setVertSpeed(-4);
     }
     virtual ~OilSlick();
+    
+    virtual void handleOverlap();
     
     virtual bool collisionAvoidanceWorthy() { return false; }
     
@@ -96,6 +100,8 @@ public:
     }
     virtual ~HealingGoodie();
     
+    virtual void handleOverlap();
+    
     virtual bool collisionAvoidanceWorthy() { return false; }
     
 private:
@@ -109,6 +115,8 @@ public:
     }
     virtual ~HolyWaterGoodie();
     
+    virtual void handleOverlap();
+    
     virtual bool collisionAvoidanceWorthy() { return false; }
 private:
 };
@@ -120,6 +128,8 @@ public:
         setVertSpeed(-4);
     }
     virtual ~SoulGoodie();
+    
+    virtual void handleOverlap();
     
     virtual bool collisionAvoidanceWorthy() { return false; }
     
@@ -140,7 +150,7 @@ public:
     virtual void doSomething();
     virtual void grunt() {}
   
-    virtual void overlapWithRacer() = 0; //varies between Zombie and human
+    virtual void handleOverlap() = 0; //varies between Zombie and human
     
     virtual void receiveDamage(int hitPoints);
 
@@ -160,7 +170,7 @@ public:
 
 private:
 
-    virtual void overlapWithRacer();
+    virtual void handleOverlap();
 };
 
 class ZombiePed : public Pedestrian {
@@ -175,7 +185,7 @@ private:
     int m_ticksUntilGrunt;
     
     virtual void grunt();
-    virtual void overlapWithRacer();
+    virtual void handleOverlap();
 
 };
 
@@ -192,7 +202,7 @@ public:
     virtual void doSomething();
     //virtual void grunt() {}
   
-    void overlapWithRacer(); //varies between Zombie and human
+    void handleOverlap(); //varies between Zombie and human
     
     virtual void receiveDamage(int hitPoints);
 
@@ -211,6 +221,8 @@ public:
     
     virtual bool collisionAvoidanceWorthy() { return true; }
     virtual void receiveDamage(int hitPoints);
+    void spin();
+    void addWater(int charge);
     
     void move();
     virtual void doSomething();

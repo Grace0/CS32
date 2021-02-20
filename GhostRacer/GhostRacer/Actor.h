@@ -112,19 +112,38 @@ private:
 
 };
 
+class ZombieCab : public Actor {
+public:
+    ZombieCab(double startX, double startY, StudentWorld* studentWorld) : Actor(IID_ZOMBIE_CAB, startX, startY, 90, 3.0, 0, studentWorld) {
+        m_movementPlanDis = 0;
+        //setVertSpeed(-4.0);
+        setHorizSpeed(0.0);
+        m_hitPoints = 3;
+        m_hasOverlapped = false;
+    }
+    
+    virtual void doSomething();
+    //virtual void grunt() {}
+  
+    void overlapWithRacer(); //varies between Zombie and human
+    
+    virtual void receiveDamage(int hitPoints);
+
+    virtual ~ZombieCab() {}
+    virtual bool collisionAvoidanceWorthy() { return true; }
+private:
+    int m_movementPlanDis;
+    int m_hitPoints;
+    bool m_hasOverlapped;
+};
+
 class GhostRacer : public Actor { //GhostRacer is derived from Actor
 public:
     GhostRacer(StudentWorld *studentWorld);
     virtual ~GhostRacer() {} //virtual functions must be defined (Even if they're empty)
     
     virtual bool collisionAvoidanceWorthy() { return true; }
-    virtual void receiveDamage(int hitPoints) {
-        m_hitPoints -= hitPoints;
-        if (m_hitPoints <= 0) {
-            setToDead();
-            //getWorld()->playSound(SOUND_PLAYER_DIE);
-        }
-    }
+    virtual void receiveDamage(int hitPoints);
     
     void move();
     virtual void doSomething();
@@ -139,9 +158,8 @@ public:
     virtual ~BorderLine() {}
     
     virtual void doSomething();
-    virtual bool collisionAvoidanceWorthy() { return true; }
+    virtual bool collisionAvoidanceWorthy() { return false; }
 private:
-    bool m_isAlive;
 };
 
 #endif // ACTOR_H_

@@ -18,6 +18,9 @@ public:
     virtual void cleanUp();
     
     Actor* getGhostRacer() { return m_ghostRacer; }
+    Actor* closestInLane(); //add two new white border lines
+    //between the three lanes (at x = ROAD_CENTER - ROAD_WIDTH / 2 + ROAD_WIDTH/3, and x = ROAD_CENTER + ROAD_WIDTH / 2 - ROAD_WIDTH/3)
+    //void endLevel() { return GWSTATUS_PLAYER_DIED; } //for human ped
 
 private:
     Actor* m_ghostRacer;

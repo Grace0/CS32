@@ -18,6 +18,7 @@ GameWorld* createStudentWorld(string assetPath) //called in main.cpp
 StudentWorld::StudentWorld(string assetPath)
 : GameWorld(assetPath)
 {
+    m_ghostRacer = nullptr;
     m_lastWhite = 0;
 }
 
@@ -49,19 +50,17 @@ int StudentWorld::move()
     for (int i = 0; i < m_actorVec.size(); i++) {
         if (m_actorVec[i]->isAlive()) {
             m_actorVec[i]->doSomething();
+            if (!m_ghostRacer->isAlive()) return GWSTATUS_PLAYER_DIED;
         }
     }
 
     m_ghostRacer->doSomething();
     if (!m_ghostRacer->isAlive()) return GWSTATUS_PLAYER_DIED;
-//    if (Ghost Racer completed the currentLevel)
+//    if ()
 //    {
-//    add bonus points to the score
+//    //add bonus points to the score
 //    return GWSTATUS_FINISHED_LEVEL;
 //    }
-//     }
-//    }
-    
 
     removeDeadActors();
 
@@ -102,6 +101,8 @@ void StudentWorld::removeDeadActors() {
 }
 void StudentWorld::addNewActors() {
    
+    int level = getLevel();
+    
     //Borderlines
     double new_border_y = VIEW_HEIGHT-SPRITE_HEIGHT;
     double delta_y = new_border_y - m_lastWhite;
@@ -119,9 +120,15 @@ void StudentWorld::addNewActors() {
     }
     
     //Zombie Peds
-    int chanceZombiePed = max(100 - getLevel() * 10, 20);
+    int chanceZombiePed = max(100 - level * 10, 20);
     if (randInt(0, chanceZombiePed-1) == 0) {
         m_actorVec.push_back(new ZombiePed(randInt(0, VIEW_WIDTH-1), VIEW_HEIGHT-1, this));
+    }
+    
+    //Human Peds
+    int chanceHumanPed = max(200 - level * 10, 30);
+    if (randInt(0, chanceHumanPed-1) == 0) {
+        m_actorVec.push_back(new HumanPed(randInt(0, VIEW_WIDTH-1), VIEW_HEIGHT-1, this));
     }
     
 }
@@ -129,4 +136,11 @@ void StudentWorld::addNewActors() {
 void StudentWorld::updateDisplayText() {
     string text = "Score: " + to_string(getScore()) + "  Lvl: " + to_string(getLevel()) + "  Souls2Save: " + "999" + "  Lives: " + to_string(getLives()) + "  Health: " + "999" + "  Sprays: " + "999" + "  Bonus: " + "999";
     setGameStatText(text); //Score: 2100 Lvl: 1 Souls2Save: 5 Lives: 3 Health: 95 Sprays: 22 Bonus: 4321
+}
+
+Actor* StudentWorld::closestInLane() {
+    for (int i = 0; i < m_actorVec.size(); i++) {
+        if (m_actorVec[i]->getX() )
+    }
+    return nullptr;
 }

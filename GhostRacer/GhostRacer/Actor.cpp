@@ -74,7 +74,6 @@ void GhostRacer::move() {
 }
 
 BorderLine::BorderLine(int imageID, double startX, double startY, StudentWorld* studentWorld): Actor(imageID, startX, startY, 0, 2.0, 2.0, studentWorld) {
-    m_isAlive = true;
     setVertSpeed(-4);
     setHorizSpeed(0);
 }
@@ -142,7 +141,7 @@ void Pedestrian::doSomething() {
 
 void HumanPed::overlapWithRacer() {
    getWorld()->decLives();
-   //getWorld()->endLevel();
+   getWorld()->getGhostRacer()->setToDead();
 }
 
 void ZombiePed::overlapWithRacer() {
@@ -156,31 +155,48 @@ void Pedestrian::receiveDamage(int hitPoints) {
    m_hitPoints -= hitPoints;
    if (m_hitPoints <= 0) {
        setToDead();
-       //getWorld()->playSound(SOUND_PED_DIE);
+       getWorld()->playSound(SOUND_PED_DIE);
        if (doOverlap(getWorld()->getGhostRacer())) {
            //add new healing goodie in its current position
        }
            //ensure the player receives 150 points
    } else {
-       //getWorld()->playSound(SOUND_PED_HURT);
+       getWorld()->playSound(SOUND_PED_HURT);
    }
 }
 
-//void ZombiePed::grunt() {
-//   
-//   if (((getX() - getWorld()->getGhostRacer()->getX()) <= 30) && (getY() > getWorld()->getGhostRacer()->getY())) {
-//       setDirection(270);
-//       if (getX() > getWorld()->getGhostRacer()->getX()) {
-//           setHorizSpeed(-1);
-//       } else if (getX() < getWorld()->getGhostRacer()->getX()) {
-//           setHorizSpeed(1);
-//       } else {
-//           setHorizSpeed(0);
-//       }
-//       m_ticksUntilGrunt--;
-//       if (m_ticksUntilGrunt <= 0) {
-//           //getWorld()->playSound(SOUND_ZOMBIE_ATTACK);
-//           m_ticksUntilGrunt = 20;
-//       }
-//   }
-//}
+void ZombieCab::doSomething() {
+    if (!isAlive()) return;
+    
+    if (doOverlap(getWorld()->getGhostRacer())) {
+        if (m_hasOverlapped) {
+            
+        } else {
+            getWorld()->playSound(SOUND_VEHICLE_CRASH);
+            getWorld()->getGhostRacer()->receiveDamage(20);
+            
+            if (getX() <= getWorld()->getGhostRacer()->getX()) {
+                setHorizSpeed(-5);
+                setDirection(120 + randInt(0, 20-1));
+            } else {
+                setHorizSpeed(5);
+                setDirection(60 - randInt(0, 20-1));
+            }
+            m_hasOverlapped = true;
+        }
+        
+        useMoveAlg();
+        
+//        if ((getVertSpeed() > getWorld()->getGhostRacer()->getVertSpeed()) && ) {
+//
+//        }
+    }
+}
+
+void GhostRacer::receiveDamage(int hitPoints) {
+   m_hitPoints -= hitPoints;
+   if (m_hitPoints <= 0) {
+       setToDead();
+       getWorld()->playSound(SOUND_PLAYER_DIE);
+   }
+}

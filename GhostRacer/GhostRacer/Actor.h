@@ -3,30 +3,10 @@
 
 #include "GraphObject.h" //Actor inherits from GraphObject
 #include "GameConstants.h" //to include imageID's
-//#include "StudentWorld.h"
-// Students:  Add code to this file, Actor.cpp, StudentWorld.h, and StudentWorld.cpp
-
-//GraphObject functions
-//GraphObject(int imageID, double startX, double startY,
-//    int startDirection = 0, double size = 1.0, int depth = 0);
-
-//    double getX() const; // in pixels (0-255)
-//    double getY() const; // in pixels (0-255)
-//    void moveTo(double x, double y); // in pixels (0-255)
-//     // moveForward() moves the actor the specified number of units in the
-//     // direction it is facing.
-//    void moveForward(int units = 1);
-//     // getPositionInThisDirection() returns a new (x, y) location in the
-//     // specified direction and distance, based on the passed-in angle and the
-//     // GraphObject’s current (x, y) location.
-//    void getPositionInThisDirection(int angle, int units,
-//     double& dx, double& dy);
-//    int getDirection() const; // in degrees (0-359)
-//    void setDirection(int d); // in degrees (0-359)
 
 class StudentWorld; //since Actor uses a pointer to a StudentWorld
 
-class Actor : public GraphObject { //Actor is derived from GraphObject
+class Actor : public GraphObject {
 
 public:
     Actor(int imageID, double startX, double startY, int startDirection, double size, int depth, StudentWorld* studentWorld) : GraphObject(imageID, startX, startY, startDirection, size, depth) { //default params at the end
@@ -57,7 +37,7 @@ public:
     virtual bool isAffectedProjectiles() = 0;
     virtual void activate() {}
     virtual void receiveDamage(int damage) {
-    } //?
+    }
 private:
     StudentWorld* m_studentWorld;
     bool m_isAlive;
@@ -144,7 +124,7 @@ private:
 
 class Pedestrian : public Actor {
 public:
-    Pedestrian(int imageID, double startX, double startY, double size, StudentWorld* studentWorld) : Actor(imageID, startX, startY, 0, size, 0, studentWorld) { //direction=0, depth=0
+    Pedestrian(int imageID, double startX, double startY, double size, StudentWorld* studentWorld) : Actor(imageID, startX, startY, 0, size, 0, studentWorld) {
         m_movementPlanDis = 0;
         setVertSpeed(-4.0);
         setHorizSpeed(0.0);
@@ -152,14 +132,14 @@ public:
     }
     
     virtual void doSomething();
-    virtual void grunt() {}
+    virtual void grunt() {} //optional
     
     int getHitPoints() { return m_hitPoints; }
     void setHitPoints(double hitPoints) { m_hitPoints = hitPoints; }
   
     virtual void handleOverlap() = 0; //varies between Zombie and human
-    virtual bool isAffectedProjectiles() { return true; } //both zombie and human are
-    virtual void receiveDamage(int hitPoints) = 0; //peds are only damaged by HWP
+    virtual bool isAffectedProjectiles() { return true; } //both zombie and human are, and ZomCab
+    virtual void receiveDamage(int hitPoints) = 0; //peds and ZomCab are only damaged by HWP
 
     virtual ~Pedestrian() {}
     virtual bool collisionAvoidanceWorthy() { return true; }
@@ -202,14 +182,12 @@ class ZombieCab : public Actor {
 public:
     ZombieCab(double startX, double startY, StudentWorld* studentWorld) : Actor(IID_ZOMBIE_CAB, startX, startY, 90, 3.0, 0, studentWorld) {
         m_movementPlanDis = 0;
-        //setVertSpeed(-4.0);
         setHorizSpeed(0.0);
         m_hitPoints = 3;
         m_hasOverlapped = false;
     }
     
     virtual void doSomething();
-    //virtual void grunt() {}
     virtual bool isAffectedProjectiles() { return true; }
     void handleOverlap(); //varies between Zombie and human
     

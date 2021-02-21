@@ -121,28 +121,35 @@ private:
 };
 
 
-
+//int imageID, double startX, double startY, int startDirection, double size, int depth, StudentWorld* studentWorld
 class Pedestrian : public Actor {
 public:
-    Pedestrian(int imageID, double startX, double startY, double size, StudentWorld* studentWorld) : Actor(imageID, startX, startY, 0, size, 0, studentWorld) {
+    
+    Pedestrian(int imageID, double startX, double startY, int startDirection, double size, double startVertSpeed, double startHorizSpeed, int startHitPoints, StudentWorld* studentWorld) : Actor(imageID, startX, startY, startDirection, size, 0, studentWorld) {
         m_movementPlanDis = 0;
-        setVertSpeed(-4.0);
-        setHorizSpeed(0.0);
-        m_hitPoints = 2;
+        setVertSpeed(startVertSpeed);
+        setHorizSpeed(startHorizSpeed);
+        m_hitPoints = startHitPoints;
     }
     
-    virtual void doSomething();
-    virtual void grunt() {} //optional
+    virtual void doSomething(); //how does it vary?
+    virtual bool handleOverlap() = 0; //varies between Zombie and human and zombiecab
+    virtual void receiveDamage(int hitPoints) = 0;
+    virtual void selectMovementPlan(); //we'll have a basic one used for the peds; zombiecab will overwrite to have its own
+    virtual void grunt() {} //optional - ZombiePed only
+    virtual void adjustSpeed() {} //optional - ZombieCab only
+    
+    virtual bool isAffectedProjectiles() { return true; } //both zombie and human are, and ZomCab
+    virtual bool collisionAvoidanceWorthy() { return true; }
     
     int getHitPoints() { return m_hitPoints; }
     void setHitPoints(double hitPoints) { m_hitPoints = hitPoints; }
-  
-    virtual void handleOverlap() = 0; //varies between Zombie and human
-    virtual bool isAffectedProjectiles() { return true; } //both zombie and human are, and ZomCab
-    virtual void receiveDamage(int hitPoints) = 0; //peds and ZomCab are only damaged by HWP
+    
+    int getMovementPlan() { return m_movementPlanDis; }
+    void setMovementPlan(int movement) { m_movementPlanDis = movement; }
 
     virtual ~Pedestrian() {}
-    virtual bool collisionAvoidanceWorthy() { return true; }
+    
 private:
     int m_movementPlanDis;
     int m_hitPoints;
@@ -150,7 +157,7 @@ private:
 
 class HumanPed : public Pedestrian {
 public:
-    HumanPed(double startX, double startY, StudentWorld* studentWorld) : Pedestrian(IID_HUMAN_PED, startX, startY, 2.0, studentWorld) {
+    HumanPed(double startX, double startY, StudentWorld* studentWorld) : Pedestrian(IID_HUMAN_PED, startX, startY, 0, 2.0, -4.0, 0.0, 0, studentWorld) {
     }
     virtual ~HumanPed() {}
     virtual void receiveDamage(int hitPoints);
@@ -158,12 +165,12 @@ public:
 
 private:
 
-    virtual void handleOverlap();
+    virtual bool handleOverlap();
 };
 
 class ZombiePed : public Pedestrian {
 public:
-    ZombiePed(double startX, double startY, StudentWorld* studentWorld) : Pedestrian(IID_ZOMBIE_PED, startX, startY, 3.0, studentWorld) {
+    ZombiePed(double startX, double startY, StudentWorld* studentWorld) : Pedestrian(IID_ZOMBIE_PED, startX, startY, 0, 3.0, -4.0, 0.0, 0, studentWorld) {
         m_ticksUntilGrunt = 0;
     }
     virtual ~ZombiePed() {}
@@ -174,30 +181,25 @@ private:
     int m_ticksUntilGrunt;
     
     virtual void grunt();
-    virtual void handleOverlap();
+    virtual bool handleOverlap();
 
 };
 
-class ZombieCab : public Actor {
+class ZombieCab : public Pedestrian {
 public:
-    ZombieCab(double startX, double startY, StudentWorld* studentWorld) : Actor(IID_ZOMBIE_CAB, startX, startY, 90, 3.0, 0, studentWorld) {
-        m_movementPlanDis = 0;
-        setHorizSpeed(0.0);
-        m_hitPoints = 3;
+    ZombieCab(double startX, double startY, StudentWorld* studentWorld) : Pedestrian(IID_ZOMBIE_CAB, startX, startY, 90, 3.0, 0.0, 0.0, 3, studentWorld) {
         m_hasOverlapped = false;
     }
     
-    virtual void doSomething();
-    virtual bool isAffectedProjectiles() { return true; }
-    void handleOverlap(); //varies between Zombie and human
+    //virtual void doSomething(); uses pedestrian's doSomething
+    virtual bool handleOverlap();
+    virtual void selectMovementPlan();
+    virtual void adjustSpeed();
     
-    virtual void receiveDamage(int hitPoints); //zombie cab is only damaged by HWP
-
+    virtual void receiveDamage(int hitPoints);
     virtual ~ZombieCab() {}
-    virtual bool collisionAvoidanceWorthy() { return true; }
+    
 private:
-    int m_movementPlanDis;
-    int m_hitPoints;
     bool m_hasOverlapped;
 };
 

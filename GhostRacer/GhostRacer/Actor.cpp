@@ -98,18 +98,7 @@ void ZombiePed::grunt() {
    }
 }
 
-void Pedestrian::doSomething() {
-    if (!isAlive()) return;
-    
-    if (doOverlap(getWorld()->getGhostRacer())) {
-        handleOverlap();
-        return;
-    }
-    
-    grunt();
-    
-    if (!useMoveAlg()) return;
-    
+void Pedestrian::selectMovementPlan() {
     //zombieCabs and zombiePeds decrement first...?
     m_movementPlanDis--;
     if (m_movementPlanDis > 0) {
@@ -131,19 +120,41 @@ void Pedestrian::doSomething() {
     }
 }
 
-void HumanPed::handleOverlap() {
-   getWorld()->decLives();
-   getWorld()->getGhostRacer()->setToDead();
+void Pedestrian::doSomething() {
+    if (!isAlive()) return;
+    
+    if (doOverlap(getWorld()->getGhostRacer())) {
+        if (handleOverlap()) { //zombie ped or human ped's handleOverlaps return true
+            return;
+        }
+        
+    }
+    
+    grunt();
+    
+    if (!useMoveAlg()) return;
+    
+    adjustSpeed();
+    
+    selectMovementPlan();
+
 }
 
-void ZombiePed::handleOverlap() {
+bool HumanPed::handleOverlap() {
+   getWorld()->decLives();
+   getWorld()->getGhostRacer()->setToDead();
+   return true;
+}
+
+bool ZombiePed::handleOverlap() {
     getWorld()->getGhostRacer()->receiveDamage(5);
     receiveDamage(2);
+    return true;
 }
 
 void ZombieCab::receiveDamage(int hitPoints) {
-    m_hitPoints -= hitPoints;
-    if (m_hitPoints <= 0) {
+    setHitPoints(getHitPoints() - hitPoints);
+    if (getHitPoints() <= 0) {
         setToDead();
         getWorld()->playSound(SOUND_VEHICLE_DIE);
         if (randInt(0, 4) == 0) {
@@ -170,46 +181,41 @@ void ZombiePed::receiveDamage(int hitPoints) {
    }
 }
 
-void ZombieCab::doSomething() {
-    if (!isAlive()) return;
-    
-    if (doOverlap(getWorld()->getGhostRacer())) {
-        if (m_hasOverlapped) {
-            
+bool ZombieCab::handleOverlap() {
+    if (!m_hasOverlapped) {
+        getWorld()->playSound(SOUND_VEHICLE_CRASH);
+        getWorld()->getGhostRacer()->receiveDamage(20);
+
+        if (getX() <= getWorld()->getGhostRacer()->getX()) {
+            setHorizSpeed(-5);
+            setDirection(120 + randInt(0, 20-1));
         } else {
-            getWorld()->playSound(SOUND_VEHICLE_CRASH);
-            getWorld()->getGhostRacer()->receiveDamage(20);
-            
-            if (getX() <= getWorld()->getGhostRacer()->getX()) {
-                setHorizSpeed(-5);
-                setDirection(120 + randInt(0, 20-1));
-            } else {
-                setHorizSpeed(5);
-                setDirection(60 - randInt(0, 20-1));
-            }
-            m_hasOverlapped = true;
+            setHorizSpeed(5);
+            setDirection(60 - randInt(0, 20-1));
         }
-        
-        if (!useMoveAlg()) return;
-        
+        m_hasOverlapped = true;
+    }
+    return false;
+}
+
+void ZombieCab::selectMovementPlan() {
+    if (getMovementPlan() > 0) {
+        setMovementPlan(getMovementPlan()-1);
+        return;
+    } else {
+        double added_speed = randInt(-2, 2);
+        setVertSpeed(getVertSpeed() + added_speed);
+        setMovementPlan(randInt(4, 32));
+    }
+}
+
+void ZombieCab::adjustSpeed() {
+    //extension of ZombieCab only
         if ((getVertSpeed() > getWorld()->getGhostRacer()->getVertSpeed())) {
            // getWorld()->closestInLane(getLaneNum(), getY(), true);
         } else {
            // getWorld()->closestInLane(getLaneNum(), getY(), false);
         }
-        
-        //Movement plan
-        if (m_movementPlanDis > 0) {
-            m_movementPlanDis--;
-            return;
-        } else {
-            
-            double added_speed = randInt(-2, 2);
-            setVertSpeed(getVertSpeed() + added_speed);
-            m_movementPlanDis = randInt(4, 32);
-        }
-        
-    }
 }
 
 void GhostRacer::receiveDamage(int hitPoints) {

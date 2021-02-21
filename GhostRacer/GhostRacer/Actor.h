@@ -9,17 +9,17 @@ class StudentWorld; //since Actor uses a pointer to a StudentWorld
 class Actor : public GraphObject {
 
 public:
-    Actor(int imageID, double startX, double startY, int startDirection, double size, int depth, StudentWorld* studentWorld) : GraphObject(imageID, startX, startY, startDirection, size, depth) { //default params at the end
+    Actor(int imageID, double startX, double startY, int startDirection, double size, int depth, double startVertSpeed, double startHorizSpeed, StudentWorld* studentWorld) : GraphObject(imageID, startX, startY, startDirection, size, depth) { //default params at the end
         m_studentWorld = studentWorld;
         m_isAlive = true;
-        m_vertSpeed = 0;
-        m_horizSpeed = 0;
+        m_vertSpeed = startVertSpeed;
+        m_horizSpeed = startHorizSpeed;
     }
     
     //Main functions
     virtual void doSomething() = 0;
     bool useMoveAlg();
-    virtual void receiveDamage(int i) {} //? for HWP
+    virtual void receiveDamage(int damage) {} //? for HWP
     
     bool doOverlap(Actor* otherActor);
     int getLaneNum();
@@ -51,21 +51,46 @@ private:
 
 class Active : public Actor {
 public:
-    Active();
+    
+    //for GR
+    Active(StudentWorld *studentWorld) : Actor(IID_GHOST_RACER, 128, 32, 90, 4.0, 0, 0.0, 0.0, studentWorld) {
+       m_hitPoints = 100;
+    }
+    
+    //for humped, zomped, zomcab
+    Active(int imageID, int startX, int startY, int startDirection, int size, double startVertSpeed, double startHorizSpeed, int startHitPoints, StudentWorld* studentWorld) : Actor(imageID, startX, startY, startDirection, size, 0, startVertSpeed, startHorizSpeed, studentWorld) {
+        m_hitPoints = startHitPoints;
+    }
+    
+    //Main functions
+    virtual void doSomething() = 0;
+    virtual void receiveDamage(int hitPoints) = 0; //GR is never damaged by HWP
+    
+    //Setters/getters
+    void addHealth(int health); //insert +ive num for GR, -ive num for others
+    int getHealth();
+    
+    //Properties
+    virtual bool isAffectedProjectiles() { return true; } //zombiecab, zombieped, humanped - not GR
+    bool collisionAvoidanceWorthy() { return true; } //all
+    
     virtual ~Active() {}
 private:
+    int m_hitPoints;
 };
 
-//depth, horiz speed, vert speed
+//depth,
 //collisionavoidanceworthy
 class Goodie : public Actor {
 public:
-    Goodie(int imageID, double startX, double startY, int startDirection, double size, int depth, StudentWorld* studentWorld) : Actor(imageID, startX, startY, startDirection, size, depth, studentWorld) {
+    Goodie(int imageID, double startX, double startY, int startDirection, double size, StudentWorld* studentWorld) : Actor(imageID, startX, startY, startDirection, size, 2.0, -4.0, 0.0, studentWorld) {
         
     }
     virtual bool isAffectedProjectiles() = 0;
     virtual void doSomething();
     virtual void handleOverlap() = 0; //handle overlap with GR
+    
+    virtual bool collisionAvoidanceWorthy() { return false; }
     virtual ~Goodie() {}
 private:
     
@@ -73,75 +98,67 @@ private:
 
 class OilSlick : public Goodie {
 public:
-    OilSlick(double startX, double startY, StudentWorld* studentWorld) : Goodie(IID_OIL_SLICK, startX, startY, 0, randInt(2,5), 2, studentWorld) {
-        setHorizSpeed(0);
-        setVertSpeed(-4);
+    OilSlick(double startX, double startY, StudentWorld* studentWorld) : Goodie(IID_OIL_SLICK, startX, startY, 0, randInt(2,5), studentWorld) {
     }
     virtual ~OilSlick() {}
     virtual bool isAffectedProjectiles() { return false; }
     virtual void handleOverlap();
     
-    virtual bool collisionAvoidanceWorthy() { return false; }
+ //   virtual bool collisionAvoidanceWorthy() { return false; }
     
 private:
 };
 
 class HealingGoodie : public Goodie {
 public:
-    HealingGoodie(double startX, double startY, StudentWorld* studentWorld) : Goodie(IID_HEAL_GOODIE, startX, startY, 0, 1.0, 2, studentWorld) {
-        setHorizSpeed(0);
-        setVertSpeed(-4);
+    HealingGoodie(double startX, double startY, StudentWorld* studentWorld) : Goodie(IID_HEAL_GOODIE, startX, startY, 0, 1.0, studentWorld) {
     }
     virtual ~HealingGoodie() {}
     virtual void handleOverlap();
     
     virtual bool isAffectedProjectiles() { return true; }
     void receiveDamage(int damage); //only damaged by HWP
-    virtual bool collisionAvoidanceWorthy() { return false; }
+   // virtual bool collisionAvoidanceWorthy() { return false; }
     
 private:
 };
 
 class HolyWaterGoodie : public Goodie {
 public:
-    HolyWaterGoodie(double startX, double startY, StudentWorld* studentWorld) : Goodie(IID_HOLY_WATER_GOODIE, startX, startY, 90, 2.0, 2, studentWorld) {
-        setHorizSpeed(0);
-        setVertSpeed(-4);
+    HolyWaterGoodie(double startX, double startY, StudentWorld* studentWorld) : Goodie(IID_HOLY_WATER_GOODIE, startX, startY, 90, 2.0, studentWorld) {
     }
     virtual ~HolyWaterGoodie();
     
     virtual void handleOverlap();
     virtual bool isAffectedProjectiles() { return true; }
     void receiveDamage(int damage); //only damaged by HWP
-    virtual bool collisionAvoidanceWorthy() { return false; }
+    //virtual bool collisionAvoidanceWorthy() { return false; }
 private:
 };
 
 class SoulGoodie : public Goodie {
 public:
-    SoulGoodie(double startX, double startY, StudentWorld* studentWorld) : Goodie(IID_SOUL_GOODIE, startX, startY, 0, 4.0, 2, studentWorld) {
-        setHorizSpeed(0);
-        setVertSpeed(-4);
+    SoulGoodie(double startX, double startY, StudentWorld* studentWorld) : Goodie(IID_SOUL_GOODIE, startX, startY, 0, 4.0, studentWorld) {
     }
     virtual ~SoulGoodie();
     virtual bool isAffectedProjectiles() { return false; }
     virtual void handleOverlap();
     
-    virtual bool collisionAvoidanceWorthy() { return false; }
+    //virtual bool collisionAvoidanceWorthy() { return false; }
     
 private:
 };
 
 
 //int imageID, double startX, double startY, int startDirection, double size, int depth, StudentWorld* studentWorld
-class Pedestrian : public Actor {
+class Pedestrian : public Active {
 public:
     
-    Pedestrian(int imageID, double startX, double startY, int startDirection, double size, double startVertSpeed, double startHorizSpeed, int startHitPoints, StudentWorld* studentWorld) : Actor(imageID, startX, startY, startDirection, size, 0, studentWorld) {
+    Pedestrian(int imageID, double startX, double startY, int startDirection, double size, double startVertSpeed, double startHorizSpeed, int startHitPoints, StudentWorld* studentWorld) : Active(imageID, startX, startY, startDirection, size, startVertSpeed, startHorizSpeed, startHitPoints, studentWorld) {
         m_movementPlanDis = 0;
-        setVertSpeed(startVertSpeed);
-        setHorizSpeed(startHorizSpeed);
-        m_hitPoints = startHitPoints;
+    //    setVertSpeed(startVertSpeed);
+     //   setHorizSpeed(startHorizSpeed);
+      //  m_hitPoints = startHitPoints;
     }
     
     virtual void doSomething(); //how does it vary?
@@ -150,12 +167,9 @@ public:
     virtual void selectMovementPlan(); //we'll have a basic one used for the peds; zombiecab will overwrite to have its own
     virtual void grunt() {} //optional - ZombiePed only
     virtual void adjustSpeed() {} //optional - ZombieCab only
-    
-    virtual bool isAffectedProjectiles() { return true; } //both zombie and human are, and ZomCab
-    virtual bool collisionAvoidanceWorthy() { return true; }
-    
-    int getHitPoints() { return m_hitPoints; }
-    void setHitPoints(double hitPoints) { m_hitPoints = hitPoints; }
+ 
+  //  int getHitPoints() { return m_hitPoints; }
+ //   void setHitPoints(double hitPoints) { m_hitPoints = hitPoints; }
     
     int getMovementPlan() { return m_movementPlanDis; }
     void setMovementPlan(int movement) { m_movementPlanDis = movement; }
@@ -164,7 +178,7 @@ public:
     
 private:
     int m_movementPlanDis;
-    int m_hitPoints;
+ //   int m_hitPoints;
 };
 
 class HumanPed : public Pedestrian {
@@ -215,16 +229,15 @@ private:
     bool m_hasOverlapped;
 };
 
-class GhostRacer : public Actor { //GhostRacer is derived from Actor
+class GhostRacer : public Active { //GhostRacer is derived from Actor
 public:
-    GhostRacer(StudentWorld *studentWorld);
+    GhostRacer(StudentWorld *studentWorld) : Active(studentWorld) {
+       m_holyWaterUnits = 10;
+    }
     virtual ~GhostRacer() {} //virtual functions must be defined (Even if they're empty)
     
     virtual void doSomething();
-    
-    virtual void receiveDamage(int hitPoints); //GR is never damaged by HWP
-    void addHealth(int health);
-    int getHealth();
+    virtual void receiveDamage(int damage);
     
     void spin();
     void addWater(int charge);
@@ -232,19 +245,15 @@ public:
     void move();
     
     virtual bool isAffectedProjectiles() { return false; }
-    virtual bool collisionAvoidanceWorthy() { return true; }
     
 private:
     int m_holyWaterUnits;
-    int m_hitPoints;
 };
 
 class BorderLine : public Actor {
 public:
     
-    BorderLine(int imageID, double startX, double startY, StudentWorld* studentWorld): Actor(imageID, startX, startY, 0, 2.0, 2.0, studentWorld) {
-        setVertSpeed(-4);
-        setHorizSpeed(0);
+    BorderLine(int imageID, double startX, double startY, StudentWorld* studentWorld): Actor(imageID, startX, startY, 0, 2.0, 2.0, -4.0, 0.0, studentWorld) {
     }
     virtual ~BorderLine() {}
     virtual bool isAffectedProjectiles() { return false; }
@@ -255,7 +264,7 @@ private:
 
 class HolyWaterProjectile : public Actor {
 public:
-    HolyWaterProjectile(double startX, double startY, int startDirection, StudentWorld* studentWorld) : Actor(IID_HOLY_WATER_PROJECTILE, startX, startY, startDirection, 1.0, 1, studentWorld) {
+    HolyWaterProjectile(double startX, double startY, int startDirection, StudentWorld* studentWorld) : Actor(IID_HOLY_WATER_PROJECTILE, startX, startY, startDirection, 1.0, 1, 0.0, 0.0, studentWorld) {
         m_maxTravDis = 160;
     }
     virtual ~HolyWaterProjectile() {}

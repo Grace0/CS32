@@ -12,11 +12,6 @@ bool Actor::doOverlap(Actor* otherActor) {
     return false;
 }
 
-GhostRacer::GhostRacer(StudentWorld *studentWorld) : Actor(IID_GHOST_RACER, 128, 32, 90, 4.0, 0, studentWorld) {
-   m_holyWaterUnits = 10;
-   m_hitPoints = 100;
-}
-
 void GhostRacer::doSomething() {
     if (!isAlive()) {
         return;
@@ -153,8 +148,8 @@ bool ZombiePed::handleOverlap() {
 }
 
 void ZombieCab::receiveDamage(int hitPoints) {
-    setHitPoints(getHitPoints() - hitPoints);
-    if (getHitPoints() <= 0) {
+    addHealth(-hitPoints);
+    if (getHealth() <= 0) {
         setToDead();
         getWorld()->playSound(SOUND_VEHICLE_DIE);
         if (randInt(0, 4) == 0) {
@@ -168,8 +163,8 @@ void ZombieCab::receiveDamage(int hitPoints) {
 }
 
 void ZombiePed::receiveDamage(int hitPoints) {
-    setHitPoints(getHitPoints()-hitPoints);
-   if (getHitPoints() <= 0) {
+    addHealth(-hitPoints);
+   if (getHealth() <= 0) {
        setToDead();
        getWorld()->playSound(SOUND_PED_DIE);
        if (!doOverlap(getWorld()->getGhostRacer()) && (randInt(0, 4) == 0)) {
@@ -219,8 +214,8 @@ void ZombieCab::adjustSpeed() {
 }
 
 void GhostRacer::receiveDamage(int hitPoints) {
-   m_hitPoints -= hitPoints;
-   if (m_hitPoints <= 0) {
+   addHealth(-hitPoints);
+   if (getHealth() <= 0) {
        setToDead();
        getWorld()->playSound(SOUND_PLAYER_DIE);
    }
@@ -298,7 +293,7 @@ void HolyWaterProjectile::doSomething() {
     
 }
  
-int GhostRacer::getHealth() {
+int Active::getHealth() {
     return m_hitPoints;
 }
 
@@ -313,7 +308,7 @@ void HealingGoodie::handleOverlap() {
     getWorld()->addPoints(250);
 }
 
-void GhostRacer::addHealth(int health) {
+void Active::addHealth(int health) {
     m_hitPoints += health;
     if (m_hitPoints > 100) m_hitPoints = 100; //max
 }

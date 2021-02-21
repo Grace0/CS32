@@ -245,7 +245,11 @@ private:
 
 class BorderLine : public Actor {
 public:
-    BorderLine(int imageID, double startX, double startY, StudentWorld* studentWorld);
+    
+    BorderLine(int imageID, double startX, double startY, StudentWorld* studentWorld): Actor(imageID, startX, startY, 0, 2.0, 2.0, studentWorld) {
+        setVertSpeed(-4);
+        setHorizSpeed(0);
+    }
     virtual ~BorderLine() {}
     virtual bool isAffectedProjectiles() { return false; }
     virtual void doSomething();

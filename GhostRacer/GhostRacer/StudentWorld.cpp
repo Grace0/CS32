@@ -82,10 +82,9 @@ void StudentWorld::cleanUp()
 {
     delete m_ghostRacer;
     
-    //SOMETHING HERE tries to follow a dangling pointer
-    for (std::vector<Actor*>::iterator it = m_actorVec.begin(); it != m_actorVec.end(); it++) {
+    for (std::vector<Actor*>::iterator it = m_actorVec.begin(); it != m_actorVec.end(); ) {
         delete *it; // delete what "it" points to
-        it = m_actorVec.erase(it); //"it" now points to the next element of the vector
+        it = m_actorVec.erase(it); //"it" now points to the next element of the vector (unless it points to the end)
     }
 }
 

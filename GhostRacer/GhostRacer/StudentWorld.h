@@ -25,12 +25,6 @@ public:
     void addOilSlick(double startX, double startY);
     void addPoints(int numPoints);
     
-    int getScore();
-    int getHealth();
-    int getSouls2Save();
-    int getSprays();
-    int getBonus();
-    
     void incNumSaved();
 
 private:
@@ -40,6 +34,12 @@ private:
     void removeDeadActors();
     void addNewActors();
     void updateDisplayText();
+    
+    int getScore();
+    int getHealth();
+    int getSouls2Save();
+    int getSprays();
+    int getBonus();
     
     double m_lastWhite;
     int m_playerPoints;

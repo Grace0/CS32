@@ -67,11 +67,6 @@ void GhostRacer::move() {
     moveTo(cur_x + delta_x, cur_y);
 }
 
-BorderLine::BorderLine(int imageID, double startX, double startY, StudentWorld* studentWorld): Actor(imageID, startX, startY, 0, 2.0, 2.0, studentWorld) {
-    setVertSpeed(-4);
-    setHorizSpeed(0);
-}
-
 void BorderLine::doSomething() {
    useMoveAlg();
 }

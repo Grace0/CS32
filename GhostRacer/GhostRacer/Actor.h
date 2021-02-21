@@ -15,17 +15,21 @@ public:
         m_vertSpeed = 0;
         m_horizSpeed = 0;
     }
-    virtual ~Actor() {} //virtual so that subclass' destructors get called; note that subclasses get destructed first
- 
+    
+    //Main functions
+    virtual void doSomething() = 0;
+    bool useMoveAlg();
+    virtual void receiveDamage(int i) {} //? for HWP
+    
+    bool doOverlap(Actor* otherActor);
+    int getLaneNum();
+    //virtual bool handleOverlap() = 0; ??
+    
+    //Getters/Setters
     StudentWorld* getWorld() { return m_studentWorld; }
+    
     bool isAlive() { return m_isAlive; }
     void setToDead() { m_isAlive = false; }
-    bool doOverlap(Actor* otherActor);
-    bool useMoveAlg();
-
-    int getLaneNum();
-    
-    virtual bool collisionAvoidanceWorthy() { return true; }
     
     virtual double getVertSpeed() { return m_vertSpeed; }
     virtual void setVertSpeed(double vertSpeed) { m_vertSpeed = vertSpeed; }
@@ -33,15 +37,23 @@ public:
     virtual double getHorizSpeed() { return m_horizSpeed; }
     virtual void setHorizSpeed(double horizSpeed) { m_horizSpeed = horizSpeed; }
     
-    virtual void doSomething() = 0;
+    //Properties
     virtual bool isAffectedProjectiles() = 0;
-    virtual void activate() {}
-    virtual void receiveDamage(int damage) {
-    }
+    virtual bool collisionAvoidanceWorthy() { return true; }
+    
+    virtual ~Actor() {} //virtual so that subclass' destructors get called; note that subclasses get destructed first
+
 private:
     StudentWorld* m_studentWorld;
     bool m_isAlive;
     double m_vertSpeed, m_horizSpeed;
+};
+
+class Active : public Actor {
+public:
+    Active();
+    virtual ~Active() {}
+private:
 };
 
 //depth, horiz speed, vert speed
@@ -208,16 +220,20 @@ public:
     GhostRacer(StudentWorld *studentWorld);
     virtual ~GhostRacer() {} //virtual functions must be defined (Even if they're empty)
     
-    virtual bool isAffectedProjectiles() { return false; }
-    virtual bool collisionAvoidanceWorthy() { return true; }
+    virtual void doSomething();
+    
     virtual void receiveDamage(int hitPoints); //GR is never damaged by HWP
+    void addHealth(int health);
+    int getHealth();
+    
     void spin();
     void addWater(int charge);
-    int getHealth();
     int getSprays();
-    void addHealth(int health);
     void move();
-    virtual void doSomething();
+    
+    virtual bool isAffectedProjectiles() { return false; }
+    virtual bool collisionAvoidanceWorthy() { return true; }
+    
 private:
     int m_holyWaterUnits;
     int m_hitPoints;

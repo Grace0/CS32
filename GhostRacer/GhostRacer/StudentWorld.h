@@ -24,7 +24,6 @@ public:
     void addHealingGoodie(double startX, double startY);
     void addOilSlick(double startX, double startY);
     void addHolyWaterSpray(double startX, double startY, int startDirection);
-    void addPoints(int numPoints);
     
     void incNumSaved();
 
@@ -36,14 +35,12 @@ private:
     void addNewActors();
     void updateDisplayText();
     
-    int getScore();
     int getHealth();
     int getSouls2Save();
     int getSprays();
     int getBonus();
     
     double m_lastWhite;
-    int m_playerPoints;
     int m_numSaved;
     int m_bonusPoints;
 };

@@ -134,7 +134,7 @@ class HolyWaterGoodie : public Goodie {
 public:
     HolyWaterGoodie(double startX, double startY, StudentWorld* studentWorld) : Goodie(IID_HOLY_WATER_GOODIE, startX, startY, 90, 2.0, studentWorld) {
     }
-    virtual ~HolyWaterGoodie();
+    virtual ~HolyWaterGoodie() {}
     
     virtual void handleOverlap();
     virtual bool isAffectedProjectiles() { return true; }
@@ -147,10 +147,10 @@ class SoulGoodie : public Goodie {
 public:
     SoulGoodie(double startX, double startY, StudentWorld* studentWorld) : Goodie(IID_SOUL_GOODIE, startX, startY, 0, 4.0, studentWorld) {
     }
-    virtual ~SoulGoodie();
+    virtual ~SoulGoodie() {}
   //  virtual bool isAffectedProjectiles() { return false; }
     virtual void handleOverlap();
-    void doSomethingAndSpin();
+    void doSomething();
     
     //virtual bool collisionAvoidanceWorthy() { return false; }
     

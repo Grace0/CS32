@@ -181,7 +181,7 @@ void ZombieCab::receiveDamage(int hitPoints) {
         if (randInt(0, 4) == 0) {
             getWorld()->addOilSlick(getX(), getY());
         }
-        getWorld()->addPoints(200);
+        getWorld()->increaseScore(200);
         return;
     } else {
         getWorld()->playSound(SOUND_VEHICLE_HURT);
@@ -196,7 +196,7 @@ void ZombiePed::receiveDamage(int hitPoints) {
        if (!doOverlap(getWorld()->getGhostRacer()) && (randInt(0, 4) == 0)) {
            getWorld()->addHealingGoodie(getX(), getY());
        }
-       getWorld()->addPoints(150);
+       getWorld()->increaseScore(150);
    } else {
        getWorld()->playSound(SOUND_PED_HURT);
    }
@@ -276,7 +276,7 @@ void HolyWaterGoodie::handleOverlap() {
     getWorld()->getGhostRacer()->addWater(10);
     setToDead();
     getWorld()->playSound(SOUND_GOT_GOODIE);
-    getWorld()->addPoints(50);
+    getWorld()->increaseScore(50);
 }
 
 void GhostRacer::spin() {
@@ -301,11 +301,13 @@ void SoulGoodie::handleOverlap() {
     getWorld()->incNumSaved();
     setToDead();
     getWorld()->playSound(SOUND_GOT_SOUL);
-    getWorld()->addPoints(100);
+    getWorld()->increaseScore(100);
 }
 
-void SoulGoodie::doSomethingAndSpin() {
-    doSomething();
+void SoulGoodie::doSomething() {
+   
+    Goodie::doSomething(); ///MORE OF THESE!
+    
     setDirection(getDirection()+10);
 }
 
@@ -342,7 +344,7 @@ void HealingGoodie::handleOverlap() {
     getWorld()->getGhostRacer()->addHealth(10);
     setToDead();
     getWorld()->playSound(SOUND_GOT_GOODIE);
-    getWorld()->addPoints(250);
+    getWorld()->increaseScore(250);
 }
 
 void Active::addHealth(int health) {

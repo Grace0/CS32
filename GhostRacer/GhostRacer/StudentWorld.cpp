@@ -19,7 +19,6 @@ StudentWorld::StudentWorld(string assetPath)
 {
     m_ghostRacer = nullptr;
     m_lastWhite = 0;
-    m_playerPoints = 0;
     m_numSaved = 0;
     m_bonusPoints = 5000;
 }
@@ -60,8 +59,9 @@ int StudentWorld::move()
     if (!m_ghostRacer->isAlive()) return GWSTATUS_PLAYER_DIED;
     
     if (m_numSaved == (2 * getLevel() + 5)) {
-        addPoints(m_bonusPoints);
+        increaseScore(m_bonusPoints);
         m_bonusPoints = 5000; //reset
+        m_numSaved = 0; //reset
         return GWSTATUS_FINISHED_LEVEL;
     }
 
@@ -70,11 +70,7 @@ int StudentWorld::move()
     addNewActors();
 
     updateDisplayText();
-//    Update display text // update the score/lives/level text at screen top
-//     // the player hasn’t completed the current level and hasn’t died, so
-//     // continue playing the current level
 
-    
     return GWSTATUS_CONTINUE_GAME;
 }
 
@@ -125,19 +121,31 @@ void StudentWorld::addNewActors() {
     //Zombie Peds
     int chanceZombiePed = max(100 - level * 10, 20);
     if (randInt(0, chanceZombiePed-1) == 0) {
-        m_actorVec.push_back(new ZombiePed(randInt(0, VIEW_WIDTH-1), VIEW_HEIGHT-1, this));
+        m_actorVec.push_back(new ZombiePed(randInt(ROAD_CENTER-ROAD_WIDTH/2, ROAD_CENTER+ROAD_WIDTH/2), VIEW_HEIGHT-1, this));
     }
     
     //Human Peds
     int chanceHumanPed = max(200 - level * 10, 30);
     if (randInt(0, chanceHumanPed-1) == 0) {
-        m_actorVec.push_back(new HumanPed(randInt(0, VIEW_WIDTH-1), VIEW_HEIGHT-1, this));
+        m_actorVec.push_back(new HumanPed(randInt(ROAD_CENTER-ROAD_WIDTH/2, ROAD_CENTER+ROAD_WIDTH/2), VIEW_HEIGHT-1, this));
     }
     
     //Oil Slick
     int chanceOilSlick = max(150 - level * 10, 40);
     if (randInt(0, chanceOilSlick-1) == 0) {
-        m_actorVec.push_back(new OilSlick(randInt(0, VIEW_WIDTH-1), VIEW_HEIGHT-1, this));
+        m_actorVec.push_back(new OilSlick(randInt(ROAD_CENTER-ROAD_WIDTH/2, ROAD_CENTER+ROAD_WIDTH/2), VIEW_HEIGHT-1, this));
+    }
+    
+    //Holy Water Refill Goodies
+    int chanceOfHolyWater = 100 + 10 * level;
+    if (randInt(0, chanceOfHolyWater-1) == 0) {
+        m_actorVec.push_back(new HolyWaterGoodie(randInt(ROAD_CENTER-ROAD_WIDTH/2, ROAD_CENTER+ROAD_WIDTH/2), VIEW_HEIGHT-1, this));
+    }
+    
+    //Lost Soul Goodies
+    int chanceOfLostSoul = 100;
+    if (randInt(0, chanceOfLostSoul-1) == 0) {
+        m_actorVec.push_back(new SoulGoodie(randInt(ROAD_CENTER-ROAD_WIDTH/2, ROAD_CENTER+ROAD_WIDTH/2), VIEW_HEIGHT-1, this));
     }
     
 }
@@ -163,15 +171,11 @@ Actor* StudentWorld::closestInLane(int laneNum, double y, bool inFront) {
     return potentialClosest; //no other actors in the lane
 }
 
-void StudentWorld::addPoints(int numPoints) { m_playerPoints += numPoints; }
+//void StudentWorld::addPoints(int numPoints) { m_playerPoints += numPoints; }
 
 GhostRacer* StudentWorld::getGhostRacer() { return m_ghostRacer; }
 
 void StudentWorld::incNumSaved() { m_numSaved++; }
-
-int StudentWorld::getScore() {
-    return m_playerPoints;
-}
 
 int StudentWorld::getHealth() {
     return getGhostRacer()->getHealth();

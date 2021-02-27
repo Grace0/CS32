@@ -209,3 +209,7 @@ void StudentWorld::addHealingGoodie(double startX, double startY) {
 void StudentWorld::addOilSlick(double startX, double startY) {
     m_actorVec.push_back(new OilSlick(startX, startY, this));
 }
+
+void StudentWorld::addHolyWaterSpray(double startX, double startY, int startDirection) {
+    m_actorVec.push_back(new HolyWaterProjectile(startX, startY, startDirection, this));
+}

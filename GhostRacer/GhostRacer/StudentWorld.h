@@ -23,6 +23,7 @@ public:
     Actor* getProjectileOverlap(HolyWaterProjectile* proj);
     void addHealingGoodie(double startX, double startY);
     void addOilSlick(double startX, double startY);
+    void addHolyWaterSpray(double startX, double startY, int startDirection);
     void addPoints(int numPoints);
     
     void incNumSaved();

@@ -19,6 +19,7 @@ public:
     //Main functions
     virtual void doSomething() = 0;
     bool useMoveAlg();
+    bool isWithinBounds(int x, int y);
     virtual void receiveDamage(int damage) {} //? for HWP
     
     bool doOverlap(Actor* otherActor);
@@ -272,6 +273,7 @@ class HolyWaterProjectile : public Goodie {
 public:
     HolyWaterProjectile(double startX, double startY, int startDirection, StudentWorld* studentWorld) : Goodie(startX, startY, startDirection, studentWorld) {
         m_maxTravDis = 160;
+        m_curTravDis = 0;
     }
     virtual ~HolyWaterProjectile() {}
  //   virtual bool isAffectedProjectiles() { return false; }
@@ -279,6 +281,7 @@ public:
  //   virtual bool collisionAvoidanceWorthy() { return false; }
 private:
     int m_maxTravDis;
+    int m_curTravDis;
 };
 
 #endif // ACTOR_H_

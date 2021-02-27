@@ -19,35 +19,38 @@ void GhostRacer::doSomething() {
     
     int ch;
     if (getWorld()->getKey(ch)) {
-    switch (ch)
-    {
-        case KEY_PRESS_LEFT:
-            if (getDirection() < 114) {
-                setDirection(getDirection()+8);
-            }
-            break;
-        case KEY_PRESS_RIGHT:
-            if (getDirection() > 66) {
-                setDirection(getDirection()-8);
-            }
-            break;
-        case KEY_PRESS_UP:
-            if (getVertSpeed() < 5) {
-                setVertSpeed(getVertSpeed()+1);
-            }
-            break;
-        case KEY_PRESS_DOWN:
-            if (getVertSpeed() > -1) {
-                setVertSpeed(getVertSpeed()-1);
-            }
-            break;
-        case KEY_PRESS_SPACE:
-      //  ... add spray in front of Ghost Racer...;
-            break;
-    }
-        
-        
-    
+        switch (ch)
+        {
+            case KEY_PRESS_LEFT:
+                if (getDirection() < 114) {
+                    setDirection(getDirection()+8);
+                }
+                break;
+            case KEY_PRESS_RIGHT:
+                if (getDirection() > 66) {
+                    setDirection(getDirection()-8);
+                }
+                break;
+            case KEY_PRESS_UP:
+                if (getVertSpeed() < 5) {
+                    setVertSpeed(getVertSpeed()+1);
+                }
+                break;
+            case KEY_PRESS_DOWN:
+                if (getVertSpeed() > -1) {
+                    setVertSpeed(getVertSpeed()-1);
+                }
+                break;
+            case KEY_PRESS_SPACE:
+                if (m_holyWaterUnits >= 1) {
+                    double delta_x = SPRITE_HEIGHT*cos(getDirection()*3.14/180.0);
+                    double delta_y = SPRITE_HEIGHT*sin(getDirection()*3.14/180.0);
+                    getWorld()->addHolyWaterSpray(getX()+delta_x, getY()+delta_y, getDirection());
+                    getWorld()->playSound(SOUND_PLAYER_SPRAY);
+                    m_holyWaterUnits--;
+                }
+                break;
+        }
     }
     
     move(); //regardless of whether the player hit a key, GR should move for the give tick
@@ -72,7 +75,12 @@ bool Actor::useMoveAlg() {
     double new_x = getX() + m_horizSpeed;
     moveTo(new_x, new_y);
     
-    if (getX() < 0 || getY() < 0 || getX() > VIEW_WIDTH || getY() > VIEW_HEIGHT) {
+    return isWithinBounds(getX(), getY());
+
+}
+
+bool Actor::isWithinBounds(int x, int y) {
+    if (x < 0 || y < 0 || x > VIEW_WIDTH || y > VIEW_HEIGHT) {
         m_isAlive = false;
         return false;
     } else {
@@ -288,7 +296,13 @@ void HolyWaterProjectile::doSomething() {
         setToDead();
         return;
     } else {
-        moveForward();
+        moveForward(SPRITE_HEIGHT);
+        m_curTravDis += SPRITE_HEIGHT;
+    }
+    
+    if (!isWithinBounds(getX(), getY()) || m_curTravDis >= m_maxTravDis) {
+        setToDead();
+        return;
     }
     
 }

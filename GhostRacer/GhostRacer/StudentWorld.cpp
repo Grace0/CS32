@@ -148,6 +148,15 @@ void StudentWorld::addNewActors() {
         m_actorVec.push_back(new SoulGoodie(randInt(ROAD_CENTER-ROAD_WIDTH/2, ROAD_CENTER+ROAD_WIDTH/2), VIEW_HEIGHT-1, this));
     }
     
+    //Zombie Cab
+    int chanceVehicle = max(100 - level * 10, 20);
+    if (randInt(0, chanceVehicle-1) == 0) {
+        int curLane = randInt(0, 2);
+        if (curLane == 0) { //leftmost lane
+            
+        }
+    }
+    
 }
 
 void StudentWorld::updateDisplayText() {
@@ -159,14 +168,14 @@ Actor* StudentWorld::closestInLane(int laneNum, double y, bool inFront) {
     
     Actor* potentialClosest = nullptr;
     
-//    for (int i = 0; i < m_actorVec.size(); i++) {
-//        if (m_actorVec[i]->getLaneNum() == laneNum) {
-//            if ((m_actorVec[i]->getY() > y) && (potentialClosest->getY() > m_actorVec[i]->getY())) {
-//                potentialClosest = m_actorVec[i];
-//            }
-//
-//        }
-//    }
+    for (int i = 0; i < m_actorVec.size(); i++) { //for all the Actors
+        if (m_actorVec[i]->getLaneNum() == laneNum) { //if it's in the given lane
+            if ((m_actorVec[i]->getY() > y) && (potentialClosest->getY() > m_actorVec[i]->getY())) {
+                potentialClosest = m_actorVec[i];
+            }
+
+        }
+    }
     
     return potentialClosest; //no other actors in the lane
 }

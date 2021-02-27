@@ -17,6 +17,24 @@ void GhostRacer::doSomething() {
         return;
     }
     
+    //Left lane bound
+    if (getX() <= ROAD_CENTER-ROAD_WIDTH/2) {
+        if (getDirection() > 90) {
+            receiveDamage(10);
+        }
+        setDirection(82);
+        getWorld()->playSound(SOUND_VEHICLE_CRASH);
+    }
+    
+    //Right lane bound
+    if (getX() >= ROAD_CENTER+ROAD_WIDTH/2) {
+        if (getDirection() < 90) {
+            receiveDamage(10);
+        }
+        setDirection(98);
+        getWorld()->playSound(SOUND_VEHICLE_CRASH);
+    }
+    
     int ch;
     if (getWorld()->getKey(ch)) {
         switch (ch)

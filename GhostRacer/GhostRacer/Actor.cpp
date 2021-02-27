@@ -270,7 +270,7 @@ void GhostRacer::spin() {
     }
     
     if ((getDirection() + new_dir) >= 60 && (getDirection() + new_dir) <= 120) {
-        setDirection(new_dir);
+        setDirection(getDirection() + new_dir);
     }
 
 }

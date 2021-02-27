@@ -286,6 +286,11 @@ void SoulGoodie::handleOverlap() {
     getWorld()->addPoints(100);
 }
 
+void SoulGoodie::doSomethingAndSpin() {
+    doSomething();
+    setDirection(getDirection()+10);
+}
+
 void HolyWaterProjectile::doSomething() {
     if (!isAlive()) return;
     

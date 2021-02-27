@@ -150,6 +150,7 @@ public:
     virtual ~SoulGoodie();
   //  virtual bool isAffectedProjectiles() { return false; }
     virtual void handleOverlap();
+    void doSomethingAndSpin();
     
     //virtual bool collisionAvoidanceWorthy() { return false; }
     

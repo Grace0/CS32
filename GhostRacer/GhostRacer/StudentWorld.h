@@ -19,7 +19,7 @@ public:
     virtual void cleanUp();
     
     GhostRacer* getGhostRacer();
-    Actor* closestInLane(int laneNum, double y, bool inFront);
+    Actor* closestInLane(int laneNum, double y);
     Actor* getProjectileOverlap(HolyWaterProjectile* proj);
     void addHealingGoodie(double startX, double startY);
     void addOilSlick(double startX, double startY);
@@ -39,6 +39,9 @@ private:
     int getSouls2Save();
     int getSprays();
     int getBonus();
+    
+    int getLaneCoord(int laneNum);
+    void addZombieCab();
     
     double m_lastWhite;
     int m_numSaved;

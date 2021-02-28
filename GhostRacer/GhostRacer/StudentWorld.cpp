@@ -151,12 +151,43 @@ void StudentWorld::addNewActors() {
     //Zombie Cab
     int chanceVehicle = max(100 - level * 10, 20);
     if (randInt(0, chanceVehicle-1) == 0) {
-        int curLane = randInt(0, 2);
-        if (curLane == 0) { //leftmost lane
-            
+        addZombieCab();
+    }
+    
+}
+
+void StudentWorld::addZombieCab() {
+    int curLane = randInt(0, 2);
+    double x;
+    double y;
+    double startSpeed;
+    int chosenLane;
+    bool foundViableLane = false;
+    
+    for (int i = 0; i < 3; i++) {
+        chosenLane = (curLane + i) % 3;
+        Actor* closestActor = closestInLane(chosenLane, 0);
+        if (closestActor == nullptr || closestActor->getY() > VIEW_HEIGHT/3) {
+            x = getLaneCoord(chosenLane);
+            y = SPRITE_HEIGHT/2;
+            startSpeed = m_ghostRacer->getVertSpeed() + randInt(2, 4);
+            foundViableLane = true;
+            break; //out of the for loop
+        }
+        
+        closestActor = closestInLane(chosenLane, VIEW_HEIGHT-1);
+        if (closestActor == nullptr || closestActor->getY() < VIEW_HEIGHT*2/3) {
+            x = getLaneCoord(chosenLane);
+            y = VIEW_HEIGHT - SPRITE_HEIGHT/2;
+            startSpeed = m_ghostRacer->getVertSpeed() - randInt(2, 4);
+            foundViableLane = true;
+            break; //out of the for loop
         }
     }
     
+    if (foundViableLane) {
+        m_actorVec.push_back(new ZombieCab(x, y, startSpeed, this));
+    }
 }
 
 void StudentWorld::updateDisplayText() {
@@ -164,16 +195,15 @@ void StudentWorld::updateDisplayText() {
     setGameStatText(text);
 }
 
-Actor* StudentWorld::closestInLane(int laneNum, double y, bool inFront) {
+//for creating zombie cabs
+Actor* StudentWorld::closestInLane(int laneNum, double targetY) {
     
     Actor* potentialClosest = nullptr;
     
     for (int i = 0; i < m_actorVec.size(); i++) { //for all the Actors
-        if (m_actorVec[i]->getLaneNum() == laneNum) { //if it's in the given lane
-            if ((m_actorVec[i]->getY() > y) && (potentialClosest->getY() > m_actorVec[i]->getY())) {
-                potentialClosest = m_actorVec[i];
-            }
-
+        if (m_actorVec[i]->collisionAvoidanceWorthy() && m_actorVec[i]->getLaneNum() == laneNum) { //if it's in the given lane
+            if (potentialClosest == nullptr) potentialClosest = m_actorVec[i]; //first time it's being set
+            else if (abs(m_actorVec[i]->getY() - targetY) < abs(potentialClosest->getY() - targetY)) potentialClosest = m_actorVec[i];
         }
     }
     
@@ -225,4 +255,10 @@ void StudentWorld::addOilSlick(double startX, double startY) {
 
 void StudentWorld::addHolyWaterSpray(double startX, double startY, int startDirection) {
     m_actorVec.push_back(new HolyWaterProjectile(startX, startY, startDirection, this));
+}
+
+int StudentWorld::getLaneCoord(int laneNum) {
+    if (laneNum == 0) return ROAD_CENTER-ROAD_WIDTH/3;
+    if (laneNum == 1) return ROAD_CENTER;
+    return ROAD_CENTER+ROAD_WIDTH/3; //if laneNum = 2
 }

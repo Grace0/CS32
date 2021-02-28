@@ -220,8 +220,9 @@ private:
 };
 
 class ZombieCab : public Pedestrian {
-public:
-    ZombieCab(double startX, double startY, StudentWorld* studentWorld) : Pedestrian(IID_ZOMBIE_CAB, startX, startY, 90, 3.0, 0.0, 0.0, 3, studentWorld) {
+public://int imageID, double startX, double startY, int startDirection, double size, int depth, double startVertSpeed, double startHorizSpeed, StudentWorld* studentWorld
+    //int imageID, double startX, double startY, int startDirection, double size, double startVertSpeed, double startHorizSpeed, int startHitPoints, StudentWorld* studentWorld
+    ZombieCab(double startX, double startY, double startVertSpeed, StudentWorld* studentWorld) : Pedestrian(IID_ZOMBIE_CAB, startX, startY, 90, 4.0, startVertSpeed, 0.0, 3, studentWorld) {
         m_hasOverlapped = false;
     }
     

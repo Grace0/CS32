@@ -252,7 +252,7 @@ int Actor::getLaneNum() {
    
     if (x < ROAD_CENTER - ROAD_WIDTH / 2 + ROAD_WIDTH/3) { //leftmost lane
         return 1;
-    } else if (x > ROAD_CENTER + ROAD_WIDTH / 2 - ROAD_WIDTH/3) { //rightmost lane
+    } else if (x >= ROAD_CENTER + ROAD_WIDTH / 2 - ROAD_WIDTH/3) { //rightmost lane
         return 2;
     } else { //center lane
         return 3;

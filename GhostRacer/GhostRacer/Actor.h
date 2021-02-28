@@ -102,6 +102,8 @@ public:
     virtual bool isAffectedProjectiles() { return false; }
     virtual bool collisionAvoidanceWorthy() { return false; }
     
+    void receiveDamage(int damage) { setToDead(); }
+    
     virtual ~Goodie() {}
     
 protected:
@@ -129,7 +131,6 @@ public:
     virtual void handleOverlap();
     
     virtual bool isAffectedProjectiles() { return true; }
-    void receiveDamage(int damage); 
     
 protected:
     
@@ -144,8 +145,9 @@ public:
     
     virtual void handleOverlap();
     virtual bool isAffectedProjectiles() { return true; }
-    void receiveDamage(int damage); //only damaged by HWP
-    //virtual bool collisionAvoidanceWorthy() { return false; }
+   
+protected:
+    
 private:
 };
 
@@ -154,13 +156,35 @@ public:
     SoulGoodie(double startX, double startY, StudentWorld* studentWorld) : Goodie(IID_SOUL_GOODIE, startX, startY, 0, 4.0, studentWorld) {
     }
     virtual ~SoulGoodie() {}
-  //  virtual bool isAffectedProjectiles() { return false; }
     virtual void handleOverlap();
-    void doSomething();
+    virtual void doSomething();
     
-    //virtual bool collisionAvoidanceWorthy() { return false; }
+protected:
     
 private:
+};
+
+class BorderLine : public Goodie {
+public:
+    
+    BorderLine(int imageID, double startX, double startY, StudentWorld* studentWorld): Goodie(imageID, startX, startY, 0, 2.0, studentWorld) {
+    }
+    virtual ~BorderLine() {}
+    virtual void doSomething();
+private:
+};
+
+class HolyWaterProjectile : public Goodie {
+public:
+    HolyWaterProjectile(double startX, double startY, int startDirection, StudentWorld* studentWorld) : Goodie(startX, startY, startDirection, studentWorld) {
+        m_maxTravDis = 160;
+        m_curTravDis = 0;
+    }
+    virtual ~HolyWaterProjectile() {}
+    virtual void doSomething();
+private:
+    int m_maxTravDis;
+    int m_curTravDis;
 };
 
 
@@ -263,33 +287,6 @@ public:
     
 private:
     int m_holyWaterUnits;
-};
-
-class BorderLine : public Goodie {
-public:
-    
-    BorderLine(int imageID, double startX, double startY, StudentWorld* studentWorld): Goodie(imageID, startX, startY, 0, 2.0, studentWorld) {
-    }
-    virtual ~BorderLine() {}
- // virtual bool isAffectedProjectiles() { return false; }
-    virtual void doSomething();
- //   virtual bool collisionAvoidanceWorthy() { return false; }
-private:
-};
-
-class HolyWaterProjectile : public Goodie {
-public:
-    HolyWaterProjectile(double startX, double startY, int startDirection, StudentWorld* studentWorld) : Goodie(startX, startY, startDirection, studentWorld) {
-        m_maxTravDis = 160;
-        m_curTravDis = 0;
-    }
-    virtual ~HolyWaterProjectile() {}
- //   virtual bool isAffectedProjectiles() { return false; }
-    virtual void doSomething();
- //   virtual bool collisionAvoidanceWorthy() { return false; }
-private:
-    int m_maxTravDis;
-    int m_curTravDis;
 };
 
 #endif // ACTOR_H_

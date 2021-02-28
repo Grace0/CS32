@@ -14,7 +14,7 @@ bool Actor::doOverlap(Actor* otherActor) {
 }
 
 bool Actor::useMoveAlg() {
-    double vert_speed = m_vertSpeed - getWorld()->getGhostRacer()->getVertSpeed(); //temporary variable; shouldn't be changing m_vertSpeed itself each loop because that would make the speed keep changing
+    double vert_speed = m_vertSpeed - getWorld()->getGhostRacer()->getVertSpeed();
     double new_y = getY() + vert_speed;
     double new_x = getX() + m_horizSpeed;
     moveTo(new_x, new_y);
@@ -35,9 +35,6 @@ bool Actor::isWithinBounds(double x, double y) {
 
 int Actor::getLaneNum() {
     double x = getX();
-   
-    //        m_actorVec.push_back(new BorderLine(IID_WHITE_BORDER_LINE, LEFT_EDGE + ROAD_WIDTH/3, m * 4*SPRITE_HEIGHT, this));
-   // m_actorVec.push_back(new BorderLine(IID_WHITE_BORDER_LINE, RIGHT_EDGE - ROAD_WIDTH/3, m * 4*SPRITE_HEIGHT, this));
     
     if (x < ROAD_CENTER - ROAD_WIDTH / 2 + ROAD_WIDTH/3) { //leftmost lane
         return 0;
@@ -74,10 +71,6 @@ void OilSlick::handleOverlap() {
 }
 
 //Healing Goodie class implementations
-void HealingGoodie::receiveDamage(int damage) {
-    setToDead();
-}
-
 void HealingGoodie::handleOverlap() {
     getWorld()->getGhostRacer()->addHealth(10);
     setToDead();
@@ -86,10 +79,6 @@ void HealingGoodie::handleOverlap() {
 }
 
 //Holy Water Goodie class implementations
-void HolyWaterGoodie::receiveDamage(int damage) {
-    setToDead();
-}
-
 void HolyWaterGoodie::handleOverlap() {
     getWorld()->getGhostRacer()->addWater(10);
     setToDead();
@@ -107,9 +96,36 @@ void SoulGoodie::handleOverlap() {
 
 void SoulGoodie::doSomething() {
    
-    Goodie::doSomething(); ///MORE OF THESE!
+    Goodie::doSomething();
     
     setDirection(getDirection()+10);
+}
+
+//Borderline class implementations
+void BorderLine::doSomething() {
+   useMoveAlg();
+}
+
+//HolyWaterProjectile class implementations
+void HolyWaterProjectile::doSomething() {
+    if (!isAlive()) return;
+    
+    Actor* overlapped = getWorld()->getProjectileOverlap(this);
+    
+    if (overlapped != nullptr) {
+        overlapped->receiveDamage(1);
+        setToDead();
+        return;
+    } else {
+        moveForward(SPRITE_HEIGHT);
+        m_curTravDis += SPRITE_HEIGHT;
+    }
+    
+    if (!isWithinBounds(getX(), getY()) || m_curTravDis >= m_maxTravDis) {
+        setToDead();
+        return;
+    }
+    
 }
 
 //Pedestrian class implementations
@@ -372,31 +388,4 @@ void GhostRacer::addWater(int charge) {
 
 int GhostRacer::getSprays() {
     return m_holyWaterUnits;
-}
-
-//Borderline class implementations
-void BorderLine::doSomething() {
-   useMoveAlg();
-}
-
-//HolyWaterProjectile class implementations
-void HolyWaterProjectile::doSomething() {
-    if (!isAlive()) return;
-    
-    Actor* overlapped = getWorld()->getProjectileOverlap(this);
-    
-    if (overlapped != nullptr) {
-        overlapped->receiveDamage(1);
-        setToDead();
-        return;
-    } else {
-        moveForward(SPRITE_HEIGHT);
-        m_curTravDis += SPRITE_HEIGHT;
-    }
-    
-    if (!isWithinBounds(getX(), getY()) || m_curTravDis >= m_maxTravDis) {
-        setToDead();
-        return;
-    }
-    
 }

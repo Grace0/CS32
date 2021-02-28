@@ -128,9 +128,9 @@ void HolyWaterProjectile::doSomething() {
     
 }
 
+
 //Pedestrian class implementations
 void Pedestrian::selectMovementPlan() {
-    //zombieCabs and zombiePeds decrement first...?
     m_movementPlanDis--;
     if (m_movementPlanDis > 0) {
         return;
@@ -161,11 +161,11 @@ void Pedestrian::doSomething() {
         
     }
     
-    grunt();
+    grunt(); //Only zombie ped
     
     if (!useMoveAlg()) return;
     
-    if (adjustSpeed()) return;
+    if (adjustSpeed()) return; //only zombie cab
     
     selectMovementPlan();
 
@@ -272,13 +272,11 @@ bool ZombieCab::adjustSpeed() {
     if (closest == nullptr) return false; //did not adjust speed
     
         if ((getVertSpeed() > getWorld()->getGhostRacer()->getVertSpeed())) {
-         //   Actor* closest = getWorld()->closestInLane(getLaneNum(), getY());
             if ((closest->getY() > getY()) && (abs(closest->getY() - getY()) < 96)) {
                 setVertSpeed(getVertSpeed() - 0.5);
                 return true;
             }
         } else {
-          //  Actor* closest = getWorld()->closestInLane(getLaneNum(), getY());
             if ((closest->getY() < getY()) && (abs(closest->getY() - getY()) < 96)) {
                 setVertSpeed(getVertSpeed() + 0.5);
                 return true;

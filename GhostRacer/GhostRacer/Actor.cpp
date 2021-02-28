@@ -250,12 +250,15 @@ void GhostRacer::receiveDamage(int hitPoints) {
 int Actor::getLaneNum() {
     int x = getX();
    
+    //        m_actorVec.push_back(new BorderLine(IID_WHITE_BORDER_LINE, LEFT_EDGE + ROAD_WIDTH/3, m * 4*SPRITE_HEIGHT, this));
+   // m_actorVec.push_back(new BorderLine(IID_WHITE_BORDER_LINE, RIGHT_EDGE - ROAD_WIDTH/3, m * 4*SPRITE_HEIGHT, this));
+    
     if (x < ROAD_CENTER - ROAD_WIDTH / 2 + ROAD_WIDTH/3) { //leftmost lane
-        return 1;
+        return 0;
     } else if (x >= ROAD_CENTER + ROAD_WIDTH / 2 - ROAD_WIDTH/3) { //rightmost lane
         return 2;
     } else { //center lane
-        return 3;
+        return 1;
     }
 }
 

@@ -2,6 +2,7 @@
 #include "StudentWorld.h" //getWorld()->anything is used in function implementations
 #include <cmath>
 
+//Actor class implementations
 bool Actor::doOverlap(Actor* otherActor) {
     double delta_x = abs(getX() - otherActor->getX());
     double delta_y = abs(getY() - otherActor->getY());
@@ -12,6 +13,266 @@ bool Actor::doOverlap(Actor* otherActor) {
     return false;
 }
 
+bool Actor::useMoveAlg() {
+    double vert_speed = m_vertSpeed - getWorld()->getGhostRacer()->getVertSpeed(); //temporary variable; shouldn't be changing m_vertSpeed itself each loop because that would make the speed keep changing
+    double new_y = getY() + vert_speed;
+    double new_x = getX() + m_horizSpeed;
+    moveTo(new_x, new_y);
+    
+    return isWithinBounds(getX(), getY());
+
+}
+
+bool Actor::isWithinBounds(double x, double y) {
+    if (x < 0 || y < 0 || x > VIEW_WIDTH || y > VIEW_HEIGHT) {
+        m_isAlive = false;
+        return false;
+    } else {
+        return true;
+    }
+}
+
+
+int Actor::getLaneNum() {
+    double x = getX();
+   
+    //        m_actorVec.push_back(new BorderLine(IID_WHITE_BORDER_LINE, LEFT_EDGE + ROAD_WIDTH/3, m * 4*SPRITE_HEIGHT, this));
+   // m_actorVec.push_back(new BorderLine(IID_WHITE_BORDER_LINE, RIGHT_EDGE - ROAD_WIDTH/3, m * 4*SPRITE_HEIGHT, this));
+    
+    if (x < ROAD_CENTER - ROAD_WIDTH / 2 + ROAD_WIDTH/3) { //leftmost lane
+        return 0;
+    } else if (x >= ROAD_CENTER + ROAD_WIDTH / 2 - ROAD_WIDTH/3) { //rightmost lane
+        return 2;
+    } else { //center lane
+        return 1;
+    }
+}
+
+//Active class implementations
+int Active::getHealth() {
+    return m_hitPoints;
+}
+
+void Active::addHealth(int health) {
+    m_hitPoints += health;
+    if (m_hitPoints > 100) m_hitPoints = 100; //max
+}
+
+//Goodie class implementations
+void Goodie::doSomething() {
+    useMoveAlg();
+    
+    if (doOverlap(getWorld()->getGhostRacer())) {
+        handleOverlap();
+    }
+}
+
+//Oil Slick class implementations
+void OilSlick::handleOverlap() {
+    getWorld()->playSound(SOUND_OIL_SLICK);
+    getWorld()->getGhostRacer()->spin();
+}
+
+//Healing Goodie class implementations
+void HealingGoodie::receiveDamage(int damage) {
+    setToDead();
+}
+
+void HealingGoodie::handleOverlap() {
+    getWorld()->getGhostRacer()->addHealth(10);
+    setToDead();
+    getWorld()->playSound(SOUND_GOT_GOODIE);
+    getWorld()->increaseScore(250);
+}
+
+//Holy Water Goodie class implementations
+void HolyWaterGoodie::receiveDamage(int damage) {
+    setToDead();
+}
+
+void HolyWaterGoodie::handleOverlap() {
+    getWorld()->getGhostRacer()->addWater(10);
+    setToDead();
+    getWorld()->playSound(SOUND_GOT_GOODIE);
+    getWorld()->increaseScore(50);
+}
+
+//Soul Goodie class implementations
+void SoulGoodie::handleOverlap() {
+    getWorld()->incNumSaved();
+    setToDead();
+    getWorld()->playSound(SOUND_GOT_SOUL);
+    getWorld()->increaseScore(100);
+}
+
+void SoulGoodie::doSomething() {
+   
+    Goodie::doSomething(); ///MORE OF THESE!
+    
+    setDirection(getDirection()+10);
+}
+
+//Pedestrian class implementations
+void Pedestrian::selectMovementPlan() {
+    //zombieCabs and zombiePeds decrement first...?
+    m_movementPlanDis--;
+    if (m_movementPlanDis > 0) {
+        return;
+    } else {
+        
+        double new_horiz_speed = randInt(-3, 3);
+        while (new_horiz_speed == 0) {
+            new_horiz_speed = randInt(-3, 3);
+        }
+
+        setHorizSpeed(new_horiz_speed);
+        m_movementPlanDis = randInt(4, 32);
+        if (getHorizSpeed() < 0) {
+            setDirection(180);
+        } else {
+            setDirection(0);
+        }
+    }
+}
+
+void Pedestrian::doSomething() {
+    if (!isAlive()) return;
+    
+    if (doOverlap(getWorld()->getGhostRacer())) {
+        if (handleOverlap()) { //zombie ped or human ped's handleOverlaps return true
+            return;
+        }
+        
+    }
+    
+    grunt();
+    
+    if (!useMoveAlg()) return;
+    
+    if (adjustSpeed()) return;
+    
+    selectMovementPlan();
+
+}
+
+//HumanPed class implementations
+bool HumanPed::handleOverlap() {
+   getWorld()->decLives();
+   getWorld()->getGhostRacer()->setToDead();
+   return true;
+}
+void HumanPed::receiveDamage(int hitPoints) {
+    setHorizSpeed(getHorizSpeed() * -1);
+    if (getHorizSpeed() < 0) { //negative speed faces left
+        setDirection(180);
+    } else {
+        setDirection(0); //positive speed faces right
+    }
+    getWorld()->playSound(SOUND_PED_HURT);
+    
+}
+
+//ZombiePed class implementations
+void ZombiePed::grunt() {
+   if (((getX() - getWorld()->getGhostRacer()->getX()) <= 30) && (getY() > getWorld()->getGhostRacer()->getY())) {
+       setDirection(270);
+       if (getX() > getWorld()->getGhostRacer()->getX()) {
+           setHorizSpeed(-1);
+       } else if (getX() < getWorld()->getGhostRacer()->getX()) {
+           setHorizSpeed(1);
+       } else {
+           setHorizSpeed(0);
+       }
+   }
+}
+
+bool ZombiePed::handleOverlap() {
+    getWorld()->getGhostRacer()->receiveDamage(5);
+    receiveDamage(2);
+    return true;
+}
+
+void ZombiePed::receiveDamage(int hitPoints) {
+    addHealth(-hitPoints);
+   if (getHealth() <= 0) {
+       setToDead();
+       getWorld()->playSound(SOUND_PED_DIE);
+       if (!doOverlap(getWorld()->getGhostRacer()) && (randInt(0, 4) == 0)) {
+           getWorld()->addHealingGoodie(getX(), getY());
+       }
+       getWorld()->increaseScore(150);
+   } else {
+       getWorld()->playSound(SOUND_PED_HURT);
+   }
+}
+
+//ZombieCab class implementations
+void ZombieCab::receiveDamage(int hitPoints) {
+    addHealth(-hitPoints);
+    if (getHealth() <= 0) {
+        setToDead();
+        getWorld()->playSound(SOUND_VEHICLE_DIE);
+        if (randInt(0, 4) == 0) {
+            getWorld()->addOilSlick(getX(), getY());
+        }
+        getWorld()->increaseScore(200);
+        return;
+    } else {
+        getWorld()->playSound(SOUND_VEHICLE_HURT);
+    }
+}
+
+bool ZombieCab::handleOverlap() {
+    if (!m_hasOverlapped) {
+        getWorld()->playSound(SOUND_VEHICLE_CRASH);
+        getWorld()->getGhostRacer()->receiveDamage(20);
+
+        if (getX() <= getWorld()->getGhostRacer()->getX()) {
+            setHorizSpeed(-5);
+            setDirection(120 + randInt(0, 20-1));
+        } else {
+            setHorizSpeed(5);
+            setDirection(60 - randInt(0, 20-1));
+        }
+        m_hasOverlapped = true;
+    }
+    return false;
+}
+
+void ZombieCab::selectMovementPlan() {
+    if (getMovementPlan() > 0) {
+        setMovementPlan(getMovementPlan()-1);
+        return;
+    } else {
+        double added_speed = randInt(-2, 2);
+        setVertSpeed(getVertSpeed() + added_speed);
+        setMovementPlan(randInt(4, 32));
+    }
+}
+
+bool ZombieCab::adjustSpeed() {
+    //extension of ZombieCab only
+    Actor* closest = getWorld()->closestInLane(getLaneNum(), getY());
+    if (closest == nullptr) return false; //did not adjust speed
+    
+        if ((getVertSpeed() > getWorld()->getGhostRacer()->getVertSpeed())) {
+         //   Actor* closest = getWorld()->closestInLane(getLaneNum(), getY());
+            if ((closest->getY() > getY()) && (abs(closest->getY() - getY()) < 96)) {
+                setVertSpeed(getVertSpeed() - 0.5);
+                return true;
+            }
+        } else {
+          //  Actor* closest = getWorld()->closestInLane(getLaneNum(), getY());
+            if ((closest->getY() < getY()) && (abs(closest->getY() - getY()) < 96)) {
+                setVertSpeed(getVertSpeed() + 0.5);
+                return true;
+            }
+        }
+    
+    return false;
+}
+
+//GhostRacer class implementations
 void GhostRacer::doSomething() {
     if (!isAlive()) {
         return;
@@ -83,203 +344,12 @@ void GhostRacer::move() {
     moveTo(cur_x + delta_x, cur_y);
 }
 
-void BorderLine::doSomething() {
-   useMoveAlg();
-}
-
-bool Actor::useMoveAlg() {
-    double vert_speed = m_vertSpeed - getWorld()->getGhostRacer()->getVertSpeed(); //temporary variable; shouldn't be changing m_vertSpeed itself each loop because that would make the speed keep changing
-    double new_y = getY() + vert_speed;
-    double new_x = getX() + m_horizSpeed;
-    moveTo(new_x, new_y);
-    
-    return isWithinBounds(getX(), getY());
-
-}
-
-bool Actor::isWithinBounds(int x, int y) {
-    if (x < 0 || y < 0 || x > VIEW_WIDTH || y > VIEW_HEIGHT) {
-        m_isAlive = false;
-        return false;
-    } else {
-        return true;
-    }
-}
-
-void ZombiePed::grunt() {
-   if (((getX() - getWorld()->getGhostRacer()->getX()) <= 30) && (getY() > getWorld()->getGhostRacer()->getY())) {
-       setDirection(270);
-       if (getX() > getWorld()->getGhostRacer()->getX()) {
-           setHorizSpeed(-1);
-       } else if (getX() < getWorld()->getGhostRacer()->getX()) {
-           setHorizSpeed(1);
-       } else {
-           setHorizSpeed(0);
-       }
-   }
-}
-
-void Pedestrian::selectMovementPlan() {
-    //zombieCabs and zombiePeds decrement first...?
-    m_movementPlanDis--;
-    if (m_movementPlanDis > 0) {
-        return;
-    } else {
-        
-        double new_horiz_speed = randInt(-3, 3);
-        while (new_horiz_speed == 0) {
-            new_horiz_speed = randInt(-3, 3);
-        }
-
-        setHorizSpeed(new_horiz_speed);
-        m_movementPlanDis = randInt(4, 32);
-        if (getHorizSpeed() < 0) {
-            setDirection(180);
-        } else {
-            setDirection(0);
-        }
-    }
-}
-
-void Pedestrian::doSomething() {
-    if (!isAlive()) return;
-    
-    if (doOverlap(getWorld()->getGhostRacer())) {
-        if (handleOverlap()) { //zombie ped or human ped's handleOverlaps return true
-            return;
-        }
-        
-    }
-    
-    grunt();
-    
-    if (!useMoveAlg()) return;
-    
-    adjustSpeed();
-    
-    selectMovementPlan();
-
-}
-
-bool HumanPed::handleOverlap() {
-   getWorld()->decLives();
-   getWorld()->getGhostRacer()->setToDead();
-   return true;
-}
-
-bool ZombiePed::handleOverlap() {
-    getWorld()->getGhostRacer()->receiveDamage(5);
-    receiveDamage(2);
-    return true;
-}
-
-void ZombieCab::receiveDamage(int hitPoints) {
-    addHealth(-hitPoints);
-    if (getHealth() <= 0) {
-        setToDead();
-        getWorld()->playSound(SOUND_VEHICLE_DIE);
-        if (randInt(0, 4) == 0) {
-            getWorld()->addOilSlick(getX(), getY());
-        }
-        getWorld()->increaseScore(200);
-        return;
-    } else {
-        getWorld()->playSound(SOUND_VEHICLE_HURT);
-    }
-}
-
-void ZombiePed::receiveDamage(int hitPoints) {
-    addHealth(-hitPoints);
-   if (getHealth() <= 0) {
-       setToDead();
-       getWorld()->playSound(SOUND_PED_DIE);
-       if (!doOverlap(getWorld()->getGhostRacer()) && (randInt(0, 4) == 0)) {
-           getWorld()->addHealingGoodie(getX(), getY());
-       }
-       getWorld()->increaseScore(150);
-   } else {
-       getWorld()->playSound(SOUND_PED_HURT);
-   }
-}
-
-bool ZombieCab::handleOverlap() {
-    if (!m_hasOverlapped) {
-        getWorld()->playSound(SOUND_VEHICLE_CRASH);
-        getWorld()->getGhostRacer()->receiveDamage(20);
-
-        if (getX() <= getWorld()->getGhostRacer()->getX()) {
-            setHorizSpeed(-5);
-            setDirection(120 + randInt(0, 20-1));
-        } else {
-            setHorizSpeed(5);
-            setDirection(60 - randInt(0, 20-1));
-        }
-        m_hasOverlapped = true;
-    }
-    return false;
-}
-
-void ZombieCab::selectMovementPlan() {
-    if (getMovementPlan() > 0) {
-        setMovementPlan(getMovementPlan()-1);
-        return;
-    } else {
-        double added_speed = randInt(-2, 2);
-        setVertSpeed(getVertSpeed() + added_speed);
-        setMovementPlan(randInt(4, 32));
-    }
-}
-
-void ZombieCab::adjustSpeed() {
-    //extension of ZombieCab only
-        if ((getVertSpeed() > getWorld()->getGhostRacer()->getVertSpeed())) {
-           // getWorld()->closestInLane(getLaneNum(), getY(), true);
-        } else {
-           // getWorld()->closestInLane(getLaneNum(), getY(), false);
-        }
-}
-
 void GhostRacer::receiveDamage(int hitPoints) {
    addHealth(-hitPoints);
    if (getHealth() <= 0) {
        setToDead();
        getWorld()->playSound(SOUND_PLAYER_DIE);
    }
-}
-
-int Actor::getLaneNum() {
-    int x = getX();
-   
-    //        m_actorVec.push_back(new BorderLine(IID_WHITE_BORDER_LINE, LEFT_EDGE + ROAD_WIDTH/3, m * 4*SPRITE_HEIGHT, this));
-   // m_actorVec.push_back(new BorderLine(IID_WHITE_BORDER_LINE, RIGHT_EDGE - ROAD_WIDTH/3, m * 4*SPRITE_HEIGHT, this));
-    
-    if (x < ROAD_CENTER - ROAD_WIDTH / 2 + ROAD_WIDTH/3) { //leftmost lane
-        return 0;
-    } else if (x >= ROAD_CENTER + ROAD_WIDTH / 2 - ROAD_WIDTH/3) { //rightmost lane
-        return 2;
-    } else { //center lane
-        return 1;
-    }
-}
-
-void Goodie::doSomething() {
-    useMoveAlg();
-    
-    if (doOverlap(getWorld()->getGhostRacer())) {
-        handleOverlap();
-    }
-}
-
-void OilSlick::handleOverlap() {
-    getWorld()->playSound(SOUND_OIL_SLICK);
-    getWorld()->getGhostRacer()->spin();
-}
-
-void HolyWaterGoodie::handleOverlap() {
-    getWorld()->getGhostRacer()->addWater(10);
-    setToDead();
-    getWorld()->playSound(SOUND_GOT_GOODIE);
-    getWorld()->increaseScore(50);
 }
 
 void GhostRacer::spin() {
@@ -300,20 +370,16 @@ void GhostRacer::addWater(int charge) {
     m_holyWaterUnits += charge;
 }
 
-void SoulGoodie::handleOverlap() {
-    getWorld()->incNumSaved();
-    setToDead();
-    getWorld()->playSound(SOUND_GOT_SOUL);
-    getWorld()->increaseScore(100);
+int GhostRacer::getSprays() {
+    return m_holyWaterUnits;
 }
 
-void SoulGoodie::doSomething() {
-   
-    Goodie::doSomething(); ///MORE OF THESE!
-    
-    setDirection(getDirection()+10);
+//Borderline class implementations
+void BorderLine::doSomething() {
+   useMoveAlg();
 }
 
+//HolyWaterProjectile class implementations
 void HolyWaterProjectile::doSomething() {
     if (!isAlive()) return;
     
@@ -333,43 +399,4 @@ void HolyWaterProjectile::doSomething() {
         return;
     }
     
-}
- 
-int Active::getHealth() {
-    return m_hitPoints;
-}
-
-int GhostRacer::getSprays() {
-    return m_holyWaterUnits;
-}
-
-void HealingGoodie::handleOverlap() {
-    getWorld()->getGhostRacer()->addHealth(10);
-    setToDead();
-    getWorld()->playSound(SOUND_GOT_GOODIE);
-    getWorld()->increaseScore(250);
-}
-
-void Active::addHealth(int health) {
-    m_hitPoints += health;
-    if (m_hitPoints > 100) m_hitPoints = 100; //max
-}
-
-void HumanPed::receiveDamage(int hitPoints) {
-    setHorizSpeed(getHorizSpeed() * -1);
-    if (getHorizSpeed() < 0) { //negative speed faces left
-        setDirection(180);
-    } else {
-        setDirection(0); //positive speed faces right
-    }
-    getWorld()->playSound(SOUND_PED_HURT);
-    
-}
-
-void HealingGoodie::receiveDamage(int damage) {
-    setToDead();
-}
-
-void HolyWaterGoodie::receiveDamage(int damage) {
-    setToDead();
 }

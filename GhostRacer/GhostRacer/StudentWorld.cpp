@@ -150,7 +150,7 @@ void StudentWorld::addNewActors() {
     
     //Zombie Cab
     int chanceVehicle = max(100 - level * 10, 20);
-    if (randInt(0, chanceVehicle-1) == 0) {     
+    if (randInt(0, chanceVehicle-1) == 0) {
         addZombieCab();
     }
     
@@ -196,6 +196,7 @@ void StudentWorld::updateDisplayText() {
 }
 
 //for creating zombie cabs
+//closest to the bottom / closest to the top
 Actor* StudentWorld::closestInLane(int laneNum, double targetY) {
     
     Actor* potentialClosest = nullptr;
@@ -220,8 +221,31 @@ Actor* StudentWorld::closestInLane(int laneNum, double targetY) {
     
     return potentialClosest; //no other actors in the lane
 }
-
-//void StudentWorld::addPoints(int numPoints) { m_playerPoints += numPoints; }
+//
+//Actor* StudentWorld::frontClosestInLane(int laneNum, double targetY) {
+//
+//    Actor* potentialClosest = nullptr;
+//
+//    for (int i = 0; i < m_actorVec.size(); i++) { //for all the Actors
+//        if (m_actorVec[i]->collisionAvoidanceWorthy() && m_actorVec[i]->getLaneNum() == laneNum && m_actorVec[i]->getY() > m_ghostRacer->getY()) { //if it's in the given lane
+//            if (potentialClosest == nullptr) {
+//                potentialClosest = m_actorVec[i]; //first time it's being set
+//            } else if (abs(m_actorVec[i]->getY() - m_ghostRacer->getY()) < abs(potentialClosest->getY() - m_ghostRacer->getY())) {
+//                potentialClosest = m_actorVec[i];
+//            }
+//        }
+//    }
+//
+//    if (m_ghostRacer->getLaneNum() == laneNum) {
+//        if (potentialClosest == nullptr) {
+//            potentialClosest = m_ghostRacer; //first time it's being set
+//        } else if (abs(m_ghostRacer->getY() - targetY) < abs(potentialClosest->getY() - targetY)) {
+//            potentialClosest = m_ghostRacer;
+//        }
+//    }
+//
+//    return potentialClosest; //no other actors in the lane
+//}
 
 GhostRacer* StudentWorld::getGhostRacer() { return m_ghostRacer; }
 

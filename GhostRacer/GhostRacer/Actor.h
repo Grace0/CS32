@@ -16,34 +16,34 @@ public:
         m_horizSpeed = startHorizSpeed;
     }
     
-    //Main functions
+
+    virtual bool collisionAvoidanceWorthy() { return true; }
+    
+    virtual ~Actor() {} //virtual so that subclass' destructors get called; note that subclasses get destructed first
+    
+    void setToDead() { m_isAlive = false; }
+    double getVertSpeed() { return m_vertSpeed; }
+    virtual void receiveDamage(int damage) {}
+    
     virtual void doSomething() = 0;
-    bool useMoveAlg();
-    bool isWithinBounds(int x, int y);
-    virtual void receiveDamage(int damage) {} //? for HWP
-    
-    bool doOverlap(Actor* otherActor);
+    bool isAlive() { return m_isAlive; }
     int getLaneNum();
-    //virtual bool handleOverlap() = 0; ??
+    virtual bool isAffectedProjectiles() = 0;
+    bool doOverlap(Actor* otherActor);
     
-    //Getters/Setters
+protected:
+    
+    bool useMoveAlg();
+    bool isWithinBounds(double x, double y);
+    
     StudentWorld* getWorld() { return m_studentWorld; }
     
-    bool isAlive() { return m_isAlive; }
-    void setToDead() { m_isAlive = false; }
-    
-    virtual double getVertSpeed() { return m_vertSpeed; }
     virtual void setVertSpeed(double vertSpeed) { m_vertSpeed = vertSpeed; }
     
     virtual double getHorizSpeed() { return m_horizSpeed; }
     virtual void setHorizSpeed(double horizSpeed) { m_horizSpeed = horizSpeed; }
     
-    //Properties
-    virtual bool isAffectedProjectiles() = 0;
-    virtual bool collisionAvoidanceWorthy() { return true; }
     
-    virtual ~Actor() {} //virtual so that subclass' destructors get called; note that subclasses get destructed first
-
 private:
     StudentWorld* m_studentWorld;
     bool m_isAlive;
@@ -58,24 +58,27 @@ public:
        m_hitPoints = 100;
     }
     
-    //for humped, zomped, zomcab
-    Active(int imageID, int startX, int startY, int startDirection, int size, double startVertSpeed, double startHorizSpeed, int startHitPoints, StudentWorld* studentWorld) : Actor(imageID, startX, startY, startDirection, size, 0, startVertSpeed, startHorizSpeed, studentWorld) {
+    //for HumPed, ZomPed, ZomCab
+    Active(int imageID, double startX, double startY, int startDirection, int size, double startVertSpeed, double startHorizSpeed, int startHitPoints, StudentWorld* studentWorld) : Actor(imageID, startX, startY, startDirection, size, 0, startVertSpeed, startHorizSpeed, studentWorld) {
         m_hitPoints = startHitPoints;
     }
     
     //Main functions
     virtual void doSomething() = 0;
-    virtual void receiveDamage(int hitPoints) = 0; //GR is never damaged by HWP
+    virtual void receiveDamage(int hitPoints) = 0;
     
     //Setters/getters
-    void addHealth(int health); //insert +ive num for GR, -ive num for others
+    void addHealth(int health);
     int getHealth();
     
     //Properties
-    virtual bool isAffectedProjectiles() { return true; } //zombiecab, zombieped, humanped - not GR
-    bool collisionAvoidanceWorthy() { return true; } //all
+    virtual bool isAffectedProjectiles() { return true; }
+    bool collisionAvoidanceWorthy() { return true; }
     
     virtual ~Active() {}
+    
+protected:
+    
 private:
     int m_hitPoints;
 };
@@ -86,19 +89,22 @@ public:
         
     }
     
-    //for HWP
+    //for HolyWaterProjectile
     Goodie(double startX, double startY, int startDirection, StudentWorld* studentWorld) : Actor(IID_HOLY_WATER_PROJECTILE, startX, startY, startDirection, 1.0, 1, 0.0, 0.0, studentWorld) {
         
     }
+    
     //Main functions
     virtual void doSomething();
-    virtual void handleOverlap() {}; //handle overlap with GR
+    virtual void handleOverlap() {};
     
     //Properties
     virtual bool isAffectedProjectiles() { return false; }
     virtual bool collisionAvoidanceWorthy() { return false; }
     
     virtual ~Goodie() {}
+    
+protected:
     
 private:
 };
@@ -108,10 +114,9 @@ public:
     OilSlick(double startX, double startY, StudentWorld* studentWorld) : Goodie(IID_OIL_SLICK, startX, startY, 0, randInt(2,5), studentWorld) {
     }
     virtual ~OilSlick() {}
- //   virtual bool isAffectedProjectiles() { return false; }
     virtual void handleOverlap();
     
- //   virtual bool collisionAvoidanceWorthy() { return false; }
+protected:
     
 private:
 };
@@ -124,8 +129,9 @@ public:
     virtual void handleOverlap();
     
     virtual bool isAffectedProjectiles() { return true; }
-    void receiveDamage(int damage); //only damaged by HWP
-   // virtual bool collisionAvoidanceWorthy() { return false; }
+    void receiveDamage(int damage); 
+    
+protected:
     
 private:
 };
@@ -174,7 +180,7 @@ public:
     virtual void receiveDamage(int hitPoints) = 0;
     virtual void selectMovementPlan(); //we'll have a basic one used for the peds; zombiecab will overwrite to have its own
     virtual void grunt() {} //optional - ZombiePed only
-    virtual void adjustSpeed() {} //optional - ZombieCab only
+    virtual bool adjustSpeed() { return false; } //optional - ZombieCab only
  
   //  int getHitPoints() { return m_hitPoints; }
  //   void setHitPoints(double hitPoints) { m_hitPoints = hitPoints; }
@@ -226,10 +232,10 @@ public://int imageID, double startX, double startY, int startDirection, double s
         m_hasOverlapped = false;
     }
     
-    //virtual void doSomething(); uses pedestrian's doSomething
+   // virtual void doSomething(); //doesn't quite just use pedestrian's doSomething
     virtual bool handleOverlap();
     virtual void selectMovementPlan();
-    virtual void adjustSpeed();
+    virtual bool adjustSpeed();
     
     virtual void receiveDamage(int hitPoints);
     virtual ~ZombieCab() {}

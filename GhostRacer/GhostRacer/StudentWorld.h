@@ -14,9 +14,6 @@ class StudentWorld : public GameWorld
 public:
     StudentWorld(std::string assetPath);
     virtual ~StudentWorld();
-    virtual int init();
-    virtual int move();
-    virtual void cleanUp();
     
     GhostRacer* getGhostRacer();
     Actor* closestInLane(int laneNum, double y);
@@ -24,10 +21,14 @@ public:
     void addHealingGoodie(double startX, double startY);
     void addOilSlick(double startX, double startY);
     void addHolyWaterSpray(double startX, double startY, int startDirection);
-    
     void incNumSaved();
 
 private:
+    
+    virtual int init();
+    virtual int move();
+    virtual void cleanUp();
+    
     GhostRacer* m_ghostRacer;
     std::vector<Actor*> m_actorVec;
     

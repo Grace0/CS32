@@ -9,10 +9,9 @@ const int RIGHT_EDGE = ROAD_CENTER+ROAD_WIDTH/2;
 
 GameWorld* createStudentWorld(string assetPath) //called in main.cpp
 {
-	return new StudentWorld(assetPath); //returning a pointer to an object of itself?
+	return new StudentWorld(assetPath);
 }
 
-// Students:  Add code to this file, StudentWorld.h, Actor.h, and Actor.cpp
 
 StudentWorld::StudentWorld(string assetPath)
 : GameWorld(assetPath)
@@ -25,7 +24,7 @@ StudentWorld::StudentWorld(string assetPath)
 
 int StudentWorld::init()
 {
-    //yellow border lines //StudentWorld can't have a data member that's a pointer to a single border line object
+    //yellow border lines
     for (int n = 0; n < VIEW_HEIGHT/SPRITE_HEIGHT; n++) {
         m_actorVec.push_back(new BorderLine(IID_YELLOW_BORDER_LINE, LEFT_EDGE, n * SPRITE_HEIGHT, this));
         m_actorVec.push_back(new BorderLine(IID_YELLOW_BORDER_LINE, RIGHT_EDGE, n * SPRITE_HEIGHT, this));
@@ -191,7 +190,7 @@ void StudentWorld::addZombieCab() {
 }
 
 void StudentWorld::updateDisplayText() {
-    string text = "Score: " + to_string(getScore()) + "  Lvl: " + to_string(getLevel()) + "  Souls2Save: " + to_string(getSouls2Save()) + "  Lives: " + to_string(getLives()) + "  Health: " + to_string(getHealth()) + "  Sprays: " + to_string(getSprays()) + "  Bonus: " + to_string(getBonus()); //stringstream?
+    string text = "Score: " + to_string(getScore()) + "  Lvl: " + to_string(getLevel()) + "  Souls2Save: " + to_string(getSouls2Save()) + "  Lives: " + to_string(getLives()) + "  Health: " + to_string(getHealth()) + "  Sprays: " + to_string(getSprays()) + "  Bonus: " + to_string(getBonus());
     setGameStatText(text);
 }
 
@@ -221,31 +220,6 @@ Actor* StudentWorld::closestInLane(int laneNum, double targetY) {
     
     return potentialClosest; //no other actors in the lane
 }
-//
-//Actor* StudentWorld::frontClosestInLane(int laneNum, double targetY) {
-//
-//    Actor* potentialClosest = nullptr;
-//
-//    for (int i = 0; i < m_actorVec.size(); i++) { //for all the Actors
-//        if (m_actorVec[i]->collisionAvoidanceWorthy() && m_actorVec[i]->getLaneNum() == laneNum && m_actorVec[i]->getY() > m_ghostRacer->getY()) { //if it's in the given lane
-//            if (potentialClosest == nullptr) {
-//                potentialClosest = m_actorVec[i]; //first time it's being set
-//            } else if (abs(m_actorVec[i]->getY() - m_ghostRacer->getY()) < abs(potentialClosest->getY() - m_ghostRacer->getY())) {
-//                potentialClosest = m_actorVec[i];
-//            }
-//        }
-//    }
-//
-//    if (m_ghostRacer->getLaneNum() == laneNum) {
-//        if (potentialClosest == nullptr) {
-//            potentialClosest = m_ghostRacer; //first time it's being set
-//        } else if (abs(m_ghostRacer->getY() - targetY) < abs(potentialClosest->getY() - targetY)) {
-//            potentialClosest = m_ghostRacer;
-//        }
-//    }
-//
-//    return potentialClosest; //no other actors in the lane
-//}
 
 GhostRacer* StudentWorld::getGhostRacer() { return m_ghostRacer; }
 

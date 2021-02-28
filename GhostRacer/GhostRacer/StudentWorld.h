@@ -20,7 +20,6 @@ public:
     
     GhostRacer* getGhostRacer();
     Actor* closestInLane(int laneNum, double y);
-   // Actor* closestInLane(int laneNum, bool inFront);
     Actor* getProjectileOverlap(HolyWaterProjectile* proj);
     void addHealingGoodie(double startX, double startY);
     void addOilSlick(double startX, double startY);

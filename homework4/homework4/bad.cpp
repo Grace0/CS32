@@ -1,4 +1,4 @@
-/*
+
   // Remove the movies in li with a rating below 55 and destroy them.
   // It is acceptable if the order of the remaining movies is not
   // the same as in the original list.
@@ -13,4 +13,4 @@ void removeBad(list<Movie*>& li) //li is passed as a reference to a list of poin
         }
     }
 }
-*/
+

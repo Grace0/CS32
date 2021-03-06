@@ -1,6 +1,8 @@
 #include "StudentSpellCheck.h"
 #include <string>
 #include <vector>
+#include <iostream>
+#include <fstream>
 
 SpellCheck* createSpellCheck()
 {
@@ -12,7 +14,19 @@ StudentSpellCheck::~StudentSpellCheck() {
 }
 
 bool StudentSpellCheck::load(std::string dictionaryFile) {
-	return false; // TODO
+    std::ifstream infile(dictionaryFile);
+    if (!infile) {
+        return false;
+    }
+    
+    std::string line;
+    while (getline(infile, line)) {
+
+    }
+    
+
+    return true;  // TODO
+    
 }
 
 bool StudentSpellCheck::spellCheck(std::string word, int max_suggestions, std::vector<std::string>& suggestions) {

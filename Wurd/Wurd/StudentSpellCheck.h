@@ -18,4 +18,27 @@ private:
 
 };
 
+class Trie {
+public:
+    
+    struct Node {
+        char letter;
+        std::vector<Node*> branches;
+        
+        Node() {}
+        Node(char l) { letter = l; }
+    };
+    
+    Trie() {
+        root = new Node;
+    }
+    ~Trie();
+    
+    bool addNode(char letter);
+    
+private:
+    
+    Node* root;
+};
+
 #endif  // STUDENTSPELLCHECK_H_

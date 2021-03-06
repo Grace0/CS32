@@ -125,7 +125,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 1130;
-				ORGANIZATIONNAME = "David Smallberg";
+				ORGANIZATIONNAME = "CS 32";
 				TargetAttributes = {
 					4B7935F425F0E66E004610F3 = {
 						CreatedOnToolsVersion = 11.3.1;
@@ -166,7 +166,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "WDIR=$SOURCE_ROOT/$PROJECT_NAME\ncp $TARGET_BUILD_DIR/$PRODUCT_NAME $WDIR\ncd $WDIR\nosascript <<END-END-END\ntell application \"Terminal\"\n    set T to do script \"WURDDIR='$WDIR' '$WDIR/$PRODUCT_NAME'; exit\"\n    set W to the id of window 1 where its tab 1 = T\n    repeat\n        delay 2\n        if not busy of T then exit repeat\n    end repeat\n    close window id W\nend tell\nEND-END-END\n\n";
+			shellScript = "WDIR=\"$SOURCE_ROOT/$PROJECT_NAME\"\ncp \"$TARGET_BUILD_DIR/$PRODUCT_NAME\" \"$WDIR\"\n\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -298,6 +298,7 @@
 		4B7935FD25F0E66E004610F3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				"OTHER_LDFLAGS[arch=*]" = "-lncurses";
@@ -308,6 +309,7 @@
 		4B7935FE25F0E66E004610F3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				"OTHER_LDFLAGS[arch=*]" = "-lncurses";

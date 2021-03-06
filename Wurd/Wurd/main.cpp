@@ -4,35 +4,54 @@
 #include <string>
 #include <cstdlib>
 #include <cstring>
-#include <unistd.h>
 
 // Do not change anything in this file other than these initializer values
-const std::string DICTIONARYPATH = "dictionary.txt";
+const char* DICTIONARYPATH = "dictionary.txt";
 const int FOREGROUND_COLOR = COLOR_WHITE;
 const int BACKGROUND_COLOR = COLOR_BLACK;
 const int HIGHLIGHT_COLOR  = COLOR_RED;
 // Choices are COLOR_x, where x is WHITE, BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN
 
+bool neededToRelaunchAndDid() {
+    char* needToRelaunch = getenv("NEEDTORELAUNCH");
+    if (needToRelaunch == nullptr  ||  strcmp(needToRelaunch, "yes") != 0) {
+        return false;
+    }
+    int status = std::system("/usr/bin/osascript << END_END_END\n"
+        "tell application \"Terminal\"\n"
+        "  set T to do script \""
+                "unset NEEDTORELAUNCH; "
+                "cd \\\"$WURDDIR\\\"  ||  { echo Error: Can not change to directory \\\"$WURDDIR\\\"; exit 1; }; "
+                "./Wurd; exit\"\n"
+        "  set W to the id of window 1 where its tab 1 = T\n"
+        "  repeat until T is not busy\n"
+        "    delay 2\n"
+        "  end repeat\n"
+        "  delay 1\n"  // change this to a larger number of seconds if you want to keep the window open longer
+        "  close window id W\n"
+        "end tell\nEND_END_END\n");
+    std::cout << "Terminal window ended with exit code: " << status << std::endl;
+    return true;
+}
+
 int main(int argc, char* argv[]) {
-	char* term = getenv("TERM");
-	if (term == nullptr  ||  strcmp(term, "xterm-256color") != 0)
-		return 0;
-	char* dir = getenv("WURDDIR");
-	if (dir != nullptr)
-	{
-		if (chdir(dir) == -1)
-			std::cout << "Error: Can not change to directory " << dir << std::endl;
-	}
+    if (neededToRelaunchAndDid())
+        return 0;
+    char* term = std::getenv("TERM");
+    if (term == nullptr  ||  std::strncmp(term, "xterm", 5) != 0) {
+        std::cout << "TERM variable does not start with 'xterm'" << std::endl;
+        return 1;
+    }
 
-	TextIO ti(FOREGROUND_COLOR, BACKGROUND_COLOR, HIGHLIGHT_COLOR);
+    TextIO ti(FOREGROUND_COLOR, BACKGROUND_COLOR, HIGHLIGHT_COLOR);
 
-	EditorGui editor(LINES, COLS);
+    EditorGui editor(LINES, COLS);
 
-	if (!editor.loadDictionary(DICTIONARYPATH)) {
-		editor.writeStatus("Error: Can not load dictionary " + DICTIONARYPATH);
-	}
-	if (argc == 2) {
-		editor.loadFileToEdit(argv[1]);
-	}
-	editor.run();
+    if (!editor.loadDictionary(DICTIONARYPATH)) {
+        editor.writeStatus(std::string("Error: Can not load dictionary ") + DICTIONARYPATH);
+    }
+    if (argc == 2) {
+        editor.loadFileToEdit(argv[1]);
+    }
+    editor.run();
 }

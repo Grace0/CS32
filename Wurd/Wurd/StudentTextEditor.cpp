@@ -55,7 +55,7 @@ void StudentTextEditor::getPos(int& row, int& col) const {
 }
 
 int StudentTextEditor::getLines(int startRow, int numRows, std::vector<std::string>& lines) const {
-	// TODO
+	return -1; // TODO
 }
 
 void StudentTextEditor::undo() {

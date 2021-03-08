@@ -1,7 +1,7 @@
 #include "StudentTextEditor.h"
 #include "Undo.h"
-#include <vector>
 #include <string>
+#include <vector>
 #include <fstream>
 
 TextEditor* createTextEditor(Undo* un)
@@ -11,9 +11,9 @@ TextEditor* createTextEditor(Undo* un)
 
 StudentTextEditor::StudentTextEditor(Undo* undo)
  : TextEditor(undo) {
-     m_row = 0;
-     m_col = 0;
-}
+     cursorPos.row = 0;
+     cursorPos.col = 0;
+ }
 
 StudentTextEditor::~StudentTextEditor()
 {
@@ -21,7 +21,6 @@ StudentTextEditor::~StudentTextEditor()
 }
 
 bool StudentTextEditor::load(std::string file) {
-    
     std::ifstream infile(file);
     if (!infile) {
         return false;
@@ -33,9 +32,9 @@ bool StudentTextEditor::load(std::string file) {
         contents.push_back(line);
     }
     
-    m_row = contents.size();
-    m_col = contents.back().size();
-	return true;  // TODO
+    cursorPos.row = contents.size();
+    cursorPos.col = contents.back().size();
+    return true;  // TODO
 }
 
 bool StudentTextEditor::save(std::string file) {
@@ -67,11 +66,11 @@ void StudentTextEditor::enter() {
 }
 
 void StudentTextEditor::getPos(int& row, int& col) const {
-	// TODO
+	row = 0; col = 0; // TODO
 }
 
 int StudentTextEditor::getLines(int startRow, int numRows, std::vector<std::string>& lines) const {
-	return -1; // TODO
+	return 0; // TODO
 }
 
 void StudentTextEditor::undo() {

@@ -103,7 +103,12 @@ public:
 	// line: The status line to display.
 	void writeStatus(const std::string& line) {
 		TextIO::move(rows_, 0);
-		TextIO::print(line + std::string(cols_ - line.length(), ' '));
+		if (line.length() <= cols_) {
+			TextIO::print(line);
+			TextIO::print(std::string(cols_ - line.length(), ' '));
+		}
+		else
+			TextIO::print(line.substr(0, cols_));
 	}
 
 private:
@@ -114,6 +119,8 @@ private:
 	// Returns true if the user wants to keep editing, and false if they want to quit editing (Ctrl-X).
 	bool processKey(const int ch) {
 		switch (ch) {
+		case -1:
+			return true;
 		case KEY_UP:
 			te_->move(TextEditor::Dir::UP);
 			break;

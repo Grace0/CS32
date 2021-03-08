@@ -26,11 +26,14 @@ public:
 
 private:
     
-    int m_row;
-    int m_col;
+    struct CursorPos {
+        int row;
+        int col;
+    };
+    
+    CursorPos cursorPos;
     
     std::list<std::string> contents;
-    
 
 };
 

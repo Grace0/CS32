@@ -25,7 +25,6 @@ bool StudentSpellCheck::load(std::string dictionaryFile) {
     }
 
     return true;  // TODO
-    
 }
 
 bool StudentSpellCheck::spellCheck(std::string word, int max_suggestions, std::vector<std::string>& suggestions) {

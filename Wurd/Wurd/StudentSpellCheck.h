@@ -5,7 +5,9 @@
 
 #include <string>
 #include <vector>
+#include <set>
 
+//class Trie;
 class StudentSpellCheck : public SpellCheck {
 public:
     StudentSpellCheck() { }
@@ -15,7 +17,8 @@ public:
 	void spellCheckLine(const std::string& line, std::vector<Position>& problems);
 
 private:
-
+    //Trie dict;
+    std::set<std::string> dict;
 };
 
 class Trie {

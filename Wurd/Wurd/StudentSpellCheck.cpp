@@ -21,9 +21,8 @@ bool StudentSpellCheck::load(std::string dictionaryFile) {
     
     std::string line;
     while (getline(infile, line)) {
-
+        dict.insert(line);
     }
-    
 
     return true;  // TODO
     

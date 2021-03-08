@@ -14,15 +14,15 @@ StudentSpellCheck::~StudentSpellCheck() {
 }
 
 bool StudentSpellCheck::load(std::string dictionaryFile) {
-    std::ifstream infile(dictionaryFile);
-    if (!infile) {
-        return false;
-    }
-    
-    std::string line;
-    while (getline(infile, line)) {
-        dict.insert(line);
-    }
+//    std::ifstream infile(dictionaryFile);
+//    if (!infile) {
+//        return false;
+//    }
+//    
+//    std::string line;
+//    while (getline(infile, line)) {
+//        dict.insert(line);
+//    }
 
     return true;  // TODO
 }

@@ -21,7 +21,7 @@ private:
     
 };
 
-class Trie {
+class Trie { //recursion
 public:
     
     struct Node {

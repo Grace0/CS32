@@ -17,7 +17,7 @@ StudentTextEditor::StudentTextEditor(Undo* undo)
 
 StudentTextEditor::~StudentTextEditor()
 {
-	// TODO
+	
 }
 
 bool StudentTextEditor::load(std::string file) {
@@ -29,11 +29,11 @@ bool StudentTextEditor::load(std::string file) {
     std::string line;
     while (getline(infile, line)) {
         if (line.back() == '\r') line.pop_back();
-        contents.push_back(line);
+        //contents.push_back(line);
     }
     
-    cursorPos.row = contents.size();
-    cursorPos.col = contents.back().size();
+  //  cursorPos.row = contents.size()-1;
+   // cursorPos.col = contents.back().size()-1;
     return true;  // TODO
 }
 
@@ -42,7 +42,9 @@ bool StudentTextEditor::save(std::string file) {
 }
 
 void StudentTextEditor::reset() {
-	// TODO
+ //   contents.clear();
+    cursorPos.row = 0;
+    cursorPos.col = 0;
 }
 
 void StudentTextEditor::move(Dir dir) {
@@ -58,7 +60,8 @@ void StudentTextEditor::backspace() {
 }
 
 void StudentTextEditor::insert(char ch) {
-	// TODO
+    //get reference to current line
+    cursorPos.col++;
 }
 
 void StudentTextEditor::enter() {
@@ -66,11 +69,15 @@ void StudentTextEditor::enter() {
 }
 
 void StudentTextEditor::getPos(int& row, int& col) const {
-	row = 0; col = 0; // TODO
+	row = cursorPos.row; col = cursorPos.col;
 }
 
 int StudentTextEditor::getLines(int startRow, int numRows, std::vector<std::string>& lines) const {
-	return 0; // TODO
+    lines.clear();
+    for (int r = startRow; r < startRow + numRows; r++) {
+        //lines.push_back()
+    }
+    return 0; // TODO
 }
 
 void StudentTextEditor::undo() {

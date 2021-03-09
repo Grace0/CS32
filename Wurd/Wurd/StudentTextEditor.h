@@ -3,40 +3,9 @@
 
 #include "TextEditor.h"
 #include <string>
+#include <list>
 
 class Undo;
-
-class LinkedList {
-public:
-    LinkedList() {
-        head = new Node("", head, head);
-        currentLine = head;
-    }
-    ~LinkedList() {}
-    
-    void addNode(std::string line) { //add to the end
-        Node* newLine = new Node(line, head, currentLine);
-        currentLine->prev = currentLine->next;
-        currentLine->next = newLine;
-        currentLine = newLine;
-    }
-    
-private:
-    struct Node {
-        std::string line;
-        Node* next;
-        Node* prev;
-        Node () {}
-        Node (std::string l, Node* n, Node *p) {
-            line = l;
-            next = n;
-            prev = p;
-        }
-    };
-    
-    Node* head;
-    Node* currentLine;
-};
 
 class StudentTextEditor : public TextEditor {
 public:
@@ -64,7 +33,7 @@ private:
     
     CursorPos cursorPos;
     
-    LinkedList contents;
+    std::list<std::string> contents;
 
 };
 

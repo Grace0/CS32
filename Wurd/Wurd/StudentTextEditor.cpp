@@ -115,7 +115,7 @@ void StudentTextEditor::move(Dir dir) {
     }
 }
 
-//TODO: Test
+//option + delete
 void StudentTextEditor::del() {
     
     if (cursorPos.col == (*curLine).size()) {
@@ -129,19 +129,20 @@ void StudentTextEditor::del() {
     }
 }
 
-//TODO: Test
+
 void StudentTextEditor::backspace() {
-    
+   
     if (cursorPos.col > 0) {
         *curLine = (*curLine).erase(cursorPos.col-1, 1);
         cursorPos.col--;
     } else if (cursorPos.col == 0 || (*curLine) == "" ) {
         if (curLine != contents.begin()) {
+            *(std::prev(curLine)) += *curLine;
+            contents.erase(curLine);
+            
+            cursorPos.row--;
             curLine--;
             cursorPos.col = curLine->size();
-            curLine->append(*(curLine++));
-            contents.erase(curLine++);
-            cursorPos.row--;
         }
     }
 }
@@ -158,7 +159,6 @@ void StudentTextEditor::insert(char ch) {
     }
 }
 
-//TODO: fix
 void StudentTextEditor::enter() {
   
     contents.insert(std::next(curLine), curLine->substr(cursorPos.col, curLine->length()-cursorPos.col));

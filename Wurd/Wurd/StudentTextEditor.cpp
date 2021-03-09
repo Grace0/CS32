@@ -23,6 +23,8 @@ StudentTextEditor::~StudentTextEditor()
 }
 
 bool StudentTextEditor::load(std::string file) {
+    reset();
+    contents.clear();
     std::ifstream infile(file);
     if (!infile) {
         return false;
@@ -35,8 +37,7 @@ bool StudentTextEditor::load(std::string file) {
     }
     
     cursorPos.row = contents.size()-1;
-    curLine = contents.begin();
-    curLine = std::next(curLine, cursorPos.row);
+    curLine = std::next(contents.begin(), cursorPos.row);
     cursorPos.col = contents.back().size();
     return true;
 }
@@ -69,13 +70,18 @@ void StudentTextEditor::move(Dir dir) {
             if (cursorPos.row != 0) {
                 cursorPos.row--;
                 curLine--;
+                if (cursorPos.col > curLine->size()) {
+                    cursorPos.col = curLine->size();
+                }
             }
             break;
         case DOWN:
             if (cursorPos.row != contents.size()-1) {
                 cursorPos.row++;
                 curLine++;
-                
+                if (cursorPos.col > curLine->size()) {
+                    cursorPos.col = curLine->size();
+                }
             }
             break;
         case LEFT:
@@ -155,7 +161,8 @@ void StudentTextEditor::insert(char ch) {
 //TODO: fix
 void StudentTextEditor::enter() {
   
-    contents.insert(curLine++, "");
+    contents.insert(std::next(curLine), curLine->substr(cursorPos.col, curLine->length()-cursorPos.col));
+    *curLine = curLine->substr(0, cursorPos.col);
     
     cursorPos.row++;
     curLine++;

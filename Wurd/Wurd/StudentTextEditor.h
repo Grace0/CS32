@@ -31,7 +31,7 @@ private:
         int col;
     };
     
-    std::list<std::string>::iterator getCurLine();
+    std::list<std::string>::iterator curLine;
     
     CursorPos cursorPos;
     

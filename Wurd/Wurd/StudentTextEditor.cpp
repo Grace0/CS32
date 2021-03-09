@@ -13,6 +13,7 @@ StudentTextEditor::StudentTextEditor(Undo* undo)
  : TextEditor(undo) {
      cursorPos.row = 0;
      cursorPos.col = 0;
+     contents.push_back(""); //so that if we start typing on the first line, getLines will actually return something and our typed chars will show up on the screen
  }
 
 StudentTextEditor::~StudentTextEditor()
@@ -33,7 +34,7 @@ bool StudentTextEditor::load(std::string file) {
     }
     
     cursorPos.row = contents.size()-1;
-    cursorPos.col = contents.back().size()-1;
+    cursorPos.col = contents.back().size();
     return true;
 }
 
@@ -73,9 +74,14 @@ void StudentTextEditor::insert(char ch) {
     std::list<std::string>::iterator it = contents.begin();
     auto curLine = std::next(it, cursorPos.row);
     
-    std::string s(1, ch);
-    (*curLine).insert(cursorPos.col, s);
-    cursorPos.col++;
+    if (ch == '\t') {
+        (*curLine).insert(cursorPos.col, "    ");
+        cursorPos.col += 4;
+    } else {
+        std::string s(1, ch);
+        (*curLine).insert(cursorPos.col, s);
+        cursorPos.col++;
+    }
 }
 
 void StudentTextEditor::enter() {

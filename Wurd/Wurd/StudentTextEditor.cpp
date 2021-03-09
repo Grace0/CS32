@@ -38,11 +38,20 @@ bool StudentTextEditor::load(std::string file) {
 }
 
 bool StudentTextEditor::save(std::string file) {
-	return false;  // TODO
+    std::ofstream outfile(file);
+    if (!outfile) {
+        return false;
+    }
+    
+    for (std::list<std::string>::iterator it = contents.begin(); it != contents.end(); it++) {
+        outfile << (*it) + '\n';
+    }
+    
+	return true;
 }
 
 void StudentTextEditor::reset() {
- //   contents.clear();
+    contents.clear();
     cursorPos.row = 0;
     cursorPos.col = 0;
 }
@@ -61,6 +70,11 @@ void StudentTextEditor::backspace() {
 
 void StudentTextEditor::insert(char ch) {
     //get reference to current line
+    std::list<std::string>::iterator it = contents.begin();
+    auto curLine = std::next(it, cursorPos.row);
+    
+    std::string s(1, ch);
+    (*curLine).insert(cursorPos.col, s);
     cursorPos.col++;
 }
 
@@ -82,10 +96,9 @@ int StudentTextEditor::getLines(int startRow, int numRows, std::vector<std::stri
     }
     
     lines.clear();
-    std::list<std::string>::iterator it;
-    for (int i = 0; i < startRow; i++) {
-        it++;
-    }
+    std::list<std::string>::const_iterator it = contents.begin();
+    
+    auto curLine = std::next(it, startRow);
     
     for (int r = startRow; (r < (startRow + numRows)) && it != contents.end(); r++) {
         lines.push_back(*it);
